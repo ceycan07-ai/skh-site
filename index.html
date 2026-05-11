@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SunExpress Holidays — Tatil Paketleri</title>
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    /* ── HERO ── */
+    .hero {
+      background: var(--blue-dark);
+      position: relative;
+      overflow: hidden;
+      padding: 4rem 2.5rem 7rem;
+      min-height: 520px;
+    }
+
+    .hero-sun {
+      position: absolute;
+      right: -80px; top: -80px;
+      width: 440px; height: 440px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 38% 38%, var(--blue-light) 0%, rgba(26,66,138,0.4) 55%, transparent 75%);
+      animation: sunPulse 7s ease-in-out infinite;
+    }
+    .hero-ring1 {
+      position: absolute;
+      right: 60px; top: 40px;
+      width: 360px; height: 360px;
+      border-radius: 50%;
+      border: 2px solid rgba(235,99,12,0.3);
+      animation: sunPulse 7s ease-in-out infinite reverse;
+    }
+    .hero-ring2 {
+      position: absolute;
+      right: 95px; top: 75px;
+      width: 290px; height: 290px;
+      border-radius: 50%;
+      border: 2px solid rgba(0,159,227,0.2);
+    }
+    @keyframes sunPulse {
+      0%, 100% { transform: scale(1); }
+      50%       { transform: scale(1.05); }
+    }
+
+    .hero-arc {
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 100%; height: 80px;
+      background: var(--cream);
+      clip-path: ellipse(55% 100% at 50% 100%);
+    }
+
+    .hero-content { position: relative; z-index: 10; max-width: 540px; }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--blue-light);
+      margin-bottom: 1rem;
+      font-weight: 500;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 54px;
+      font-weight: 700;
+      line-height: 1.08;
+      color: white;
+      margin-bottom: 1.25rem;
+    }
+    .hero-title em { font-style: normal; color: var(--orange); }
+
+    .hero-sub {
+      font-size: 15px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.62);
+      line-height: 1.75;
+      max-width: 420px;
+      margin-bottom: 2rem;
+    }
+
+    .hero-ctas { display: flex; gap: 10px; }
+
+    /* ── SEARCH ── */
+    .search-wrap {
+      max-width: 1080px;
+      margin: -34px auto 0;
+      padding: 0 2.5rem;
+      position: relative;
+      z-index: 20;
+    }
+
+    .search-box {
+      background: white;
+      border-radius: var(--radius-xl);
+      padding: 1.5rem 1.75rem;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      border: 1px solid var(--border);
+    }
+
+    .s-field {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 0 1.25rem;
+      border-right: 1px solid var(--border);
+      cursor: pointer;
+    }
+    .s-field:first-child { padding-left: 0; }
+    .s-field:last-of-type { border-right: none; }
+
+    .s-label {
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 3px;
+      font-weight: 500;
+    }
+    .s-val { font-size: 15px; font-weight: 500; color: var(--text); }
+    .s-sub { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+
+    /* ── DESTINATIONS GRID ── */
+    .dest-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 14px;
+      height: 380px;
+    }
+
+    .dest-card {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.28s;
+      text-decoration: none;
+    }
+    .dest-card:hover { transform: scale(1.02); }
+    .dest-card.big { grid-row: span 2; }
+
+    .dest-bg {
+      width: 100%; height: 100%;
+      min-height: 130px;
+      display: flex;
+      align-items: flex-end;
+      padding: 1.25rem;
+      position: relative;
+    }
+    .dest-card.big .dest-bg { min-height: 290px; }
+
+    .dest-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(10,22,60,0.72) 0%, transparent 65%);
+    }
+    .dest-pattern {
+      position: absolute; inset: 0;
+      opacity: 0.1;
+      background-image: radial-gradient(circle at 70% 30%, white 1px, transparent 1px);
+      background-size: 22px 22px;
+    }
+
+    .dest-info { position: relative; z-index: 2; }
+    .dest-iata { font-size: 11px; color: rgba(255,255,255,0.55); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 2px; }
+    .dest-city { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: white; }
+    .dest-card.big .dest-city { font-size: 30px; }
+    .dest-nights { font-size: 11px; color: rgba(255,255,255,0.65); margin-top: 3px; }
+    .dest-badge {
+      position: absolute; top: 12px; left: 12px;
+      background: var(--orange);
+      color: white; font-size: 10px; font-weight: 700;
+      letter-spacing: 0.8px; text-transform: uppercase;
+      padding: 4px 10px; border-radius: 6px; z-index: 3;
+    }
+
+    .bg-ayt { background: linear-gradient(140deg, var(--blue-dark) 0%, var(--blue-light) 100%); }
+    .bg-bjv { background: linear-gradient(140deg, #0f6b5e, var(--blue-light) 100%); }
+    .bg-adb { background: linear-gradient(140deg, var(--blue-dark), #6e3fa3 100%); }
+    .bg-dlm { background: linear-gradient(140deg, #1A5E2A, var(--blue-light) 100%); }
+    .bg-hrg { background: linear-gradient(140deg, #8a3a1a, var(--orange) 100%); }
+
+    /* ── DEALS ── */
+    .deals-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .deal-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: transform 0.22s, box-shadow 0.22s;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    .deal-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+
+    .deal-header {
+      height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      opacity: 0.55;
+      position: relative;
+    }
+    .deal-body { padding: 1rem 1.1rem; }
+    .deal-tag {
+      display: inline-block;
+      background: var(--orange-lt);
+      color: var(--orange);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 5px;
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+    }
+    .deal-hotel { font-size: 13px; font-weight: 500; color: var(--blue-dark); margin-bottom: 2px; }
+    .deal-dest { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; }
+    .deal-stars { color: var(--orange); font-size: 11px; margin-bottom: 8px; }
+    .deal-price-row { display: flex; align-items: baseline; gap: 5px; }
+    .deal-from { font-size: 10px; color: var(--text-muted); text-transform: uppercase; }
+    .deal-price { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--blue-dark); }
+    .deal-nights { font-size: 11px; color: var(--text-muted); }
+
+    /* ── PERKS ── */
+    .perks-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .perk-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+    }
+    .perk-icon {
+      width: 44px; height: 44px;
+      background: var(--orange-lt);
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      margin-bottom: 1rem;
+    }
+    .perk-title { font-size: 15px; font-weight: 600; color: var(--blue-dark); margin-bottom: 5px; }
+    .perk-text { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+    /* ── PROMO ── */
+    .promo-banner {
+      background: var(--blue-dark);
+      border-radius: var(--radius-xl);
+      padding: 2.5rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .promo-banner::after {
+      content: '';
+      position: absolute;
+      right: -60px; top: -60px;
+      width: 280px; height: 280px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,159,227,0.25) 0%, transparent 70%);
+    }
+    .promo-text { position: relative; z-index: 2; }
+    .promo-eyebrow { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--blue-light); margin-bottom: 0.5rem; }
+    .promo-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: white; margin-bottom: 0.5rem; }
+    .promo-sub { font-size: 14px; color: rgba(255,255,255,0.55); }
+    .promo-btn { position: relative; z-index: 2; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="sx-nav">
+  <a href="index.html" class="nav-logo">SunExpress <em>Holidays</em></a>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Tatiller</a></li>
+    <li><a href="search.html">Arama</a></li>
+    <li><a href="dest-antalya.html">Destinasyonlar</a></li>
+    <li><a href="booking.html">Rezervasyon</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="btn-ghost">Giriş Yap</button>
+    <a href="booking.html" class="btn-primary">Rezervasyon Yap</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-sun"></div>
+  <div class="hero-ring1"></div>
+  <div class="hero-ring2"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">✈ Antalya · Bodrum · İzmir · Dalaman · Hurghada</p>
+    <h1 class="hero-title">Hayalinizin<br>tatili <em>burada.</em></h1>
+    <p class="hero-sub">Uçuş + otel paketleri, özel fiyatlarla. SunExpress güvencesiyle Akdeniz'in en gözde destinasyonlarına.</p>
+    <div class="hero-ctas">
+      <a href="search.html" class="btn-primary-lg">Paketleri keşfet →</a>
+      <a href="dest-antalya.html" class="btn-ghost" style="padding: 0.9rem 2rem; font-size: 15px; border-radius: var(--radius-md); text-decoration: none; color: rgba(255,255,255,0.8);">Destinasyonlar</a>
+    </div>
+  </div>
+  <div class="hero-arc"></div>
+</section>
+
+<!-- SEARCH -->
+<div class="search-wrap">
+  <div class="search-box">
+    <div class="s-field">
+      <span class="s-label">Nereden</span>
+      <span class="s-val">İstanbul (SAW)</span>
+      <span class="s-sub">Sabiha Gökçen</span>
+    </div>
+    <div class="s-field">
+      <span class="s-label">Nereye</span>
+      <span class="s-val">Tüm destinasyonlar</span>
+      <span class="s-sub">AYT, BJV, ADB, DLM, HRG</span>
+    </div>
+    <div class="s-field">
+      <span class="s-label">Gidiş</span>
+      <span class="s-val">15 Temmuz</span>
+      <span class="s-sub">2025, Salı</span>
+    </div>
+    <div class="s-field">
+      <span class="s-label">Dönüş</span>
+      <span class="s-val">22 Temmuz</span>
+      <span class="s-sub">7 gece</span>
+    </div>
+    <div class="s-field">
+      <span class="s-label">Kişi</span>
+      <span class="s-val">2 Yetişkin</span>
+      <span class="s-sub">0 Çocuk</span>
+    </div>
+    <a href="search.html" class="cs-btn">Ara →</a>
+  </div>
+</div>
+
+<!-- DESTINATIONS -->
+<div class="section" style="padding-top: 3.5rem;">
+  <div class="section-header">
+    <h2 class="section-title">Popüler destinasyonlar</h2>
+    <a href="dest-antalya.html" class="see-all">Tümünü gör →</a>
+  </div>
+  <div class="dest-grid">
+    <a href="dest-antalya.html" class="dest-card big">
+      <div class="dest-bg bg-ayt">
+        <div class="dest-pattern"></div>
+        <div class="dest-overlay"></div>
+        <div class="dest-badge">En çok satan</div>
+        <div class="dest-info">
+          <div class="dest-iata">AYT</div>
+          <div class="dest-city">Antalya</div>
+          <div class="dest-nights">€499 · 7 gece · uçak dahil</div>
+        </div>
+      </div>
+    </a>
+    <a href="dest-bodrum.html" class="dest-card">
+      <div class="dest-bg bg-bjv">
+        <div class="dest-pattern"></div>
+        <div class="dest-overlay"></div>
+        <div class="dest-info">
+          <div class="dest-iata">BJV</div>
+          <div class="dest-city">Bodrum</div>
+          <div class="dest-nights">€579 · 5 gece</div>
+        </div>
+      </div>
+    </a>
+    <a href="search.html" class="dest-card">
+      <div class="dest-bg bg-adb">
+        <div class="dest-pattern"></div>
+        <div class="dest-overlay"></div>
+        <div class="dest-info">
+          <div class="dest-iata">ADB</div>
+          <div class="dest-city">İzmir</div>
+          <div class="dest-nights">€420 · 4 gece</div>
+        </div>
+      </div>
+    </a>
+    <a href="search.html" class="dest-card">
+      <div class="dest-bg bg-dlm">
+        <div class="dest-pattern"></div>
+        <div class="dest-overlay"></div>
+        <div class="dest-info">
+          <div class="dest-iata">DLM</div>
+          <div class="dest-city">Dalaman</div>
+          <div class="dest-nights">€510 · 6 gece</div>
+        </div>
+      </div>
+    </a>
+    <a href="dest-hurghada.html" class="dest-card">
+      <div class="dest-bg bg-hrg">
+        <div class="dest-pattern"></div>
+        <div class="dest-overlay"></div>
+        <div class="dest-badge">Yeni</div>
+        <div class="dest-info">
+          <div class="dest-iata">HRG</div>
+          <div class="dest-city">Hurghada</div>
+          <div class="dest-nights">€649 · 7 gece</div>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- DEALS -->
+<div class="section" style="padding-top: 0;">
+  <div class="section-header">
+    <h2 class="section-title">Bu haftanın fırsatları</h2>
+    <a href="search.html" class="see-all">Tümünü gör →</a>
+  </div>
+  <div class="deals-grid">
+    <a href="hotel.html" class="deal-card">
+      <div class="deal-header bg-ayt">🏖</div>
+      <div class="deal-body">
+        <div class="deal-tag">Erken rezervasyon</div>
+        <div class="deal-hotel">Rixos Premium Belek</div>
+        <div class="deal-dest">Antalya · Ultra her şey dahil</div>
+        <div class="deal-stars">★★★★★</div>
+        <div class="deal-price-row"><span class="deal-from">den</span><span class="deal-price">€649</span><span class="deal-nights">/ 7 gece</span></div>
+      </div>
+    </a>
+    <a href="hotel.html" class="deal-card">
+      <div class="deal-header bg-bjv">⛵</div>
+      <div class="deal-body">
+        <div class="deal-tag">Son dakika</div>
+        <div class="deal-hotel">Mandarin Oriental</div>
+        <div class="deal-dest">Bodrum · Yarım pansiyon</div>
+        <div class="deal-stars">★★★★★</div>
+        <div class="deal-price-row"><span class="deal-from">den</span><span class="deal-price">€899</span><span class="deal-nights">/ 5 gece</span></div>
+      </div>
+    </a>
+    <a href="hotel.html" class="deal-card">
+      <div class="deal-header bg-adb">🏛</div>
+      <div class="deal-body">
+        <div class="deal-tag">Popüler</div>
+        <div class="deal-hotel">Çeşme Marina Hotel</div>
+        <div class="deal-dest">İzmir · Oda kahvaltı</div>
+        <div class="deal-stars">★★★★</div>
+        <div class="deal-price-row"><span class="deal-from">den</span><span class="deal-price">€420</span><span class="deal-nights">/ 4 gece</span></div>
+      </div>
+    </a>
+    <a href="hotel.html" class="deal-card">
+      <div class="deal-header bg-hrg">🐠</div>
+      <div class="deal-body">
+        <div class="deal-tag">Yeni destinasyon</div>
+        <div class="deal-hotel">Steigenberger Pure</div>
+        <div class="deal-dest">Hurghada · Her şey dahil</div>
+        <div class="deal-stars">★★★★★</div>
+        <div class="deal-price-row"><span class="deal-from">den</span><span class="deal-price">€749</span><span class="deal-nights">/ 7 gece</span></div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- PERKS -->
+<div class="section" style="padding-top: 0;">
+  <div class="section-header"><h2 class="section-title">Neden SunExpress Holidays?</h2></div>
+  <div class="perks-grid">
+    <div class="perk-card">
+      <div class="perk-icon">🔒</div>
+      <div class="perk-title">Güvenli ödeme</div>
+      <div class="perk-text">Datatrans altyapısıyla 3D Secure korumalı ödeme. Kartınız her zaman güvende.</div>
+    </div>
+    <div class="perk-card">
+      <div class="perk-icon">📦</div>
+      <div class="perk-title">Paket kolaylığı</div>
+      <div class="perk-text">Uçuş + otel + transfer tek rezervasyonda. Karmaşıklık yok, ekstra maliyet yok.</div>
+    </div>
+    <div class="perk-card">
+      <div class="perk-icon">🎧</div>
+      <div class="perk-title">7/24 Türkçe destek</div>
+      <div class="perk-text">Tatil öncesi ve sırasında her sorunuza Türkçe yanıt veriyoruz. SLA garantisi ile.</div>
+    </div>
+    <div class="perk-card">
+      <div class="perk-icon">✈️</div>
+      <div class="perk-title">SunExpress güvencesi</div>
+      <div class="perk-text">30 yılı aşkın Lufthansa–THY ortak havacılık deneyimiyle tatil planlamanız emin ellerde.</div>
+    </div>
+    <div class="perk-card">
+      <div class="perk-icon">⭐</div>
+      <div class="perk-title">Özenle seçilmiş oteller</div>
+      <div class="perk-text">GIATA & TrustYou verileriyle doğrulanmış gerçek yorumlara dayalı otel seçimi.</div>
+    </div>
+    <div class="perk-card">
+      <div class="perk-icon">💳</div>
+      <div class="perk-title">Esnek iptaller</div>
+      <div class="perk-text">Değişen planlarınıza uyum sağlayan esnek rezervasyon koşulları ve ücretsiz iptal.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PROMO -->
+<div class="section" style="padding-top: 0; padding-bottom: 3.5rem;">
+  <div class="promo-banner">
+    <div class="promo-text">
+      <p class="promo-eyebrow">Özel kampanya</p>
+      <h3 class="promo-title">Erken rezervasyona özel %15 indirim</h3>
+      <p class="promo-sub">31 Temmuz 2025 tarihine kadar yapılan tüm rezervasyonlarda geçerlidir.</p>
+    </div>
+    <div class="promo-btn">
+      <a href="search.html" class="btn-primary-lg">Kampanyayı keşfet →</a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="sx-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo">SunExpress <em>Holidays</em></a>
+      <p>Güneş Ekspres Havacılık A.Ş. bünyesinde faaliyet gösteren tatil platformu. Akdeniz'in en güzel destinasyonlarına uçuş + otel paketleri.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Destinasyonlar</h4>
+      <ul>
+        <li><a href="dest-antalya.html">Antalya</a></li>
+        <li><a href="dest-bodrum.html">Bodrum</a></li>
+        <li><a href="search.html">İzmir</a></li>
+        <li><a href="search.html">Dalaman</a></li>
+        <li><a href="dest-hurghada.html">Hurghada</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Yardım</h4>
+      <ul>
+        <li><a href="#">SSS</a></li>
+        <li><a href="#">İptal Koşulları</a></li>
+        <li><a href="#">Ödeme</a></li>
+        <li><a href="#">İletişim</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Şirket</h4>
+      <ul>
+        <li><a href="#">Hakkımızda</a></li>
+        <li><a href="#">Kariyer</a></li>
+        <li><a href="#">KVKK</a></li>
+        <li><a href="#">Gizlilik</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 SunExpress Holidays · Güneş Ekspres Havacılık A.Ş.</span>
+    <span>🔒 SSL Güvenli · Datatrans ödeme altyapısı</span>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arama Sonuçları — SunExpress Holidays</title>
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    .results-hero {
+      background: var(--blue-dark);
+      padding: 1.5rem 2.5rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .results-hero::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 56px;
+      background: var(--cream);
+      clip-path: ellipse(55% 100% at 50% 100%);
+    }
+    .results-hero-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+    .results-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      color: white;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+    .results-sub {
+      font-size: 13px;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 1.5rem;
+    }
+
+    /* Layout */
+    .results-layout {
+      max-width: 1080px;
+      margin: -20px auto 0;
+      padding: 0 2.5rem 3rem;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 1.75rem;
+      align-items: start;
+    }
+
+    /* ── FILTERS SIDEBAR ── */
+    .filters {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      position: sticky;
+      top: 80px;
+    }
+
+    .filters-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--blue-dark);
+      margin-bottom: 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .filters-clear {
+      font-size: 11px;
+      color: var(--orange);
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .filter-group { margin-bottom: 1.5rem; }
+    .filter-group:last-child { margin-bottom: 0; }
+
+    .filter-label {
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-bottom: 0.75rem;
+    }
+
+    .price-range {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 13px;
+      color: var(--text-mid);
+    }
+    .price-range input[type=range] {
+      width: 100%;
+      accent-color: var(--orange);
+      margin: 0.5rem 0;
+    }
+    .price-vals {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .check-group { display: flex; flex-direction: column; gap: 8px; }
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-mid);
+      cursor: pointer;
+    }
+    .check-item input[type=checkbox] { accent-color: var(--orange); width: 15px; height: 15px; cursor: pointer; }
+
+    .star-filter { display: flex; gap: 6px; flex-wrap: wrap; }
+    .star-btn {
+      border: 1px solid var(--border);
+      background: var(--white);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 12px;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.18s;
+    }
+    .star-btn.active, .star-btn:hover {
+      border-color: var(--orange);
+      background: var(--orange-lt);
+      color: var(--orange);
+      font-weight: 600;
+    }
+
+    .filter-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 1.25rem 0;
+    }
+
+    /* ── RESULTS AREA ── */
+    .results-area { display: flex; flex-direction: column; gap: 0; }
+
+    .sort-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+    .result-count {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .result-count strong { color: var(--text); }
+    .sort-select {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.4rem 0.75rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: var(--text);
+      background: var(--white);
+      cursor: pointer;
+      outline: none;
+    }
+
+    /* ── HOTEL CARD ── */
+    .hotel-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      margin-bottom: 1rem;
+      transition: box-shadow 0.22s, transform 0.22s;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+    }
+    .hotel-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+
+    .hotel-img {
+      position: relative;
+      overflow: hidden;
+      background: var(--blue-dark);
+      min-height: 220px;
+    }
+    .hotel-img-bg {
+      width: 100%;
+      height: 100%;
+      min-height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 72px;
+      opacity: 0.4;
+      position: relative;
+    }
+    .hotel-img-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, transparent 60%, rgba(255,255,255,0.08));
+    }
+    .hotel-tag {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: var(--orange);
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+    .hotel-fav {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 32px;
+      height: 32px;
+      background: rgba(255,255,255,0.9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    .img-dots {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 4px;
+    }
+    .img-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.4);
+    }
+    .img-dot.active { background: white; }
+
+    .hotel-body { padding: 1.5rem 1.5rem 1.25rem; display: flex; flex-direction: column; }
+
+    .hotel-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .hotel-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--blue-dark);
+      margin-bottom: 0.25rem;
+    }
+    .hotel-location {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 0.75rem;
+    }
+    .hotel-desc {
+      font-size: 13px;
+      color: var(--text-mid);
+      line-height: 1.65;
+      margin-bottom: 1rem;
+      flex: 1;
+    }
+    .hotel-amenities {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+    .amenity {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      color: var(--text-muted);
+      background: var(--cream);
+      padding: 3px 8px;
+      border-radius: 5px;
+    }
+    .hotel-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+      margin-top: auto;
+    }
+    .hotel-review {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .review-score {
+      background: var(--blue-dark);
+      color: white;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+    .review-text { font-size: 12px; color: var(--text-muted); }
+    .hotel-price-area { text-align: right; }
+    .price-from { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .price-val {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--blue-dark);
+      line-height: 1.1;
+    }
+    .price-per { font-size: 11px; color: var(--text-muted); margin-bottom: 0.5rem; }
+    .card-cta {
+      background: var(--orange);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 0.55rem 1.25rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity 0.18s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .card-cta:hover { opacity: 0.88; }
+
+    /* ── HOTEL BG COLORS ── */
+    .hbg-1 { background: linear-gradient(140deg, #1A428A 0%, #009FE3 100%); }
+    .hbg-2 { background: linear-gradient(140deg, #0f6b5e, #1a9fe3 100%); }
+    .hbg-3 { background: linear-gradient(140deg, #5e2a8a, #009FE3 100%); }
+    .hbg-4 { background: linear-gradient(140deg, #1A428A, #2e7d9e 100%); }
+    .hbg-5 { background: linear-gradient(140deg, #8a3a1a, #EB630C 100%); }
+    .hbg-6 { background: linear-gradient(140deg, #1a5c2a, #009FE3 100%); }
+
+    /* ── PROMO STRIP ── */
+    .promo-strip {
+      background: linear-gradient(90deg, var(--blue-dark), var(--blue-mid));
+      border-radius: var(--radius-md);
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      gap: 1rem;
+    }
+    .promo-strip p { font-size: 13px; color: white; }
+    .promo-strip strong { color: var(--orange); }
+    .promo-strip a {
+      background: var(--orange);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 0.4rem 1rem;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    /* ── PAGINATION ── */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 1.5rem;
+    }
+    .page-btn {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.18s;
+      color: var(--text-mid);
+    }
+    .page-btn:hover { border-color: var(--orange); color: var(--orange); }
+    .page-btn.active { background: var(--orange); border-color: var(--orange); color: white; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="sx-nav">
+  <a href="index.html" class="nav-logo">SunExpress <em>Holidays</em></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Tatiller</a></li>
+    <li><a href="search.html" class="active">Arama</a></li>
+    <li><a href="dest-antalya.html">Destinasyonlar</a></li>
+    <li><a href="booking.html">Rezervasyon</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="btn-ghost">Giriş Yap</button>
+    <a href="booking.html" class="btn-primary">Rezervasyon Yap</a>
+  </div>
+</nav>
+
+<!-- RESULTS HERO + SEARCH -->
+<div class="results-hero">
+  <div class="results-hero-inner">
+    <div class="breadcrumb" style="margin-bottom: 1rem;">
+      <a href="index.html">Ana Sayfa</a> › <span>Arama Sonuçları</span>
+    </div>
+    <p class="results-title">Antalya tatil paketleri</p>
+    <p class="results-sub">İstanbul SAW · 15–22 Temmuz 2025 · 2 Yetişkin · 7 gece</p>
+    <div class="compact-search">
+      <div class="cs-field">
+        <span class="cs-label">Nereden</span>
+        <span class="cs-val">İstanbul (SAW)</span>
+      </div>
+      <div class="cs-field">
+        <span class="cs-label">Nereye</span>
+        <span class="cs-val">Antalya (AYT)</span>
+      </div>
+      <div class="cs-field">
+        <span class="cs-label">Gidiş – Dönüş</span>
+        <span class="cs-val">15 Tem — 22 Tem</span>
+      </div>
+      <div class="cs-field">
+        <span class="cs-label">Kişi</span>
+        <span class="cs-val">2 Yetişkin</span>
+      </div>
+      <a href="search.html" class="cs-btn">Ara →</a>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="results-layout">
+
+  <!-- FILTERS -->
+  <aside class="filters">
+    <div class="filters-title">
+      Filtreler
+      <span class="filters-clear">Temizle</span>
+    </div>
+
+    <div class="filter-group">
+      <div class="filter-label">Fiyat Aralığı</div>
+      <input type="range" min="200" max="2000" value="1200" style="width:100%; accent-color: var(--orange);" />
+      <div class="price-vals"><span>€200</span><span>€1.200</span></div>
+    </div>
+
+    <div class="filter-divider"></div>
+
+    <div class="filter-group">
+      <div class="filter-label">Yıldız</div>
+      <div class="star-filter">
+        <button class="star-btn">★ 2</button>
+        <button class="star-btn">★ 3</button>
+        <button class="star-btn active">★ 4</button>
+        <button class="star-btn active">★ 5</button>
+      </div>
+    </div>
+
+    <div class="filter-divider"></div>
+
+    <div class="filter-group">
+      <div class="filter-label">Pansiyon Tipi</div>
+      <div class="check-group">
+        <label class="check-item"><input type="checkbox" checked /> Her şey dahil</label>
+        <label class="check-item"><input type="checkbox" checked /> Ultra her şey dahil</label>
+        <label class="check-item"><input type="checkbox" /> Yarım pansiyon</label>
+        <label class="check-item"><input type="checkbox" /> Oda kahvaltı</label>
+        <label class="check-item"><input type="checkbox" /> Sadece oda</label>
+      </div>
+    </div>
+
+    <div class="filter-divider"></div>
+
+    <div class="filter-group">
+      <div class="filter-label">Olanaklar</div>
+      <div class="check-group">
+        <label class="check-item"><input type="checkbox" checked /> Havuz</label>
+        <label class="check-item"><input type="checkbox" checked /> Plaj erişimi</label>
+        <label class="check-item"><input type="checkbox" /> Spa & Wellness</label>
+        <label class="check-item"><input type="checkbox" /> Çocuk kulübü</label>
+        <label class="check-item"><input type="checkbox" /> Ücretsiz Wi-Fi</label>
+        <label class="check-item"><input type="checkbox" /> Spor alanları</label>
+      </div>
+    </div>
+
+    <div class="filter-divider"></div>
+
+    <div class="filter-group">
+      <div class="filter-label">TrustYou Puanı</div>
+      <div class="star-filter">
+        <button class="star-btn">7+</button>
+        <button class="star-btn active">8+</button>
+        <button class="star-btn">9+</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- RESULTS -->
+  <div class="results-area">
+    <div class="sort-bar">
+      <p class="result-count"><strong>47 tesis</strong> bulundu</p>
+      <select class="sort-select">
+        <option>Önerilen sıralama</option>
+        <option>Fiyat: Düşükten yükseğe</option>
+        <option>Fiyat: Yüksekten düşüğe</option>
+        <option>TrustYou puanına göre</option>
+        <option>Yıldıza göre</option>
+      </select>
+    </div>
+
+    <!-- Promo strip -->
+    <div class="promo-strip">
+      <p>🎉 <strong>Erken rezervasyon:</strong> Bu haftaya özel seçili otellerde %15 indirim!</p>
+      <a href="#">Fırsatları gör</a>
+    </div>
+
+    <!-- Card 1 -->
+    <a href="hotel.html" class="hotel-card">
+      <div class="hotel-img">
+        <div class="hotel-img-bg hbg-1">🏖</div>
+        <div class="hotel-img-overlay"></div>
+        <div class="hotel-tag">Erken rezervasyon</div>
+        <div class="hotel-fav">♡</div>
+        <div class="img-dots">
+          <div class="img-dot active"></div>
+          <div class="img-dot"></div>
+          <div class="img-dot"></div>
+          <div class="img-dot"></div>
+        </div>
+      </div>
+      <div class="hotel-body">
+        <div class="hotel-meta">
+          <span class="badge badge-blue">★★★★★</span>
+          <span class="badge badge-orange">Ultra her şey dahil</span>
+        </div>
+        <div class="hotel-name">Rixos Premium Belek</div>
+        <div class="hotel-location">📍 Belek, Antalya · Plaja 50m</div>
+        <p class="hotel-desc">Belek'in incisi Rixos Premium, 650 metre özel plajı, 14 restoranı ve eğlence dolu programıyla aileler için mükemmel bir tatil sunuyor. Aquaworld kapalı su parkı misafirlere ücretsizdir.</p>
+        <div class="hotel-amenities">
+          <span class="amenity">🏊 5 Havuz</span>
+          <span class="amenity">🏖 Özel plaj</span>
+          <span class="amenity">🧖 Spa</span>
+          <span class="amenity">👶 Çocuk kulübü</span>
+          <span class="amenity">🎾 Tenis</span>
+          <span class="amenity">📶 Wi-Fi</span>
+        </div>
+        <div class="hotel-footer">
+          <div class="hotel-review">
+            <div class="review-score">9.1</div>
+            <div>
+              <div class="stars">★★★★★</div>
+              <div class="review-text">Mükemmel · 2.847 yorum</div>
+            </div>
+          </div>
+          <div class="hotel-price-area">
+            <div class="price-from">kişi başı</div>
+            <div class="price-val">€649</div>
+            <div class="price-per">7 gece · uçak dahil</div>
+            <a href="hotel.html" class="card-cta">İncele →</a>
+          </div>
+        </div>
+      </div>
+    </a>
+
+    <!-- Card 2 -->
+    <a href="hotel.html" class="hotel-card">
+      <div class="hotel-img">
+        <div class="hotel-img-bg hbg-2">🌿</div>
+        <div class="hotel-img-overlay"></div>
+        <div class="hotel-fav">♡</div>
+        <div class="img-dots">
+          <div class="img-dot active"></div>
+          <div class="img-dot"></div>
+          <div class="img-dot"></div>
+        </div>
+      </div>
+      <div class="hotel-body">
+        <div class="hotel-meta">
+          <span class="badge badge-blue">★★★★★</span>
+          <span class="badge badge-orange">Her şey dahil</span>
+          <span class="badge badge-green">Sürdürülebilir</span>
+        </div>
+        <div class="hotel-name">Maxx Royal Kemer Resort</div>
+        <div class="hotel-location">📍 Kemer, Antalya · Plaja 0m</div>
+        <p class="hotel-desc">Doğanın kalbinde lüks deneyim. Toros dağlarının eteklerinde konumlanan resort, kristal berraklığındaki koyuyla huzur arayanlar için idealdir.</p>
+        <div class="hotel-amenities">
+          <span class="amenity">🏊 4 Havuz</span>
+          <span class="amenity">🏖 Özel koy</span>
+          <span class="amenity">🧖 Hamam</span>
+          <span class="amenity">🎶 Canlı müzik</span>
+          <span class="amenity">📶 Wi-Fi</span>
+        </div>
+        <div class="hotel-footer">
+          <div class="hotel-review">
+            <div class="review-score">9.3</div>
+            <div>
+              <div class="stars">★★★★★</div>
+              <div class="review-text">Olağanüstü · 1.532 yorum</div>
+            </div>
+          </div>
+          <div class="hotel-price-area">
+            <div class="price-from">kişi başı</div>
+            <div class="price-val">€819</div>
+            <div class="price-per">7 gece · uçak dahil</div>
+            <a href="hotel.html" class="card-cta">İncele →</a>
+          </div>
+        </div>
+      </div>
+    </a>
+
+    <!-- Card 3 -->
+    <a href="hotel.html" class="hotel-card">
+      <div class="hotel-img">
+        <div class="hotel-img-bg hbg-3">🏰</div>
+        <div class="hotel-img-overlay"></div>
+        <div class="hotel-tag">Son odalar</div>
+        <div class="hotel-fav">♡</div>
+        <div class="img-dots">
+          <div class="img-dot active"></div>
+          <div class="img-dot"></div>
+          <div class="img-dot"></div>
+          <div class="img-dot"></div>
+          <div class="img-dot"></div>
+        </div>
+      </div>
+      <div class="hotel-body">
+        <div class="hotel-meta">
+          <span class="badge badge-blue">★★★★★</span>
+          <span class="badge badge-orange">Ultra her şey dahil</span>
+        </div>
+        <div class="hotel-name">Titanic Mardan Palace</div>
+        <div class="hotel-location">📍 Kundu, Antalya · Plaja 0m</div>
+        <p class="hotel-desc">Avrupa'nın en büyük tatil köyü. 3.000 m² açık havuzu, özel lagünü ve olağanüstü gastronomisiyle eşsiz bir deneyim sunuyor.</p>
+        <div class="hotel-amenities">
+          <span class="amenity">🏊 Lagün havuz</span>
+          <span class="amenity">🏖 Özel plaj</span>
+          <span class="amenity">🎰 Casino</span>
+          <span class="amenity">🍽 14 restoran</span>
+          <span class="amenity">📶 Wi-Fi</span>
+        </div>
+        <div class="hotel-footer">
+          <div class="hotel-review">
+            <div class="review-score">8.7</div>
+            <div>
+              <div class="stars">★★★★★</div>
+              <div class="review-text">Harika · 3.119 yorum</div>
+            </div>
+          </div>
+          <div class="hotel-price-area">
+            <div class="price-from">kişi başı</div>
+            <div class="price-val">€975</div>
+            <div class="price-per">7 gece · uçak dahil</div>
+            <a href="hotel.html" class="card-cta">İncele →</a>
+          </div>
+        </div>
+      </div>
+    </a>
+
+    <!-- Card 4 -->
+    <a href="hotel.html" class="hotel-card">
+      <div class="hotel-img">
+        <div class="hotel-img-bg hbg-4">⚓</div>
+        <div class="hotel-img-overlay"></div>
+        <div class="hotel-fav">♡</div>
+        <div class="img-dots">
+          <div class="img-dot active"></div>
+          <div class="img-dot"></div>
+          <div class="img-dot"></div>
+        </div>
+      </div>
+      <div class="hotel-body">
+        <div class="hotel-meta">
+          <span class="badge badge-blue">★★★★</span>
+          <span class="badge badge-orange">Her şey dahil</span>
+        </div>
+        <div class="hotel-name">Club Med Palmiye</div>
+        <div class="hotel-location">📍 Kemer, Antalya · Plaja 20m</div>
+        <p class="hotel-desc">Aileler ve çiftler için her şey dahil konsepti. Avrupa standartlarında konfor ve geniş aktivite programıyla uygun fiyatın ötesinde değer sunar.</p>
+        <div class="hotel-amenities">
+          <span class="amenity">🏊 3 Havuz</span>
+          <span class="amenity">🏖 Kum plaj</span>
+          <span class="amenity">🎯 Spor aktiviteleri</span>
+          <span class="amenity">📶 Wi-Fi</span>
+        </div>
+        <div class="hotel-footer">
+          <div class="hotel-review">
+            <div class="review-score">8.2</div>
+            <div>
+              <div class="stars">★★★★</div>
+              <div class="review-text">Çok iyi · 987 yorum</div>
+            </div>
+          </div>
+          <div class="hotel-price-area">
+            <div class="price-from">kişi başı</div>
+            <div class="price-val">€499</div>
+            <div class="price-per">7 gece · uçak dahil</div>
+            <a href="hotel.html" class="card-cta">İncele →</a>
+          </div>
+        </div>
+      </div>
+    </a>
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <button class="page-btn active">1</button>
+      <button class="page-btn">2</button>
+      <button class="page-btn">3</button>
+      <button class="page-btn">…</button>
+      <button class="page-btn">12</button>
+      <button class="page-btn">›</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="sx-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo">SunExpress <em>Holidays</em></a>
+      <p>Güneş Ekspres Havacılık A.Ş. bünyesinde faaliyet gösteren tatil platformu. Akdeniz'in en güzel destinasyonlarına uçuş + otel paketleri.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Destinasyonlar</h4>
+      <ul>
+        <li><a href="dest-antalya.html">Antalya</a></li>
+        <li><a href="dest-bodrum.html">Bodrum</a></li>
+        <li><a href="dest-izmir.html">İzmir</a></li>
+        <li><a href="dest-dalaman.html">Dalaman</a></li>
+        <li><a href="#">Hurghada</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Yardım</h4>
+      <ul>
+        <li><a href="#">SSS</a></li>
+        <li><a href="#">İptal Koşulları</a></li>
+        <li><a href="#">Ödeme</a></li>
+        <li><a href="#">İletişim</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Şirket</h4>
+      <ul>
+        <li><a href="#">Hakkımızda</a></li>
+        <li><a href="#">Kariyer</a></li>
+        <li><a href="#">KVKK</a></li>
+        <li><a href="#">Gizlilik</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 SunExpress Holidays · Güneş Ekspres Havacılık A.Ş.</span>
+    <span>🔒 SSL Güvenli · Datatrans ödeme altyapısı</span>
+  </div>
+</footer>
+
+</body>
+</html>

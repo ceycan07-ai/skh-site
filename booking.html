@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rezervasyon — SunExpress Holidays</title>
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    .booking-hero {
+      background: var(--blue-dark);
+      padding: 2rem 2.5rem 4.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .booking-hero::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 100%; height: 56px;
+      background: var(--cream);
+      clip-path: ellipse(55% 100% at 50% 100%);
+    }
+    .booking-hero-inner { max-width: 900px; margin: 0 auto; }
+    .booking-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 30px; font-weight: 700;
+      color: white; margin-bottom: 0.25rem;
+    }
+    .booking-hero p { font-size: 13px; color: rgba(255,255,255,0.55); }
+
+    /* ── PROGRESS BAR ── */
+    .progress-bar {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-top: 2rem;
+    }
+    .progress-step {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.45);
+      font-weight: 400;
+    }
+    .progress-step.active { color: white; font-weight: 500; }
+    .progress-step.done { color: rgba(255,255,255,0.6); }
+    .step-circle {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700;
+      color: rgba(255,255,255,0.4);
+      flex-shrink: 0;
+    }
+    .progress-step.active .step-circle {
+      background: var(--orange);
+      border-color: var(--orange);
+      color: white;
+    }
+    .progress-step.done .step-circle {
+      background: rgba(255,255,255,0.15);
+      border-color: rgba(255,255,255,0.3);
+      color: rgba(255,255,255,0.7);
+    }
+    .step-line {
+      flex: 1;
+      height: 2px;
+      background: rgba(255,255,255,0.15);
+      margin: 0 10px;
+    }
+
+    /* ── LAYOUT ── */
+    .booking-layout {
+      max-width: 900px;
+      margin: -24px auto 0;
+      padding: 0 2.5rem 3rem;
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 1.75rem;
+      align-items: start;
+    }
+
+    /* ── FORM SECTIONS ── */
+    .form-section {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .form-section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .form-section-num {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: var(--blue-dark);
+      color: white;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .form-section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--blue-dark);
+    }
+    .form-section-sub { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
+
+    /* ── FORM GRID ── */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .form-row.three { grid-template-columns: 1fr 1fr 1fr; }
+    .form-row.full  { grid-template-columns: 1fr; }
+
+    .form-group { display: flex; flex-direction: column; }
+
+    .form-label {
+      font-size: 11px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+    .form-label span { color: var(--orange); }
+
+    .form-input {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.7rem 0.9rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.18s, box-shadow 0.18s;
+      background: var(--white);
+      width: 100%;
+    }
+    .form-input:focus {
+      border-color: var(--blue-light);
+      box-shadow: 0 0 0 3px rgba(0,159,227,0.12);
+    }
+    .form-input.error { border-color: #E24B4A; }
+    .form-input::placeholder { color: var(--text-muted); font-size: 13px; }
+
+    select.form-input { cursor: pointer; }
+
+    .form-hint { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+    /* ── PASSENGER TABS ── */
+    .pax-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 1.5rem;
+    }
+    .pax-tab {
+      padding: 6px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      color: var(--text-muted);
+      background: var(--white);
+      transition: all 0.18s;
+    }
+    .pax-tab.active {
+      background: var(--blue-dark);
+      border-color: var(--blue-dark);
+      color: white;
+    }
+
+    /* ── FLIGHT SELECTION ── */
+    .flight-option {
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    .flight-option:hover { border-color: var(--blue-light); }
+    .flight-option.selected {
+      border-color: var(--orange);
+      background: var(--orange-lt);
+    }
+    .flight-radio {
+      width: 18px; height: 18px;
+      border: 2px solid var(--border);
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .flight-option.selected .flight-radio {
+      border-color: var(--orange);
+      background: var(--orange);
+    }
+    .flight-option.selected .flight-radio::after {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: white;
+    }
+    .flight-times {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .flight-time {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--blue-dark);
+    }
+    .flight-arrow { font-size: 13px; color: var(--text-muted); }
+    .flight-dur { font-size: 11px; color: var(--text-muted); }
+    .flight-stops {
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 5px;
+      background: var(--cream);
+      color: var(--text-muted);
+    }
+    .flight-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--blue-dark);
+    }
+
+    /* ── EXTRAS ── */
+    .extra-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      margin-bottom: 0.75rem;
+      cursor: pointer;
+      transition: border-color 0.18s;
+    }
+    .extra-item:hover { border-color: var(--blue-light); }
+    .extra-item input[type=checkbox] { accent-color: var(--orange); width: 18px; height: 18px; cursor: pointer; }
+    .extra-info { flex: 1; }
+    .extra-name { font-size: 14px; font-weight: 500; color: var(--text); }
+    .extra-desc { font-size: 12px; color: var(--text-muted); }
+    .extra-price { font-size: 14px; font-weight: 600; color: var(--blue-dark); }
+
+    /* ── TERMS ── */
+    .terms-check {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text-mid);
+      line-height: 1.5;
+    }
+    .terms-check input[type=checkbox] { accent-color: var(--orange); width: 16px; height: 16px; margin-top: 2px; cursor: pointer; }
+    .terms-check a { color: var(--blue-light); text-decoration: none; }
+
+    .submit-btn {
+      width: 100%;
+      background: var(--orange);
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 1.1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.18s, transform 0.15s;
+      margin-top: 1.25rem;
+    }
+    .submit-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+    .submit-trust {
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    /* ── ORDER SUMMARY ── */
+    .order-summary {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      position: sticky;
+      top: 80px;
+    }
+
+    .os-header {
+      background: var(--blue-dark);
+      padding: 1.25rem 1.5rem;
+    }
+    .os-hotel { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; color: white; }
+    .os-sub { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 3px; }
+
+    .os-body { padding: 1.25rem 1.5rem; }
+
+    .os-detail {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .os-detail:last-child { border-bottom: none; }
+    .os-detail-label { color: var(--text-muted); }
+    .os-detail-val { font-weight: 500; color: var(--text); }
+
+    .os-total {
+      background: var(--cream);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      margin-top: 0.75rem;
+    }
+    .os-total-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--text-mid);
+      margin-bottom: 6px;
+    }
+    .os-total-row.big {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--blue-dark);
+      margin-bottom: 0;
+      margin-top: 6px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border);
+    }
+    .os-saving {
+      text-align: center;
+      font-size: 12px;
+      color: #1E6B1E;
+      font-weight: 500;
+      margin-top: 8px;
+    }
+    .os-badges {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .os-badge { font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 4px; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="sx-nav">
+  <a href="index.html" class="nav-logo">SunExpress <em>Holidays</em></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Tatiller</a></li>
+    <li><a href="search.html">Arama</a></li>
+    <li><a href="dest-antalya.html">Destinasyonlar</a></li>
+    <li><a href="booking.html" class="active">Rezervasyon</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="btn-ghost">Giriş Yap</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="booking-hero">
+  <div class="booking-hero-inner">
+    <div class="breadcrumb" style="margin-bottom: 1rem;">
+      <a href="index.html">Ana Sayfa</a> ›
+      <a href="search.html">Antalya</a> ›
+      <a href="hotel.html">Rixos Premium Belek</a> ›
+      <span>Rezervasyon</span>
+    </div>
+    <h1>Rezervasyon bilgileri</h1>
+    <p>Rixos Premium Belek · 15–22 Temmuz 2025 · 2 Yetişkin · Ultra her şey dahil</p>
+
+    <!-- Progress -->
+    <div class="progress-bar" style="margin-top: 1.75rem;">
+      <div class="progress-step done">
+        <div class="step-circle">✓</div>
+        <span>Otel seçimi</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="progress-step done">
+        <div class="step-circle">✓</div>
+        <span>Uçuş seçimi</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="progress-step active">
+        <div class="step-circle">3</div>
+        <span>Yolcu bilgileri</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="progress-step">
+        <div class="step-circle">4</div>
+        <span>Ödeme</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="progress-step">
+        <div class="step-circle">5</div>
+        <span>Onay</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="booking-layout">
+  <div>
+
+    <!-- SECTION 1: İletişim bilgileri -->
+    <div class="form-section">
+      <div class="form-section-header">
+        <div class="form-section-num">1</div>
+        <div>
+          <div class="form-section-title">İletişim bilgileri</div>
+          <div class="form-section-sub">Rezervasyon onayı bu adrese gönderilecek</div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">E-posta <span>*</span></label>
+          <input class="form-input" type="email" placeholder="ornek@email.com" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Telefon <span>*</span></label>
+          <input class="form-input" type="tel" placeholder="+90 5XX XXX XX XX" />
+        </div>
+      </div>
+
+      <div class="form-row full">
+        <div class="form-group">
+          <label class="form-label">Tercih edilen iletişim dili</label>
+          <select class="form-input">
+            <option>Türkçe</option>
+            <option>English</option>
+            <option>Deutsch</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2: Yolcu bilgileri -->
+    <div class="form-section">
+      <div class="form-section-header">
+        <div class="form-section-num">2</div>
+        <div>
+          <div class="form-section-title">Yolcu bilgileri</div>
+          <div class="form-section-sub">Pasaportunuzdaki bilgilerle aynı olmalıdır</div>
+        </div>
+      </div>
+
+      <!-- Passenger tabs -->
+      <div class="pax-tabs">
+        <button class="pax-tab active">Yetişkin 1 (Lider)</button>
+        <button class="pax-tab">Yetişkin 2</button>
+      </div>
+
+      <div class="form-row three">
+        <div class="form-group">
+          <label class="form-label">Unvan <span>*</span></label>
+          <select class="form-input">
+            <option>Bay</option>
+            <option>Bayan</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Ad <span>*</span></label>
+          <input class="form-input" type="text" placeholder="Adınız" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Soyad <span>*</span></label>
+          <input class="form-input" type="text" placeholder="Soyadınız" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Doğum tarihi <span>*</span></label>
+          <input class="form-input" type="date" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Uyruk <span>*</span></label>
+          <select class="form-input">
+            <option>Türkiye</option>
+            <option>Almanya</option>
+            <option>İngiltere</option>
+            <option>Diğer</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Pasaport / TC Kimlik No <span>*</span></label>
+          <input class="form-input" type="text" placeholder="Belge numarası" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Pasaport geçerlilik tarihi</label>
+          <input class="form-input" type="date" />
+          <span class="form-hint">Dönüş tarihinden en az 6 ay sonrası olmalı</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3: Uçuş seçimi -->
+    <div class="form-section">
+      <div class="form-section-header">
+        <div class="form-section-num">3</div>
+        <div>
+          <div class="form-section-title">Uçuş seçimi</div>
+          <div class="form-section-sub">İstanbul SAW → Antalya AYT · 15 Temmuz 2025</div>
+        </div>
+      </div>
+
+      <div class="flight-option selected">
+        <div class="flight-radio"><div></div></div>
+        <div class="flight-times">
+          <span class="flight-time">06:30</span>
+          <span class="flight-arrow">────✈────</span>
+          <span class="flight-time">07:55</span>
+          <span class="flight-dur">1s 25d</span>
+          <span class="flight-stops" style="background: #EAF5EA; color: #1E6B1E;">Direkt</span>
+        </div>
+        <div>
+          <div class="flight-price">€139 <span style="font-size: 12px; font-weight: 400; color: var(--text-muted);">/ kişi</span></div>
+          <div style="font-size: 11px; color: var(--text-muted);">XQ 101</div>
+        </div>
+      </div>
+
+      <div class="flight-option">
+        <div class="flight-radio"></div>
+        <div class="flight-times">
+          <span class="flight-time">10:15</span>
+          <span class="flight-arrow">────✈────</span>
+          <span class="flight-time">11:45</span>
+          <span class="flight-dur">1s 30d</span>
+          <span class="flight-stops" style="background: #EAF5EA; color: #1E6B1E;">Direkt</span>
+        </div>
+        <div>
+          <div class="flight-price">€159 <span style="font-size: 12px; font-weight: 400; color: var(--text-muted);">/ kişi</span></div>
+          <div style="font-size: 11px; color: var(--text-muted);">XQ 103</div>
+        </div>
+      </div>
+
+      <div class="flight-option">
+        <div class="flight-radio"></div>
+        <div class="flight-times">
+          <span class="flight-time">16:45</span>
+          <span class="flight-arrow">────✈────</span>
+          <span class="flight-time">18:10</span>
+          <span class="flight-dur">1s 25d</span>
+          <span class="flight-stops" style="background: #EAF5EA; color: #1E6B1E;">Direkt</span>
+        </div>
+        <div>
+          <div class="flight-price">€119 <span style="font-size: 12px; font-weight: 400; color: var(--text-muted);">/ kişi</span></div>
+          <div style="font-size: 11px; color: var(--text-muted);">XQ 105</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 4: Ekstralar -->
+    <div class="form-section">
+      <div class="form-section-header">
+        <div class="form-section-num">4</div>
+        <div>
+          <div class="form-section-title">Ekstra hizmetler</div>
+          <div class="form-section-sub">İsteğe bağlı eklemeler</div>
+        </div>
+      </div>
+
+      <div class="extra-item">
+        <input type="checkbox" checked />
+        <div class="extra-info">
+          <div class="extra-name">🚐 Havalimanı transferi (2 yön)</div>
+          <div class="extra-desc">AYT havalimanı ↔ Rixos Premium Belek · Özel araç</div>
+        </div>
+        <div class="extra-price">€60</div>
+      </div>
+
+      <div class="extra-item">
+        <input type="checkbox" />
+        <div class="extra-info">
+          <div class="extra-name">🧳 Ekstra bagaj (1 adet, 23kg)</div>
+          <div class="extra-desc">Kişi başı ek bagaj hakkı, her iki yön için</div>
+        </div>
+        <div class="extra-price">€45 / kişi</div>
+      </div>
+
+      <div class="extra-item">
+        <input type="checkbox" />
+        <div class="extra-info">
+          <div class="extra-name">🛡 Seyahat sigortası</div>
+          <div class="extra-desc">İptal, sağlık ve bagaj güvencesi · Europäische Reiseversicherung</div>
+        </div>
+        <div class="extra-price">€29 / kişi</div>
+      </div>
+
+      <div class="extra-item">
+        <input type="checkbox" />
+        <div class="extra-info">
+          <div class="extra-name">🌹 Romantik paket</div>
+          <div class="extra-desc">Odada çiçek, şampanya ve özel süsleme · Odaya teslim</div>
+        </div>
+        <div class="extra-price">€89</div>
+      </div>
+    </div>
+
+    <!-- SECTION 5: Özel istekler -->
+    <div class="form-section">
+      <div class="form-section-header">
+        <div class="form-section-num">5</div>
+        <div>
+          <div class="form-section-title">Özel istekler</div>
+          <div class="form-section-sub">Garanti edilemez, ancak iletilecektir</div>
+        </div>
+      </div>
+
+      <div class="form-row full">
+        <div class="form-group">
+          <label class="form-label">Diyet / Alerji bilgisi</label>
+          <select class="form-input">
+            <option>Yok</option>
+            <option>Vejetaryen</option>
+            <option>Vegan</option>
+            <option>Glutensiz</option>
+            <option>Helal</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row full">
+        <div class="form-group">
+          <label class="form-label">Özel notlar</label>
+          <textarea class="form-input" rows="3" style="resize: vertical;" placeholder="Balayı kutlaması, engelli erişimi, yüksek kat tercihi..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- TERMS + SUBMIT -->
+    <div class="form-section">
+      <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.25rem;">
+        <label class="terms-check">
+          <input type="checkbox" />
+          <span><a href="#">Rezervasyon koşullarını</a> ve <a href="#">gizlilik politikasını</a> okudum, kabul ediyorum. <span style="color: var(--orange);">*</span></span>
+        </label>
+        <label class="terms-check">
+          <input type="checkbox" />
+          <span>Kampanya ve duyurulardan haberdar olmak istiyorum (isteğe bağlı).</span>
+        </label>
+        <label class="terms-check">
+          <input type="checkbox" />
+          <span>KVKK kapsamında kişisel verilerimin işlenmesine onay veriyorum. <span style="color: var(--orange);">*</span></span>
+        </label>
+      </div>
+
+      <button class="submit-btn">Ödeme adımına geç →</button>
+      <div class="submit-trust">
+        <span>🔒 SSL korumalı</span>
+        <span>·</span>
+        <span>💳 Datatrans güvenli ödeme</span>
+        <span>·</span>
+        <span>✅ Ücretsiz iptal (48 saate kadar)</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ORDER SUMMARY -->
+  <aside>
+    <div class="order-summary">
+      <div class="os-header">
+        <div class="os-hotel">Rixos Premium Belek</div>
+        <div class="os-sub">★★★★★ · Ultra her şey dahil</div>
+      </div>
+      <div class="os-body">
+        <div class="os-detail">
+          <span class="os-detail-label">📅 Giriş</span>
+          <span class="os-detail-val">15 Temmuz 2025</span>
+        </div>
+        <div class="os-detail">
+          <span class="os-detail-label">📅 Çıkış</span>
+          <span class="os-detail-val">22 Temmuz 2025</span>
+        </div>
+        <div class="os-detail">
+          <span class="os-detail-label">🌙 Gece</span>
+          <span class="os-detail-val">7 gece</span>
+        </div>
+        <div class="os-detail">
+          <span class="os-detail-label">👥 Kişi</span>
+          <span class="os-detail-val">2 Yetişkin</span>
+        </div>
+        <div class="os-detail">
+          <span class="os-detail-label">🛏 Oda</span>
+          <span class="os-detail-val">Standart (Havuz)</span>
+        </div>
+        <div class="os-detail">
+          <span class="os-detail-label">✈ Uçuş</span>
+          <span class="os-detail-val">XQ 101 · 06:30</span>
+        </div>
+        <div class="os-detail">
+          <span class="os-detail-label">🚐 Transfer</span>
+          <span class="os-detail-val">Dahil</span>
+        </div>
+
+        <div class="os-total">
+          <div class="os-total-row"><span>2 kişi oda</span><span>€910</span></div>
+          <div class="os-total-row"><span>2 × uçuş</span><span>€278</span></div>
+          <div class="os-total-row"><span>Transfer</span><span>€60</span></div>
+          <div class="os-total-row" style="color: #1E6B1E;"><span>Erken rezervasyon (%15)</span><span>−€195</span></div>
+          <div class="os-total-row big"><span>Toplam</span><span>€1.298</span></div>
+        </div>
+        <div class="os-saving">🎉 €195 tasarruf ettiniz!</div>
+      </div>
+      <div class="os-badges">
+        <div class="os-badge">🔒 SSL güvenli</div>
+        <div class="os-badge">✅ Ücretsiz iptal</div>
+        <div class="os-badge">💳 Datatrans</div>
+      </div>
+    </div>
+  </aside>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="sx-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo">SunExpress <em>Holidays</em></a>
+      <p>Güneş Ekspres Havacılık A.Ş. bünyesinde faaliyet gösteren tatil platformu.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Yardım</h4>
+      <ul>
+        <li><a href="#">SSS</a></li>
+        <li><a href="#">İptal Koşulları</a></li>
+        <li><a href="#">İletişim</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Güvenlik</h4>
+      <ul>
+        <li><a href="#">KVKK</a></li>
+        <li><a href="#">Gizlilik</a></li>
+        <li><a href="#">Kullanım Şartları</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>İletişim</h4>
+      <ul>
+        <li><a href="#">0850 XXX XX XX</a></li>
+        <li><a href="#">holidays@sunexpress.com</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 SunExpress Holidays · Güneş Ekspres Havacılık A.Ş.</span>
+    <span>🔒 SSL Güvenli · Datatrans ödeme altyapısı</span>
+  </div>
+</footer>
+
+</body>
+</html>

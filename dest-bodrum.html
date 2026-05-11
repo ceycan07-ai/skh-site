@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bodrum Tatili — SunExpress Holidays</title>
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    .dest-hero {
+      background: linear-gradient(160deg, #0f3d2e 0%, #0f6b5e 45%, #009FE3 100%);
+      min-height: 560px;
+      display: flex;
+      align-items: flex-end;
+      position: relative;
+      overflow: hidden;
+      padding-bottom: 5rem;
+    }
+    .dh-circle { position: absolute; border-radius: 50%; }
+    .dh-c1 { width: 500px; height: 500px; top: -150px; right: -80px; background: rgba(255,255,255,0.04); }
+    .dh-c2 { width: 280px; height: 280px; bottom: 60px; left: -60px; background: rgba(235,99,12,0.1); }
+    .dh-c3 { width: 180px; height: 180px; top: 80px; left: 35%; border: 2px solid rgba(255,255,255,0.08); background: transparent; }
+    .dest-hero-wave { position: absolute; bottom: -2px; left: 0; width: 100%; height: 72px; background: var(--cream); clip-path: ellipse(56% 100% at 50% 100%); }
+    .dest-hero-content { max-width: 1080px; margin: 0 auto; padding: 0 2.5rem; position: relative; z-index: 10; }
+    .dest-eyebrow { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.65); margin-bottom: 0.75rem; }
+    .dest-hero-title { font-family: 'Playfair Display', serif; font-size: 64px; font-weight: 700; color: white; line-height: 1.05; margin-bottom: 1rem; }
+    .dest-hero-title em { font-style: italic; color: rgba(255,255,255,0.7); }
+    .dest-hero-sub { font-size: 16px; color: rgba(255,255,255,0.65); max-width: 500px; line-height: 1.7; margin-bottom: 2rem; }
+    .dest-hero-stats { display: flex; gap: 2.5rem; margin-bottom: 2rem; }
+    .dest-stat-val { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: white; }
+    .dest-stat-label { font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 2px; }
+    .dest-search { max-width: 1080px; margin: -28px auto 0; padding: 0 2.5rem; position: relative; z-index: 20; }
+
+    .highlight-card { background: var(--white); border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border); cursor: pointer; transition: transform 0.22s, box-shadow 0.22s; }
+    .highlight-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+    .highlight-img { height: 140px; display: flex; align-items: center; justify-content: center; font-size: 56px; opacity: 0.5; }
+    .hi-1 { background: linear-gradient(140deg, #0f3d2e, #0f6b5e); }
+    .hi-2 { background: linear-gradient(140deg, #1A428A, #009FE3); }
+    .hi-3 { background: linear-gradient(140deg, #5e2a8a, #1A428A); }
+    .hi-4 { background: linear-gradient(140deg, #8a6b1a, #EB630C); }
+    .hi-5 { background: linear-gradient(140deg, #8a3a1a, #EB630C); }
+    .hi-6 { background: linear-gradient(140deg, #1a5c2a, #009FE3); }
+    .highlight-body { padding: 1rem; }
+    .highlight-name { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: var(--blue-dark); margin-bottom: 4px; }
+    .highlight-desc { font-size: 12px; color: var(--text-muted); line-height: 1.55; }
+    .highlights-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 1.5rem; }
+
+    .mini-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .mini-card { background: var(--white); border-radius: var(--radius-lg); border: 1px solid var(--border); overflow: hidden; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; text-decoration: none; color: inherit; display: block; }
+    .mini-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+    .mc-img { height: 120px; display: flex; align-items: center; justify-content: center; font-size: 44px; opacity: 0.45; }
+    .mc-body { padding: 0.9rem 1rem; }
+    .mc-name { font-size: 14px; font-weight: 600; color: var(--blue-dark); margin-bottom: 2px; }
+    .mc-region { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; }
+    .mc-price-row { display: flex; justify-content: space-between; align-items: center; }
+    .mc-price { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--blue-dark); }
+    .mc-nights { font-size: 11px; color: var(--text-muted); }
+
+    .practical-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .practical-card { background: var(--white); border-radius: var(--radius-md); border: 1px solid var(--border); padding: 1.25rem; }
+    .practical-icon { font-size: 24px; margin-bottom: 0.5rem; }
+    .practical-title { font-size: 14px; font-weight: 600; color: var(--blue-dark); margin-bottom: 0.5rem; }
+    .practical-text { font-size: 13px; color: var(--text-mid); line-height: 1.6; }
+
+    .dest-cta { background: linear-gradient(135deg, #0f3d2e, #0f6b5e); border-radius: var(--radius-xl); padding: 3rem; text-align: center; position: relative; overflow: hidden; }
+    .dest-cta::before { content: '⛵'; position: absolute; font-size: 200px; right: -20px; top: -40px; opacity: 0.05; }
+    .dest-cta h2 { font-family: 'Playfair Display', serif; font-size: 32px; color: white; margin-bottom: 0.75rem; }
+    .dest-cta p { font-size: 15px; color: rgba(255,255,255,0.6); margin-bottom: 1.75rem; }
+    .dest-cta-btns { display: flex; gap: 1rem; justify-content: center; }
+
+    .region-tabs { display: flex; gap: 8px; margin-bottom: 1.25rem; flex-wrap: wrap; }
+    .region-tab { padding: 7px 16px; border: 1px solid var(--border); border-radius: 20px; font-size: 13px; font-weight: 500; cursor: pointer; color: var(--text-muted); background: var(--white); transition: all 0.18s; }
+    .region-tab.active { background: var(--blue-dark); border-color: var(--blue-dark); color: white; }
+  </style>
+</head>
+<body>
+
+<nav class="sx-nav">
+  <a href="index.html" class="nav-logo">SunExpress <em>Holidays</em></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Tatiller</a></li>
+    <li><a href="search.html">Arama</a></li>
+    <li><a href="dest-antalya.html" class="active">Destinasyonlar</a></li>
+    <li><a href="booking.html">Rezervasyon</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="btn-ghost">Giriş Yap</button>
+    <a href="booking.html" class="btn-primary">Rezervasyon Yap</a>
+  </div>
+</nav>
+
+<div class="dest-hero">
+  <div class="dh-circle dh-c1"></div>
+  <div class="dh-circle dh-c2"></div>
+  <div class="dh-circle dh-c3"></div>
+  <div class="dest-hero-content">
+    <p class="dest-eyebrow">✈ İstanbul'dan direkt · 1s 10dk</p>
+    <h1 class="dest-hero-title">Bodrum<br><em>Ege'nin incisi</em></h1>
+    <p class="dest-hero-sub">Antik Halikarnassos'un üzerinde yükselen modern Bodrum. Kristal berraklığında koylar, efsanevi gece hayatı ve Egeli yaşam tarzı.</p>
+    <div class="dest-hero-stats">
+      <div><div class="dest-stat-val">60+</div><div class="dest-stat-label">Koyu ve plaj</div></div>
+      <div><div class="dest-stat-val">27°C</div><div class="dest-stat-label">Yaz ortalaması</div></div>
+      <div><div class="dest-stat-val">2.400</div><div class="dest-stat-label">Yıllık güneş saati</div></div>
+      <div><div class="dest-stat-val">€579</div><div class="dest-stat-label">Kişi başı / 5 gece</div></div>
+    </div>
+    <a href="search.html" class="btn-primary-lg">Bodrum paketlerini gör →</a>
+  </div>
+  <div class="dest-hero-wave"></div>
+</div>
+
+<div class="dest-search">
+  <div class="compact-search" style="margin-bottom: 2rem; margin-top: 0.5rem;">
+    <div class="cs-field"><span class="cs-label">Nereden</span><span class="cs-val">İstanbul (SAW)</span></div>
+    <div class="cs-field"><span class="cs-label">Gidiş</span><span class="cs-val">Tarih seç</span></div>
+    <div class="cs-field"><span class="cs-label">Dönüş</span><span class="cs-val">Tarih seç</span></div>
+    <div class="cs-field"><span class="cs-label">Kişi</span><span class="cs-val">2 Yetişkin</span></div>
+    <a href="search.html" class="cs-btn">Ara →</a>
+  </div>
+</div>
+
+<div class="section" style="padding-top: 0.5rem;">
+  <div class="section-header"><h2 class="section-title">Bodrum'u keşfedin</h2></div>
+  <div class="highlights-grid">
+    <div class="highlight-card"><div class="highlight-img hi-1">⛵</div><div class="highlight-body"><div class="highlight-name">Mavi Yolculuk</div><div class="highlight-desc">Türkiye'nin en güzel rotası. Göcek'ten Bodrum'a tekne turuyla koydan koya geçin.</div></div></div>
+    <div class="highlight-card"><div class="highlight-img hi-2">🏰</div><div class="highlight-body"><div class="highlight-name">Bodrum Kalesi</div><div class="highlight-desc">St. Peter Kalesi ve Sualtı Arkeoloji Müzesi — UNESCO'ya aday eşsiz miras.</div></div></div>
+    <div class="highlight-card"><div class="highlight-img hi-3">🌙</div><div class="highlight-body"><div class="highlight-name">Gece hayatı</div><div class="highlight-desc">Halikarnas Diskoteki'nden Gümbet sahiline, Bodrum geceleri efsanevidir.</div></div></div>
+    <div class="highlight-card"><div class="highlight-img hi-4">🛒</div><div class="highlight-body"><div class="highlight-name">Bodrum Çarşısı</div><div class="highlight-desc">El yapımı sandalet, deri ürünleri ve yerel el sanatları için renkli çarşılar.</div></div></div>
+    <div class="highlight-card"><div class="highlight-img hi-5">🌊</div><div class="highlight-body"><div class="highlight-name">Gündoğan & Türkbükü</div><div class="highlight-desc">Bodrum'un sessiz, şık ve doğal koyları. Zeytinlik manzarasında lüks otel deneyimi.</div></div></div>
+    <div class="highlight-card"><div class="highlight-img hi-6">🏺</div><div class="highlight-body"><div class="highlight-name">Antik Halikarnassos</div><div class="highlight-desc">Dünyanın Yedi Harikası'ndan Mausoleum'un kalıntıları Bodrum'dadır.</div></div></div>
+  </div>
+</div>
+
+<div class="section" style="padding-top: 0;">
+  <div class="section-header"><h2 class="section-title">Bölgeye göre oteller</h2><a href="search.html" class="see-all">Tümünü gör →</a></div>
+  <div class="region-tabs">
+    <button class="region-tab active">Yalıkavak</button>
+    <button class="region-tab">Türkbükü</button>
+    <button class="region-tab">Gündoğan</button>
+    <button class="region-tab">Gümbet</button>
+    <button class="region-tab">Bitez</button>
+  </div>
+  <div class="mini-cards">
+    <a href="hotel.html" class="mini-card">
+      <div class="mc-img hi-1">⛵</div>
+      <div class="mc-body">
+        <div class="mc-name">Mandarin Oriental</div>
+        <div class="mc-region">Göltürkbükü · ★★★★★ · YP</div>
+        <div class="mc-price-row">
+          <div><div class="mc-price">€899</div><div class="mc-nights">/ 5 gece</div></div>
+          <a href="hotel.html" class="card-cta" style="font-size: 12px; padding: 5px 10px;">İncele</a>
+        </div>
+      </div>
+    </a>
+    <a href="hotel.html" class="mini-card">
+      <div class="mc-img hi-2">🌿</div>
+      <div class="mc-body">
+        <div class="mc-name">The Bodrum by Paramount</div>
+        <div class="mc-region">Yalıkavak · ★★★★★ · YP</div>
+        <div class="mc-price-row">
+          <div><div class="mc-price">€750</div><div class="mc-nights">/ 5 gece</div></div>
+          <a href="hotel.html" class="card-cta" style="font-size: 12px; padding: 5px 10px;">İncele</a>
+        </div>
+      </div>
+    </a>
+    <a href="hotel.html" class="mini-card">
+      <div class="mc-img hi-3">🏖</div>
+      <div class="mc-body">
+        <div class="mc-name">Kempinski Hotel Barbaros Bay</div>
+        <div class="mc-region">Gerenkuyu · ★★★★★ · YP</div>
+        <div class="mc-price-row">
+          <div><div class="mc-price">€680</div><div class="mc-nights">/ 5 gece</div></div>
+          <a href="hotel.html" class="card-cta" style="font-size: 12px; padding: 5px 10px;">İncele</a>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<div class="section" style="padding-top: 0;">
+  <div class="section-header"><h2 class="section-title">Pratik bilgiler</h2></div>
+  <div class="practical-grid">
+    <div class="practical-card"><div class="practical-icon">✈️</div><div class="practical-title">Nasıl gidilir?</div><div class="practical-text">İstanbul SAW → Bodrum BJV direkt uçuş yaklaşık 1 saat 10 dakika. SunExpress günde 2 sefer düzenlemektedir. Milas-Bodrum Havalimanı şehir merkezine 36 km uzaklıktadır.</div></div>
+    <div class="practical-card"><div class="practical-icon">📅</div><div class="practical-title">En iyi dönem</div><div class="practical-text">Mayıs–Ekim arası idealdir. Temmuz–Ağustos en kalabalık dönemdir. Haziran ve Eylül hem hava koşulları hem de fiyat açısından en ideal aydır.</div></div>
+    <div class="practical-card"><div class="practical-icon">🛥</div><div class="practical-title">Ulaşım</div><div class="practical-text">Yarımadanın her noktasına dolmuş ve tekne bağlantısı vardır. Yalıkavak Marina ile Bodrum marina arasında deniz otobüsü seferleri mevcuttur.</div></div>
+    <div class="practical-card"><div class="practical-icon">🍽</div><div class="practical-title">Gastronomi</div><div class="practical-text">Ege mutfağının vazgeçilmezi zeytinyağlı mezelerin yanı sıra Bodrum'a özel testi kebabı ve Girit mutfağından etkilenen çeşitli yemekler bulabilirsiniz.</div></div>
+  </div>
+</div>
+
+<div class="section" style="padding-top: 0; padding-bottom: 3.5rem;">
+  <div class="dest-cta">
+    <h2>Bodrum'u hemen planla</h2>
+    <p>Bu yaz Ege'nin incisinde unutulmaz bir tatil yaşayın</p>
+    <div class="dest-cta-btns">
+      <a href="search.html" class="btn-primary-lg">Paketleri gör →</a>
+      <a href="dest-antalya.html" class="btn-ghost" style="border-color: rgba(255,255,255,0.4); padding: 0.9rem 2rem; font-size: 15px; border-radius: var(--radius-md); text-decoration: none; color: rgba(255,255,255,0.8);">Antalya'ya bak</a>
+    </div>
+  </div>
+</div>
+
+<footer class="sx-footer">
+  <div class="footer-inner">
+    <div class="footer-brand"><a href="index.html" class="nav-logo">SunExpress <em>Holidays</em></a><p>Güneş Ekspres Havacılık A.Ş. bünyesinde faaliyet gösteren tatil platformu.</p></div>
+    <div class="footer-col"><h4>Destinasyonlar</h4><ul><li><a href="dest-antalya.html">Antalya</a></li><li><a href="dest-bodrum.html">Bodrum</a></li><li><a href="dest-izmir.html">İzmir</a></li><li><a href="dest-dalaman.html">Dalaman</a></li></ul></div>
+    <div class="footer-col"><h4>Yardım</h4><ul><li><a href="#">SSS</a></li><li><a href="#">İptal</a></li><li><a href="#">İletişim</a></li></ul></div>
+    <div class="footer-col"><h4>Şirket</h4><ul><li><a href="#">Hakkımızda</a></li><li><a href="#">KVKK</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><span>© 2025 SunExpress Holidays · Güneş Ekspres Havacılık A.Ş.</span><span>🔒 SSL Güvenli · Datatrans</span></div>
+</footer>
+</body>
+</html>
