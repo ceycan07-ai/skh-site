@@ -281,6 +281,27 @@
     .promo-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: white; margin-bottom: 0.5rem; }
     .promo-sub { font-size: 14px; color: rgba(255,255,255,0.55); }
     .promo-btn { position: relative; z-index: 2; }
+
+    /* Hero search dropdowns */
+    .s-field { position: relative; cursor: pointer; }
+    .h-dropdown {
+      position: absolute; top: calc(100% + 8px); left: 0;
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: var(--radius-md); box-shadow: var(--shadow-lg);
+      z-index: 300; min-width: 190px; display: none;
+      padding: 6px; animation: ddIn 0.18s ease;
+    }
+    @keyframes ddIn { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:none} }
+    .h-dropdown.open { display: block; }
+    .h-dd-item { padding: 9px 12px; font-size: 13px; color: var(--text-mid); border-radius: var(--radius-sm); cursor: pointer; transition: background 0.15s; }
+    .h-dd-item:hover { background: var(--cream); }
+    .h-dd-item.active { background: var(--blue-pale); color: var(--blue-dark); font-weight: 500; }
+    .h-date-input { border: none; background: transparent; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; color: var(--text); outline: none; cursor: pointer; width: 100%; padding: 0; }
+    .h-date-input::-webkit-calendar-picker-indicator { opacity: 0.4; cursor: pointer; }
+    .guest-row-h { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; font-size: 13px; color: var(--text-mid); border-bottom: 1px solid var(--border); }
+    .guest-row-h:last-of-type { border-bottom: none; }
+    .hgc-btn { width: 28px; height: 28px; border: 1px solid var(--border); background: var(--white); border-radius: 50%; font-size: 16px; cursor: pointer; color: var(--text-mid); display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+    .hgc-btn:hover { border-color: var(--orange); color: var(--orange); }
   </style>
   <script src="i18n.js" defer></script>
   <script src="animations.js" defer></script>
@@ -537,7 +558,7 @@
       </ul>
     </div>
     <div class="footer-col">
-      <h4>Yardım</h4>
+      <h4 data-i18n="footer.help">Yardım</h4>
       <ul>
         <li><a href="#"><span data-i18n="footer.faq">SSS</span></a></li>
         <li><a href="#"><span data-i18n="footer.cancel">İptal Koşulları</span></a></li>
@@ -546,7 +567,7 @@
       </ul>
     </div>
     <div class="footer-col">
-      <h4>Şirket</h4>
+      <h4 data-i18n="footer.company">Şirket</h4>
       <ul>
         <li><a href="#"><span data-i18n="footer.about">Hakkımızda</span></a></li>
         <li><a href="#"><span data-i18n="footer.career">Kariyer</span></a></li>
@@ -560,6 +581,52 @@
     <span>🔒 SSL Güvenli · Datatrans ödeme altyapısı</span>
   </div>
 </footer>
+
+
+<script>
+let hAdultCount = 2, hChildCount = 0;
+function hToggle(id) {
+  document.querySelectorAll('.h-dropdown').forEach(d => { if(d.id!==id) d.classList.remove('open'); });
+  document.getElementById(id).classList.toggle('open');
+}
+function hSelectFrom(el, e) {
+  e.stopPropagation();
+  document.getElementById('hFromVal').textContent = el.dataset.val;
+  el.parentNode.querySelectorAll('.h-dd-item').forEach(i=>i.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('hddFrom').classList.remove('open');
+}
+function hSelectTo(el, e) {
+  e.stopPropagation();
+  document.getElementById('hToVal').textContent = el.dataset.val;
+  el.parentNode.querySelectorAll('.h-dd-item').forEach(i=>i.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('hddTo').classList.remove('open');
+}
+function hGuest(type, d, e) {
+  e.stopPropagation();
+  if(type==='a') { hAdultCount=Math.max(1,hAdultCount+d); document.getElementById('hAdults').textContent=hAdultCount; }
+  else { hChildCount=Math.max(0,hChildCount+d); document.getElementById('hChildren').textContent=hChildCount; }
+  const lang = (typeof I18N!=='undefined')?I18N.current:'de';
+  const aLbl = {tr:'Yetişkin',de:'Erwachsene',en:'Adults'}[lang];
+  const cLbl = {tr:'Çocuk',de:'Kinder',en:'Children'}[lang];
+  const extra = hChildCount>0?`, ${hChildCount} ${cLbl}`:'';
+  document.getElementById('hGuestsVal').innerHTML = `${hAdultCount} ${aLbl}${extra}`;
+}
+function hUpdateNights() {
+  const d1=new Date(document.getElementById('hDepartDate').value);
+  const d2=new Date(document.getElementById('hReturnDate').value);
+  const n=Math.round((d2-d1)/86400000);
+  if(n>0){
+    const lang=(typeof I18N!=='undefined')?I18N.current:'de';
+    const lbl={tr:'gece',de:'Nächte',en:'nights'}[lang];
+    document.getElementById('hNightsLabel').textContent=n+' '+lbl;
+  }
+}
+document.addEventListener('click', e=>{
+  if(!e.target.closest('.s-field')) document.querySelectorAll('.h-dropdown').forEach(d=>d.classList.remove('open'));
+});
+</script>
 
 </body>
 </html>

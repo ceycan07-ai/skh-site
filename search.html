@@ -406,6 +406,130 @@
     }
     .page-btn:hover { border-color: var(--orange); color: var(--orange); }
     .page-btn.active { background: var(--orange); border-color: var(--orange); color: white; font-weight: 600; }
+
+    /* ── PRICE BLOCK (new) ── */
+    .price-block {
+      text-align: right;
+      margin-bottom: 0.5rem;
+    }
+    .price-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+    .price-amount {
+      display: flex;
+      align-items: baseline;
+      gap: 1px;
+      justify-content: flex-end;
+    }
+    .price-currency {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--blue-dark);
+      margin-top: 2px;
+    }
+    .price-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 34px;
+      font-weight: 700;
+      color: var(--blue-dark);
+      line-height: 1;
+    }
+    .price-detail {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .hotel-price-area {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.5rem;
+    }
+
+    /* ── DROPDOWN ── */
+    .cs-field { position: relative; }
+    .search-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      z-index: 300;
+      min-width: 200px;
+      display: none;
+      padding: 6px;
+      animation: ddFadeIn 0.18s ease;
+    }
+    @keyframes ddFadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+    .search-dropdown.open { display: block; }
+    .dd-item {
+      padding: 9px 12px;
+      font-size: 13px;
+      color: var(--text-mid);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .dd-item:hover { background: var(--cream); }
+    .dd-item.active { background: var(--blue-pale); color: var(--blue-dark); font-weight: 500; }
+
+    .guest-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      font-size: 13px;
+      color: var(--text-mid);
+      border-bottom: 1px solid var(--border);
+    }
+    .guest-row:last-of-type { border-bottom: none; }
+    .guest-ctrl { display: flex; align-items: center; gap: 10px; }
+    .gc-btn {
+      width: 28px; height: 28px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      border-radius: 50%;
+      font-size: 16px;
+      cursor: pointer;
+      color: var(--text-mid);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+    }
+    .gc-btn:hover { border-color: var(--orange); color: var(--orange); }
+    .gc-done {
+      width: 100%;
+      background: var(--orange);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 6px;
+    }
+
+    .cs-date-input {
+      border: none;
+      background: transparent;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      outline: none;
+      cursor: pointer;
+      width: 100%;
+      padding: 0;
+    }
+    .cs-date-input::-webkit-calendar-picker-indicator { opacity: 0.4; cursor: pointer; }
   </style>
   <script src="i18n.js" defer></script>
   <script src="animations.js" defer></script>
@@ -428,31 +552,86 @@
 </nav>
 
 <!-- RESULTS HERO + SEARCH -->
+
+<!-- RESULTS HERO + SEARCH -->
 <div class="results-hero">
   <div class="results-hero-inner">
     <div class="breadcrumb" style="margin-bottom: 1rem;">
-      <a href="index.html">Ana Sayfa</a> › <span>Arama Sonuçları</span>
+      <a href="index.html">Ana Sayfa</a> › <span data-i18n="sr.title">Antalya tatil paketleri</span>
     </div>
-    <p class="results-title"><span data-i18n="sr.title">Antalya tatil paketleri</span></p>
-    <p class="results-sub">İstanbul SAW · 15–22 Temmuz 2025 · 2 Yetişkin · 7 gece</p>
-    <div class="compact-search">
+    <p class="results-title" data-i18n="sr.title">Antalya tatil paketleri</p>
+    <p class="results-sub">Frankfurt FRA · 15–22 Jul 2025 · 2 <span data-i18n="search.adults">Yetişkin</span></p>
+
+    <!-- Interactive Search Mask -->
+    <div class="compact-search" id="searchMask">
+
+      <!-- FROM -->
+      <div class="cs-field" id="csFrom" onclick="toggleDropdown('ddFrom')">
+        <span class="cs-label" data-i18n="search.from">Nereden</span>
+        <span class="cs-val" id="fromVal">Frankfurt (FRA)</span>
+        <div class="search-dropdown" id="ddFrom">
+          <div class="dd-item active" data-val="Frankfurt (FRA)" data-key="origin.fra" onclick="selectFrom(this)">Frankfurt (FRA)</div>
+          <div class="dd-item" data-val="Munich (MUC)" data-key="origin.muc" onclick="selectFrom(this)">München (MUC)</div>
+          <div class="dd-item" data-val="Düsseldorf (DUS)" data-key="origin.dus" onclick="selectFrom(this)">Düsseldorf (DUS)</div>
+          <div class="dd-item" data-val="Hamburg (HAM)" data-key="origin.ham" onclick="selectFrom(this)">Hamburg (HAM)</div>
+          <div class="dd-item" data-val="Berlin (BER)" data-key="origin.ber" onclick="selectFrom(this)">Berlin (BER)</div>
+          <div class="dd-item" data-val="Wien (VIE)" data-key="origin.vie" onclick="selectFrom(this)">Wien (VIE)</div>
+          <div class="dd-item" data-val="London (LHR)" data-key="origin.lhr" onclick="selectFrom(this)">London (LHR)</div>
+          <div class="dd-item" data-val="Istanbul (SAW)" data-key="origin.saw" onclick="selectFrom(this)">Istanbul SAW</div>
+        </div>
+      </div>
+
+      <!-- TO -->
+      <div class="cs-field" id="csTo" onclick="toggleDropdown('ddTo')">
+        <span class="cs-label" data-i18n="search.to">Nereye</span>
+        <span class="cs-val" id="toVal">Antalya (AYT)</span>
+        <div class="search-dropdown" id="ddTo">
+          <div class="dd-item active" data-val="Antalya (AYT)" data-key="dest.ayt" onclick="selectTo(this)">Antalya (AYT)</div>
+          <div class="dd-item" data-val="Bodrum (BJV)" data-key="dest.bjv" onclick="selectTo(this)">Bodrum (BJV)</div>
+          <div class="dd-item" data-val="İzmir (ADB)" data-key="dest.adb" onclick="selectTo(this)">İzmir (ADB)</div>
+          <div class="dd-item" data-val="Dalaman (DLM)" data-key="dest.dlm" onclick="selectTo(this)">Dalaman (DLM)</div>
+          <div class="dd-item" data-val="Hurghada (HRG)" data-key="dest.hrg" onclick="selectTo(this)">Hurghada (HRG)</div>
+          <div class="dd-item" data-val="Marmaris (RMF)" data-key="dest.rmf" onclick="selectTo(this)">Marmaris (RMF)</div>
+        </div>
+      </div>
+
+      <!-- DATES -->
       <div class="cs-field">
-        <span class="cs-label">Nereden</span>
-        <span class="cs-val">İstanbul (SAW)</span>
+        <span class="cs-label" data-i18n="search.depart">Gidiş</span>
+        <input type="date" class="cs-date-input" id="departDate" value="2025-07-15" onchange="updateNights()" />
       </div>
       <div class="cs-field">
-        <span class="cs-label">Nereye</span>
-        <span class="cs-val">Antalya (AYT)</span>
+        <span class="cs-label" data-i18n="search.return">Dönüş</span>
+        <input type="date" class="cs-date-input" id="returnDate" value="2025-07-22" onchange="updateNights()" />
+        <span class="cs-sub" id="nightsLabel">7 <span data-i18n="search.nights">gece</span></span>
       </div>
-      <div class="cs-field">
-        <span class="cs-label">Gidiş – Dönüş</span>
-        <span class="cs-val">15 Tem — 22 Tem</span>
+
+      <!-- GUESTS -->
+      <div class="cs-field" id="csGuests" onclick="toggleDropdown('ddGuests')">
+        <span class="cs-label" data-i18n="search.guests">Kişi</span>
+        <span class="cs-val" id="guestsVal">2 <span data-i18n="search.adults">Yetişkin</span></span>
+        <div class="search-dropdown" id="ddGuests" style="min-width:240px;">
+          <div class="guest-row">
+            <span data-i18n="search.adults">Yetişkin</span>
+            <div class="guest-ctrl">
+              <button class="gc-btn" onclick="changeGuest('adults',-1,event)">−</button>
+              <span id="adultCount">2</span>
+              <button class="gc-btn" onclick="changeGuest('adults',1,event)">+</button>
+            </div>
+          </div>
+          <div class="guest-row">
+            <span data-i18n="search.children">Çocuk</span>
+            <div class="guest-ctrl">
+              <button class="gc-btn" onclick="changeGuest('children',-1,event)">−</button>
+              <span id="childCount">0</span>
+              <button class="gc-btn" onclick="changeGuest('children',1,event)">+</button>
+            </div>
+          </div>
+          <button class="gc-done" onclick="closeDropdown('ddGuests')" data-i18n="dest.discover">Tamam</button>
+        </div>
       </div>
-      <div class="cs-field">
-        <span class="cs-label">Kişi</span>
-        <span class="cs-val">2 Yetişkin</span>
-      </div>
-      <a href="search.html" class="cs-btn">Ara →</a>
+
+      <a href="search.html" class="cs-btn" data-i18n="search.btn">Ara →</a>
     </div>
   </div>
 </div>
@@ -461,14 +640,14 @@
 <div class="results-layout">
 
   <!-- FILTERS -->
-  <aside class="filters">
+  <aside class="filters reveal">
     <div class="filters-title">
       <span data-i18n="sr.filters">Filtreler</span>
-      <span class="filters-clear"><span data-i18n="sr.clear">Temizle</span></span>
+      <span class="filters-clear" data-i18n="sr.clear">Temizle</span>
     </div>
 
     <div class="filter-group">
-      <div class="filter-label">Fiyat Aralığı</div>
+      <div class="filter-label" data-i18n="sr.price_range">Fiyat Aralığı</div>
       <input type="range" min="200" max="2000" value="1200" style="width:100%; accent-color: var(--orange);" />
       <div class="price-vals"><span>€200</span><span>€1.200</span></div>
     </div>
@@ -476,7 +655,7 @@
     <div class="filter-divider"></div>
 
     <div class="filter-group">
-      <div class="filter-label"><span data-i18n="sr.stars">Yıldız</span></div>
+      <div class="filter-label" data-i18n="sr.stars">Yıldız</div>
       <div class="star-filter">
         <button class="star-btn">★ 2</button>
         <button class="star-btn">★ 3</button>
@@ -488,34 +667,34 @@
     <div class="filter-divider"></div>
 
     <div class="filter-group">
-      <div class="filter-label"><span data-i18n="sr.board">Pansiyon Tipi</span></div>
+      <div class="filter-label" data-i18n="sr.board">Pansiyon Tipi</div>
       <div class="check-group">
-        <label class="check-item"><input type="checkbox" checked /> Her şey dahil</label>
-        <label class="check-item"><input type="checkbox" checked /> Ultra her şey dahil</label>
-        <label class="check-item"><input type="checkbox" /> Yarım pansiyon</label>
-        <label class="check-item"><input type="checkbox" /> Oda kahvaltı</label>
-        <label class="check-item"><input type="checkbox" /> Sadece oda</label>
+        <label class="check-item"><input type="checkbox" checked /> <span data-i18n="sr.all_inc_s">Her şey dahil</span></label>
+        <label class="check-item"><input type="checkbox" checked /> <span data-i18n="sr.ultra_ai_s">Ultra her şey dahil</span></label>
+        <label class="check-item"><input type="checkbox" /> <span data-i18n="sr.half_board_s">Yarım pansiyon</span></label>
+        <label class="check-item"><input type="checkbox" /> <span data-i18n="sr.bb_s">Oda kahvaltı</span></label>
+        <label class="check-item"><input type="checkbox" /> <span data-i18n="sr.room_only_s">Sadece oda</span></label>
       </div>
     </div>
 
     <div class="filter-divider"></div>
 
     <div class="filter-group">
-      <div class="filter-label"><span data-i18n="sr.amenities">Olanaklar</span></div>
+      <div class="filter-label" data-i18n="sr.amenities">Olanaklar</div>
       <div class="check-group">
-        <label class="check-item"><input type="checkbox" checked /> Havuz</label>
-        <label class="check-item"><input type="checkbox" checked /> Plaj erişimi</label>
-        <label class="check-item"><input type="checkbox" /> Spa & Wellness</label>
-        <label class="check-item"><input type="checkbox" /> Çocuk kulübü</label>
-        <label class="check-item"><input type="checkbox" /> Ücretsiz Wi-Fi</label>
-        <label class="check-item"><input type="checkbox" /> Spor alanları</label>
+        <label class="check-item"><input type="checkbox" checked /> <span data-i18n="sr.am_pool">Havuz</span></label>
+        <label class="check-item"><input type="checkbox" checked /> <span data-i18n="sr.am_beach">Plaj erişimi</span></label>
+        <label class="check-item"><input type="checkbox" /> <span data-i18n="sr.am_spa">Spa & Wellness</span></label>
+        <label class="check-item"><input type="checkbox" /> <span data-i18n="sr.am_kids">Çocuk kulübü</span></label>
+        <label class="check-item"><input type="checkbox" /> <span data-i18n="sr.am_wifi">Ücretsiz Wi-Fi</span></label>
+        <label class="check-item"><input type="checkbox" /> <span data-i18n="sr.am_sports">Spor alanları</span></label>
       </div>
     </div>
 
     <div class="filter-divider"></div>
 
     <div class="filter-group">
-      <div class="filter-label">TrustYou Puanı</div>
+      <div class="filter-label" data-i18n="sr.trust_score">TrustYou Puanı</div>
       <div class="star-filter">
         <button class="star-btn">7+</button>
         <button class="star-btn active">8+</button>
@@ -526,207 +705,218 @@
 
   <!-- RESULTS -->
   <div class="results-area">
-    <div class="sort-bar">
-      <p class="result-count"><strong>47 tesis</strong> bulundu</p>
+    <div class="sort-bar reveal">
+      <p class="result-count" data-i18n-html="sr.results_count"><strong>47 tesis</strong> bulundu</p>
       <select class="sort-select">
-        <option>Önerilen sıralama</option>
-        <option>Fiyat: Düşükten yükseğe</option>
-        <option>Fiyat: Yüksekten düşüğe</option>
-        <option>TrustYou puanına göre</option>
-        <option><span data-i18n="sr.stars">Yıldız</span>a göre</option>
+        <option data-i18n="sr.sort_rec">Önerilen sıralama</option>
+        <option data-i18n="sr.sort_price_asc">Fiyat: Düşükten yükseğe</option>
+        <option data-i18n="sr.sort_price_desc">Fiyat: Yüksekten düşüğe</option>
+        <option data-i18n="sr.sort_trust">TrustYou puanına göre</option>
+        <option data-i18n="sr.sort_stars2">Yıldıza göre</option>
       </select>
     </div>
 
     <!-- Promo strip -->
-    <div class="promo-strip">
-      <p>🎉 <strong>Erken rezervasyon:</strong> Bu haftaya özel seçili otellerde %15 indirim!</p>
-      <a href="#">Fırsatları gör</a>
+    <div class="promo-strip reveal">
+      <p data-i18n-html="sr.promo_full">🎉 <strong>Erken rezervasyon:</strong> Bu haftaya özel seçili otellerde %15 indirim!</p>
+      <a href="#" data-i18n="sr.promo_cta">Fırsatları gör</a>
     </div>
 
-    <!-- Card 1 -->
-    <a href="hotel.html" class="hotel-card">
+    <!-- ═══ CARD 1 ═══ -->
+    <a href="hotel.html" class="hotel-card reveal">
       <div class="hotel-img">
         <div class="hotel-img-bg hbg-1">🏖</div>
         <div class="hotel-img-overlay"></div>
-        <div class="hotel-tag">Erken rezervasyon</div>
+        <div class="hotel-tag" data-i18n="tag.early">Erken rezervasyon</div>
         <div class="hotel-fav">♡</div>
         <div class="img-dots">
-          <div class="img-dot active"></div>
-          <div class="img-dot"></div>
-          <div class="img-dot"></div>
-          <div class="img-dot"></div>
+          <div class="img-dot active"></div><div class="img-dot"></div><div class="img-dot"></div><div class="img-dot"></div>
         </div>
       </div>
       <div class="hotel-body">
         <div class="hotel-meta">
           <span class="badge badge-blue">★★★★★</span>
-          <span class="badge badge-orange">Ultra her şey dahil</span>
+          <span class="badge badge-orange" data-i18n="sr.ultra_ai_s">Ultra her şey dahil</span>
         </div>
         <div class="hotel-name">Rixos Premium Belek</div>
-        <div class="hotel-location">📍 Belek, Antalya · Plaja 50m</div>
-        <p class="hotel-desc">Belek'in incisi Rixos Premium, 650 metre özel plajı, 14 restoranı ve eğlence dolu programıyla aileler için mükemmel bir tatil sunuyor. Aquaworld kapalı su parkı misafirlere ücretsizdir.</p>
+        <div class="hotel-location" data-i18n="loc.belek">📍 Belek, Antalya · Plaja 50m</div>
+        <p class="hotel-desc" data-i18n="hdesc.rixos">Belek'in incisi Rixos Premium, 650 metre özel plajı, 14 restoranı ve eğlence dolu programıyla aileler için mükemmel bir tatil sunuyor.</p>
         <div class="hotel-amenities">
-          <span class="amenity">🏊 5 Havuz</span>
-          <span class="amenity">🏖 Özel plaj</span>
-          <span class="amenity">🧖 Spa</span>
-          <span class="amenity">👶 Çocuk kulübü</span>
-          <span class="amenity">🎾 Tenis</span>
-          <span class="amenity">📶 Wi-Fi</span>
+          <span class="amenity" data-i18n="am.pools5">🏊 5 Havuz</span>
+          <span class="amenity" data-i18n="am.private_beach">🏖 Özel plaj</span>
+          <span class="amenity" data-i18n="am.spa">🧖 Spa</span>
+          <span class="amenity" data-i18n="am.kids_club">👶 Çocuk kulübü</span>
+          <span class="amenity" data-i18n="am.tennis">🎾 Tenis</span>
+          <span class="amenity" data-i18n="am.wifi">📶 Wi-Fi</span>
         </div>
         <div class="hotel-footer">
           <div class="hotel-review">
             <div class="review-score">9.1</div>
             <div>
               <div class="stars">★★★★★</div>
-              <div class="review-text"><span data-i18n="sr.excellent">Mükemmel</span> · 2.847 yorum</div>
+              <div class="review-text"><span data-i18n="sr.excellent">Mükemmel</span> · <span data-i18n="sr.rev_2847">2.847 yorum</span></div>
             </div>
           </div>
           <div class="hotel-price-area">
-            <div class="price-from">kişi başı</div>
-            <div class="price-val">€649</div>
-            <div class="price-per">7 gece · uçak dahil</div>
-            <a href="hotel.html" class="card-cta"><span data-i18n="sr.details">İncele →</span></a>
+            <div class="price-block">
+              <div class="price-label" data-i18n="sr.per_person_lbl">Kişi başı</div>
+              <div class="price-amount">
+                <span class="price-currency">€</span>
+                <span class="price-num">649</span>
+              </div>
+              <div class="price-detail" data-i18n="sr.nights7_flight">7 gece · uçak dahil</div>
+            </div>
+            <a href="hotel.html" class="card-cta" data-i18n="sr.details">İncele →</a>
           </div>
         </div>
       </div>
     </a>
 
-    <!-- Card 2 -->
-    <a href="hotel.html" class="hotel-card">
+    <!-- ═══ CARD 2 ═══ -->
+    <a href="hotel.html" class="hotel-card reveal">
       <div class="hotel-img">
         <div class="hotel-img-bg hbg-2">🌿</div>
         <div class="hotel-img-overlay"></div>
         <div class="hotel-fav">♡</div>
         <div class="img-dots">
-          <div class="img-dot active"></div>
-          <div class="img-dot"></div>
-          <div class="img-dot"></div>
+          <div class="img-dot active"></div><div class="img-dot"></div><div class="img-dot"></div>
         </div>
       </div>
       <div class="hotel-body">
         <div class="hotel-meta">
           <span class="badge badge-blue">★★★★★</span>
-          <span class="badge badge-orange">Her şey dahil</span>
-          <span class="badge badge-green">Sürdürülebilir</span>
+          <span class="badge badge-orange" data-i18n="sr.all_inc_s">Her şey dahil</span>
+          <span class="badge badge-green" data-i18n="tag.sustainable">Sürdürülebilir</span>
         </div>
         <div class="hotel-name">Maxx Royal Kemer Resort</div>
-        <div class="hotel-location">📍 Kemer, Antalya · Plaja 0m</div>
-        <p class="hotel-desc">Doğanın kalbinde lüks deneyim. Toros dağlarının eteklerinde konumlanan resort, kristal berraklığındaki koyuyla huzur arayanlar için idealdir.</p>
+        <div class="hotel-location" data-i18n="loc.kemer">📍 Kemer, Antalya · Plaja 0m</div>
+        <p class="hotel-desc" data-i18n="hdesc.maxx">Doğanın kalbinde lüks deneyim. Toros dağlarının eteklerinde konumlanan resort, kristal berraklığındaki koyuyla huzur arayanlar için idealdir.</p>
         <div class="hotel-amenities">
-          <span class="amenity">🏊 4 Havuz</span>
-          <span class="amenity">🏖 Özel koy</span>
-          <span class="amenity">🧖 Hamam</span>
-          <span class="amenity">🎶 Canlı müzik</span>
-          <span class="amenity">📶 Wi-Fi</span>
+          <span class="amenity" data-i18n="am.pools4">🏊 4 Havuz</span>
+          <span class="amenity" data-i18n="am.private_beach">🏖 Özel koy</span>
+          <span class="amenity" data-i18n="am.hamam">🛁 Hamam</span>
+          <span class="amenity" data-i18n="am.live_music">🎶 Canlı müzik</span>
+          <span class="amenity" data-i18n="am.wifi">📶 Wi-Fi</span>
         </div>
         <div class="hotel-footer">
           <div class="hotel-review">
             <div class="review-score">9.3</div>
             <div>
               <div class="stars">★★★★★</div>
-              <div class="review-text"><span data-i18n="sr.superb">Olağanüstü</span> · 1.532 yorum</div>
+              <div class="review-text"><span data-i18n="sr.superb">Olağanüstü</span> · <span data-i18n="sr.rev_1532">1.532 yorum</span></div>
             </div>
           </div>
           <div class="hotel-price-area">
-            <div class="price-from">kişi başı</div>
-            <div class="price-val">€819</div>
-            <div class="price-per">7 gece · uçak dahil</div>
-            <a href="hotel.html" class="card-cta"><span data-i18n="sr.details">İncele →</span></a>
+            <div class="price-block">
+              <div class="price-label" data-i18n="sr.per_person_lbl">Kişi başı</div>
+              <div class="price-amount">
+                <span class="price-currency">€</span>
+                <span class="price-num">819</span>
+              </div>
+              <div class="price-detail" data-i18n="sr.nights7_flight">7 gece · uçak dahil</div>
+            </div>
+            <a href="hotel.html" class="card-cta" data-i18n="sr.details">İncele →</a>
           </div>
         </div>
       </div>
     </a>
 
-    <!-- Card 3 -->
-    <a href="hotel.html" class="hotel-card">
+    <!-- ═══ CARD 3 ═══ -->
+    <a href="hotel.html" class="hotel-card reveal">
       <div class="hotel-img">
         <div class="hotel-img-bg hbg-3">🏰</div>
         <div class="hotel-img-overlay"></div>
-        <div class="hotel-tag">Son odalar</div>
+        <div class="hotel-tag" data-i18n="tag.last_rooms">Son odalar</div>
         <div class="hotel-fav">♡</div>
         <div class="img-dots">
-          <div class="img-dot active"></div>
-          <div class="img-dot"></div>
-          <div class="img-dot"></div>
-          <div class="img-dot"></div>
-          <div class="img-dot"></div>
+          <div class="img-dot active"></div><div class="img-dot"></div><div class="img-dot"></div><div class="img-dot"></div><div class="img-dot"></div>
         </div>
       </div>
       <div class="hotel-body">
         <div class="hotel-meta">
           <span class="badge badge-blue">★★★★★</span>
-          <span class="badge badge-orange">Ultra her şey dahil</span>
+          <span class="badge badge-orange" data-i18n="sr.ultra_ai_s">Ultra her şey dahil</span>
         </div>
         <div class="hotel-name">Titanic Mardan Palace</div>
-        <div class="hotel-location">📍 Kundu, Antalya · Plaja 0m</div>
-        <p class="hotel-desc">Avrupa'nın en büyük tatil köyü. 3.000 m² açık havuzu, özel lagünü ve olağanüstü gastronomisiyle eşsiz bir deneyim sunuyor.</p>
+        <div class="hotel-location" data-i18n="loc.kundu">📍 Kundu, Antalya · Plaja 0m</div>
+        <p class="hotel-desc" data-i18n="hdesc.titanic">Avrupa'nın en büyük tatil köyü. 3.000 m² açık havuzu, özel lagünü ve olağanüstü gastronomisiyle eşsiz bir deneyim sunuyor.</p>
         <div class="hotel-amenities">
-          <span class="amenity">🏊 Lagün havuz</span>
-          <span class="amenity">🏖 Özel plaj</span>
-          <span class="amenity">🎰 Casino</span>
-          <span class="amenity">🍽 14 restoran</span>
-          <span class="amenity">📶 Wi-Fi</span>
+          <span class="amenity" data-i18n="am.lagoon">🏊 Lagün havuz</span>
+          <span class="amenity" data-i18n="am.private_beach">🏖 Özel plaj</span>
+          <span class="amenity" data-i18n="am.casino">🎰 Casino</span>
+          <span class="amenity" data-i18n="am.restaurants14">🍽 14 restoran</span>
+          <span class="amenity" data-i18n="am.wifi">📶 Wi-Fi</span>
         </div>
         <div class="hotel-footer">
           <div class="hotel-review">
             <div class="review-score">8.7</div>
             <div>
               <div class="stars">★★★★★</div>
-              <div class="review-text"><span data-i18n="sr.great">Harika</span> · 3.119 yorum</div>
+              <div class="review-text"><span data-i18n="sr.great">Harika</span> · <span data-i18n="sr.rev_3119">3.119 yorum</span></div>
             </div>
           </div>
           <div class="hotel-price-area">
-            <div class="price-from">kişi başı</div>
-            <div class="price-val">€975</div>
-            <div class="price-per">7 gece · uçak dahil</div>
-            <a href="hotel.html" class="card-cta"><span data-i18n="sr.details">İncele →</span></a>
+            <div class="price-block">
+              <div class="price-label" data-i18n="sr.per_person_lbl">Kişi başı</div>
+              <div class="price-amount">
+                <span class="price-currency">€</span>
+                <span class="price-num">975</span>
+              </div>
+              <div class="price-detail" data-i18n="sr.nights7_flight">7 gece · uçak dahil</div>
+            </div>
+            <a href="hotel.html" class="card-cta" data-i18n="sr.details">İncele →</a>
           </div>
         </div>
       </div>
     </a>
 
-    <!-- Card 4 -->
-    <a href="hotel.html" class="hotel-card">
+    <!-- ═══ CARD 4 ═══ -->
+    <a href="hotel.html" class="hotel-card reveal">
       <div class="hotel-img">
         <div class="hotel-img-bg hbg-4">⚓</div>
         <div class="hotel-img-overlay"></div>
         <div class="hotel-fav">♡</div>
         <div class="img-dots">
-          <div class="img-dot active"></div>
-          <div class="img-dot"></div>
-          <div class="img-dot"></div>
+          <div class="img-dot active"></div><div class="img-dot"></div><div class="img-dot"></div>
         </div>
       </div>
       <div class="hotel-body">
         <div class="hotel-meta">
           <span class="badge badge-blue">★★★★</span>
-          <span class="badge badge-orange">Her şey dahil</span>
+          <span class="badge badge-orange" data-i18n="sr.all_inc_s">Her şey dahil</span>
         </div>
         <div class="hotel-name">Club Med Palmiye</div>
-        <div class="hotel-location">📍 Kemer, Antalya · Plaja 20m</div>
-        <p class="hotel-desc">Aileler ve çiftler için her şey dahil konsepti. Avrupa standartlarında konfor ve geniş aktivite programıyla uygun fiyatın ötesinde değer sunar.</p>
+        <div class="hotel-location" data-i18n="loc.kemer2">📍 Kemer, Antalya · Plaja 20m</div>
+        <p class="hotel-desc" data-i18n="hdesc.clubmed">Aileler ve çiftler için her şey dahil konsepti. Avrupa standartlarında konfor ve geniş aktivite programıyla uygun fiyatın ötesinde değer sunar.</p>
         <div class="hotel-amenities">
-          <span class="amenity">🏊 3 Havuz</span>
-          <span class="amenity">🏖 Kum plaj</span>
-          <span class="amenity">🎯 Spor aktiviteleri</span>
-          <span class="amenity">📶 Wi-Fi</span>
+          <span class="amenity" data-i18n="am.pools3">🏊 3 Havuz</span>
+          <span class="amenity" data-i18n="am.private_beach">🏖 Kum plaj</span>
+          <span class="amenity" data-i18n="am.sports_act">🎯 Spor aktiviteleri</span>
+          <span class="amenity" data-i18n="am.wifi">📶 Wi-Fi</span>
         </div>
         <div class="hotel-footer">
           <div class="hotel-review">
             <div class="review-score">8.2</div>
             <div>
               <div class="stars">★★★★</div>
-              <div class="review-text"><span data-i18n="sr.good">Çok iyi</span> · 987 yorum</div>
+              <div class="review-text"><span data-i18n="sr.good">Çok iyi</span> · <span data-i18n="sr.rev_987">987 yorum</span></div>
             </div>
           </div>
           <div class="hotel-price-area">
-            <div class="price-from">kişi başı</div>
-            <div class="price-val">€499</div>
-            <div class="price-per">7 gece · uçak dahil</div>
-            <a href="hotel.html" class="card-cta"><span data-i18n="sr.details">İncele →</span></a>
+            <div class="price-block">
+              <div class="price-label" data-i18n="sr.per_person_lbl">Kişi başı</div>
+              <div class="price-amount">
+                <span class="price-currency">€</span>
+                <span class="price-num">499</span>
+              </div>
+              <div class="price-detail" data-i18n="sr.nights7_flight">7 gece · uçak dahil</div>
+            </div>
+            <a href="hotel.html" class="card-cta" data-i18n="sr.details">İncele →</a>
           </div>
         </div>
       </div>
+    </a>
+
     </a>
 
     <!-- Pagination -->
@@ -759,7 +949,7 @@
       </ul>
     </div>
     <div class="footer-col">
-      <h4>Yardım</h4>
+      <h4 data-i18n="footer.help">Yardım</h4>
       <ul>
         <li><a href="#"><span data-i18n="footer.faq">SSS</span></a></li>
         <li><a href="#"><span data-i18n="footer.cancel">İptal Koşulları</span></a></li>
@@ -768,7 +958,7 @@
       </ul>
     </div>
     <div class="footer-col">
-      <h4>Şirket</h4>
+      <h4 data-i18n="footer.company">Şirket</h4>
       <ul>
         <li><a href="#"><span data-i18n="footer.about">Hakkımızda</span></a></li>
         <li><a href="#"><span data-i18n="footer.career">Kariyer</span></a></li>
@@ -782,6 +972,66 @@
     <span>🔒 SSL Güvenli · Datatrans ödeme altyapısı</span>
   </div>
 </footer>
+
+
+<script>
+/* ── SEARCH MASK INTERACTIVITY ── */
+let adults = 2, children = 0;
+
+function toggleDropdown(id) {
+  document.querySelectorAll('.search-dropdown').forEach(dd => {
+    if (dd.id !== id) dd.classList.remove('open');
+  });
+  document.getElementById(id).classList.toggle('open');
+}
+
+function selectFrom(el) {
+  document.getElementById('fromVal').textContent = el.dataset.val;
+  document.querySelectorAll('#ddFrom .dd-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('ddFrom').classList.remove('open');
+}
+
+function selectTo(el) {
+  document.getElementById('toVal').textContent = el.dataset.val;
+  document.querySelectorAll('#ddTo .dd-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('ddTo').classList.remove('open');
+}
+
+function closeDropdown(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+function changeGuest(type, delta, e) {
+  e.stopPropagation();
+  if (type === 'adults') { adults = Math.max(1, adults + delta); document.getElementById('adultCount').textContent = adults; }
+  else { children = Math.max(0, children + delta); document.getElementById('childCount').textContent = children; }
+  const lang = (typeof I18N !== 'undefined') ? I18N.current : 'tr';
+  const adultLbl = {tr:'Yetişkin',de:'Erwachsene',en:'Adults'}[lang];
+  const childLbl = {tr:'Çocuk',de:'Kinder',en:'Children'}[lang];
+  const sep = children > 0 ? `, ${children} ${childLbl}` : '';
+  document.getElementById('guestsVal').innerHTML = `${adults} ${adultLbl}${sep}`;
+}
+
+function updateNights() {
+  const d1 = new Date(document.getElementById('departDate').value);
+  const d2 = new Date(document.getElementById('returnDate').value);
+  const nights = Math.round((d2 - d1) / 86400000);
+  if (nights > 0) {
+    const lang = (typeof I18N !== 'undefined') ? I18N.current : 'tr';
+    const lbl = {tr:'gece',de:'Nächte',en:'nights'}[lang];
+    document.getElementById('nightsLabel').textContent = `${nights} ${lbl}`;
+  }
+}
+
+// Close dropdowns on outside click
+document.addEventListener('click', e => {
+  if (!e.target.closest('.cs-field')) {
+    document.querySelectorAll('.search-dropdown').forEach(dd => dd.classList.remove('open'));
+  }
+});
+</script>
 
 </body>
 </html>

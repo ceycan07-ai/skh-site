@@ -388,3 +388,166 @@ const I18N = {
 
 // Init on DOM ready
 document.addEventListener('DOMContentLoaded', () => I18N.init());
+
+/* ════════════════════════════════════════════
+   MISSING KEYS — Search page, filter, cards
+   ════════════════════════════════════════════ */
+Object.assign(TRANSLATIONS, {
+
+  /* Filter sidebar */
+  'sr.price_range':   { tr: 'Fiyat Aralığı',    de: 'Preisbereich',      en: 'Price Range' },
+  'sr.trust_score':   { tr: 'TrustYou Puanı',   de: 'TrustYou Bewertung',en: 'TrustYou Score' },
+  'sr.sort_stars':    { tr: 'Yıldıza göre',      de: 'Nach Sternen',      en: 'By stars' },
+
+  /* Board types */
+  'sr.all_inc_s':     { tr: 'Her şey dahil',    de: 'All Inclusive',     en: 'All Inclusive' },
+  'sr.ultra_ai_s':    { tr: 'Ultra her şey dahil', de: 'Ultra All Inclusive', en: 'Ultra All Inclusive' },
+  'sr.half_board_s':  { tr: 'Yarım pansiyon',   de: 'Halbpension',       en: 'Half Board' },
+  'sr.bb_s':          { tr: 'Oda kahvaltı',     de: 'Übernachtung/Frühstück', en: 'Bed & Breakfast' },
+  'sr.room_only_s':   { tr: 'Sadece oda',       de: 'Nur Übernachtung',  en: 'Room Only' },
+
+  /* Amenities */
+  'sr.am_pool':       { tr: 'Havuz',            de: 'Pool',              en: 'Pool' },
+  'sr.am_beach':      { tr: 'Plaj erişimi',     de: 'Strandzugang',      en: 'Beach access' },
+  'sr.am_spa':        { tr: 'Spa & Wellness',   de: 'Spa & Wellness',    en: 'Spa & Wellness' },
+  'sr.am_kids':       { tr: 'Çocuk kulübü',     de: 'Kinderclub',        en: 'Kids club' },
+  'sr.am_wifi':       { tr: 'Ücretsiz Wi-Fi',   de: 'Kostenloses WLAN',  en: 'Free Wi-Fi' },
+  'sr.am_sports':     { tr: 'Spor alanları',    de: 'Sportanlagen',      en: 'Sports facilities' },
+
+  /* Card amenity chips */
+  'am.pools5':        { tr: '🏊 5 Havuz',       de: '🏊 5 Pools',        en: '🏊 5 Pools' },
+  'am.pools4':        { tr: '🏊 4 Havuz',       de: '🏊 4 Pools',        en: '🏊 4 Pools' },
+  'am.pools3':        { tr: '🏊 3 Havuz',       de: '🏊 3 Pools',        en: '🏊 3 Pools' },
+  'am.private_beach': { tr: '🏖 Özel plaj',     de: '🏖 Privatstrand',   en: '🏖 Private beach' },
+  'am.spa':           { tr: '🧖 Spa',           de: '🧖 Spa',            en: '🧖 Spa' },
+  'am.kids_club':     { tr: '🧖 Çocuk kulübü', de: '👶 Kinderclub',     en: '👶 Kids club' },
+  'am.tennis':        { tr: '🎾 Tenis',         de: '🎾 Tennis',         en: '🎾 Tennis' },
+  'am.wifi':          { tr: '📶 Wi-Fi',         de: '📶 WLAN',           en: '📶 Wi-Fi' },
+  'am.hamam':         { tr: '🛁 Hamam',         de: '🛁 Hamam',          en: '🛁 Hammam' },
+  'am.live_music':    { tr: '🎶 Canlı müzik',   de: '🎶 Live-Musik',     en: '🎶 Live music' },
+  'am.casino':        { tr: '🎰 Casino',        de: '🎰 Casino',         en: '🎰 Casino' },
+  'am.restaurants14': { tr: '🍽 14 restoran',   de: '🍽 14 Restaurants', en: '🍽 14 restaurants' },
+  'am.lagoon':        { tr: '🏊 Lagün havuz',   de: '🏊 Lagunen-Pool',   en: '🏊 Lagoon pool' },
+  'am.sports_act':    { tr: '🎯 Spor aktiviteleri', de: '🎯 Sportaktivitäten', en: '🎯 Sports activities' },
+
+  /* Hotel locations */
+  'loc.belek':        { tr: '📍 Belek, Antalya · Plaja 50m', de: '📍 Belek, Antalya · 50m zum Strand', en: '📍 Belek, Antalya · 50m to beach' },
+  'loc.kemer':        { tr: '📍 Kemer, Antalya · Plaja 0m',  de: '📍 Kemer, Antalya · direkt am Strand', en: '📍 Kemer, Antalya · beachfront' },
+  'loc.kundu':        { tr: '📍 Kundu, Antalya · Plaja 0m',  de: '📍 Kundu, Antalya · direkt am Strand', en: '📍 Kundu, Antalya · beachfront' },
+  'loc.kemer2':       { tr: '📍 Kemer, Antalya · Plaja 20m', de: '📍 Kemer, Antalya · 20m zum Strand', en: '📍 Kemer, Antalya · 20m to beach' },
+
+  /* Hotel descriptions */
+  'hdesc.rixos':      {
+    tr: 'Belek\'in incisi Rixos Premium, 650 metre özel plajı, 14 restoranı ve eğlence dolu programıyla aileler için mükemmel bir tatil sunuyor. Aquaworld kapalı su parkı misafirlere ücretsizdir.',
+    de: 'Das Rixos Premium Belek bietet mit seinem 650 m langen Privatstrand, 14 Restaurants und einem abwechslungsreichen Programm einen unvergesslichen Familienurlaub. Der Aquaworld-Wasserpark ist für Gäste kostenlos.',
+    en: 'Rixos Premium Belek, the jewel of Belek, offers a perfect family holiday with its 650m private beach, 14 restaurants and entertainment-packed program. The Aquaworld water park is free for guests.'
+  },
+  'hdesc.maxx':       {
+    tr: 'Doğanın kalbinde lüks deneyim. Toros dağlarının eteklerinde konumlanan resort, kristal berraklığındaki koyuyla huzur arayanlar için idealdir.',
+    de: 'Luxuriöses Erlebnis inmitten der Natur. Das Resort am Fuße des Taurus-Gebirges mit seiner kristallklaren Bucht ist ideal für alle, die Ruhe suchen.',
+    en: 'A luxury experience in the heart of nature. The resort at the foot of the Taurus Mountains with its crystal-clear bay is ideal for those seeking tranquility.'
+  },
+  'hdesc.titanic':    {
+    tr: 'Avrupa\'nın en büyük tatil köyü. 3.000 m² açık havuzu, özel lagünü ve olağanüstü gastronomisiyle eşsiz bir deneyim sunuyor.',
+    de: 'Europas größtes Ferienresort. Mit seinem 3.000 m² großen Außenpool, einer privaten Lagune und außergewöhnlicher Gastronomie bietet es ein einzigartiges Erlebnis.',
+    en: 'Europe\'s largest holiday resort. With its 3,000 m² outdoor pool, private lagoon and extraordinary gastronomy, it offers a unique experience.'
+  },
+  'hdesc.clubmed':    {
+    tr: 'Aileler ve çiftler için her şey dahil konsepti. Avrupa standartlarında konfor ve geniş aktivite programıyla uygun fiyatın ötesinde değer sunar.',
+    de: 'All-inclusive für Familien und Paare. Mit europäischem Komfort und einem umfangreichen Aktivitätenprogramm bietet es Wert jenseits des Preises.',
+    en: 'All-inclusive concept for families and couples. European-standard comfort and a wide activity program offer value beyond the price.'
+  },
+
+  /* Review counts */
+  'sr.rev_2847':      { tr: '2.847 yorum', de: '2.847 Bewertungen', en: '2,847 reviews' },
+  'sr.rev_1532':      { tr: '1.532 yorum', de: '1.532 Bewertungen', en: '1,532 reviews' },
+  'sr.rev_3119':      { tr: '3.119 yorum', de: '3.119 Bewertungen', en: '3,119 reviews' },
+  'sr.rev_987':       { tr: '987 yorum',   de: '987 Bewertungen',   en: '987 reviews' },
+
+  /* Price card */
+  'sr.nights7_flight':{ tr: '7 gece · uçak dahil', de: '7 Nächte · inkl. Flug', en: '7 nights · incl. flight' },
+  'sr.nights5_flight':{ tr: '7 gece · uçak dahil', de: '5 Nächte · inkl. Flug', en: '5 nights · incl. flight' },
+  'sr.per_person_lbl':{ tr: 'Kişi başı',            de: 'Pro Person',             en: 'Per person' },
+
+  /* Hotel tag badges */
+  'tag.early':        { tr: 'Erken rezervasyon', de: 'Frühbucher',    en: 'Early booking' },
+  'tag.last_min':     { tr: 'Son dakika',        de: 'Last Minute',   en: 'Last minute' },
+  'tag.last_rooms':   { tr: 'Son odalar',        de: 'Letzte Zimmer', en: 'Last rooms' },
+  'tag.new_dest':     { tr: 'Yeni destinasyon',  de: 'Neues Ziel',    en: 'New destination' },
+  'tag.popular':      { tr: 'Popüler',           de: 'Beliebt',       en: 'Popular' },
+  'tag.sustainable':  { tr: 'Sürdürülebilir',    de: 'Nachhaltig',    en: 'Sustainable' },
+
+  /* Sort options */
+  'sr.sort_rec':      { tr: 'Önerilen sıralama',      de: 'Empfohlene Sortierung',  en: 'Recommended' },
+  'sr.sort_price_asc':{ tr: 'Fiyat: Düşükten yükseğe', de: 'Preis: aufsteigend',  en: 'Price: Low to High' },
+  'sr.sort_price_desc':{ tr: 'Fiyat: Yüksekten düşüğe', de: 'Preis: absteigend', en: 'Price: High to Low' },
+  'sr.sort_trust':    { tr: 'TrustYou puanına göre',  de: 'Nach TrustYou-Bewertung', en: 'By TrustYou score' },
+  'sr.sort_stars2':   { tr: 'Yıldıza göre',           de: 'Nach Sternen',          en: 'By stars' },
+
+  /* Results count */
+  'sr.results_count': { tr: '<strong>47 tesis</strong> bulundu', de: '<strong>47 Unterkünfte</strong> gefunden', en: '<strong>47 properties</strong> found' },
+
+  /* Promo strip */
+  'sr.promo_full':    {
+    tr: '🎉 <strong>Erken rezervasyon:</strong> Bu haftaya özel seçili otellerde %15 indirim!',
+    de: '🎉 <strong>Frühbucher:</strong> Diese Woche 15% Rabatt auf ausgewählte Hotels!',
+    en: '🎉 <strong>Early booking:</strong> 15% off selected hotels this week!'
+  },
+  'sr.promo_cta':     { tr: 'Fırsatları gör', de: 'Angebote anzeigen', en: 'See offers' },
+
+  /* Search mask — interactive */
+  'search.from_val':  { tr: 'Frankfurt (FRA)',  de: 'Frankfurt (FRA)',  en: 'Frankfurt (FRA)' },
+  'search.from_sub':  { tr: 'Kalkış havalimanı', de: 'Abflughafen',    en: 'Departure airport' },
+  'search.to_val':    { tr: 'Antalya (AYT)',    de: 'Antalya (AYT)',   en: 'Antalya (AYT)' },
+  'search.to_sub':    { tr: 'Varış havalimanı', de: 'Zielflughafen',   en: 'Arrival airport' },
+  'search.depart_ph': { tr: 'Tarih seçin',     de: 'Datum wählen',    en: 'Select date' },
+  'search.return_ph': { tr: 'Tarih seçin',     de: 'Datum wählen',    en: 'Select date' },
+  'search.guests_val':{ tr: '2 Yetişkin, 0 Çocuk', de: '2 Erwachsene, 0 Kinder', en: '2 Adults, 0 Children' },
+
+  /* Destinations dropdown */
+  'dest.ayt':         { tr: 'Antalya (AYT)',   de: 'Antalya (AYT)',   en: 'Antalya (AYT)' },
+  'dest.bjv':         { tr: 'Bodrum (BJV)',    de: 'Bodrum (BJV)',    en: 'Bodrum (BJV)' },
+  'dest.adb':         { tr: 'İzmir (ADB)',     de: 'Izmir (ADB)',     en: 'Izmir (ADB)' },
+  'dest.dlm':         { tr: 'Dalaman (DLM)',   de: 'Dalaman (DLM)',   en: 'Dalaman (DLM)' },
+  'dest.hrg':         { tr: 'Hurghada (HRG)',  de: 'Hurghada (HRG)',  en: 'Hurghada (HRG)' },
+  'dest.rmf':         { tr: 'Marmarice (RMF)', de: 'Marmaris (RMF)',  en: 'Marmaris (RMF)' },
+
+  /* Airport origins */
+  'origin.fra':       { tr: 'Frankfurt (FRA)',   de: 'Frankfurt (FRA)',   en: 'Frankfurt (FRA)' },
+  'origin.muc':       { tr: 'Münih (MUC)',       de: 'München (MUC)',     en: 'Munich (MUC)' },
+  'origin.dus':       { tr: 'Düsseldorf (DUS)',  de: 'Düsseldorf (DUS)',  en: 'Düsseldorf (DUS)' },
+  'origin.ham':       { tr: 'Hamburg (HAM)',      de: 'Hamburg (HAM)',     en: 'Hamburg (HAM)' },
+  'origin.ber':       { tr: 'Berlin (BER)',       de: 'Berlin (BER)',      en: 'Berlin (BER)' },
+  'origin.vie':       { tr: 'Viyana (VIE)',       de: 'Wien (VIE)',        en: 'Vienna (VIE)' },
+  'origin.lhr':       { tr: 'Londra (LHR)',       de: 'London (LHR)',      en: 'London (LHR)' },
+  'origin.lgw':       { tr: 'Londra Gatwick (LGW)', de: 'London Gatwick (LGW)', en: 'London Gatwick (LGW)' },
+  'origin.saw':       { tr: 'İstanbul Sabiha (SAW)', de: 'Istanbul Sabiha (SAW)', en: 'Istanbul Sabiha (SAW)' },
+  'origin.ist':       { tr: 'İstanbul (IST)',     de: 'Istanbul (IST)',    en: 'Istanbul (IST)' },
+
+  /* Nights */
+  'search.nights':    { tr: 'gece',              de: 'Nächte',            en: 'nights' },
+  'search.adults':    { tr: 'Yetişkin',          de: 'Erwachsene',        en: 'Adults' },
+  'search.children':  { tr: 'Çocuk',             de: 'Kinder',            en: 'Children' },
+});
+
+/* footer h4 headings */
+Object.assign(TRANSLATIONS, {
+  'footer.help':    { tr: 'Yardım',  de: 'Hilfe',         en: 'Help' },
+  'footer.company': { tr: 'Şirket', de: 'Unternehmen',   en: 'Company' },
+});
+
+/* Also patch option elements on language change */
+const _origApply = I18N.apply.bind(I18N);
+I18N.apply = function() {
+  _origApply();
+  // Translate <option data-i18n> elements
+  document.querySelectorAll('option[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    el.textContent = this.t(key);
+  });
+  // Translate <h4 data-i18n> elements
+  document.querySelectorAll('h4[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    el.textContent = this.t(key);
+  });
+};
