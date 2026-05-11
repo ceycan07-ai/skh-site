@@ -246,3 +246,43 @@ button:focus:not(:focus-visible) { outline: none; }
 @media(max-width:380px){
   .nav-logo{font-size:15px}
 }
+
+
+/* ── SVG LOGO ── */
+.logo-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+.logo-icon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.2));
+}
+.logo-text-block {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+.logo-text-main {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: -0.2px;
+}
+.logo-text-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.78);
+  letter-spacing: 0.3px;
+}
+.footer-logo .logo-text-main { font-size: 15px; }
+.footer-logo .logo-text-sub  { font-size: 12px; }
+.footer-logo .logo-icon       { width: 34px; height: 34px; }
+
+/* Remove old nav-logo text styles */
+a.nav-logo { font-family: unset; font-size: unset; font-weight: unset; letter-spacing: unset; }
