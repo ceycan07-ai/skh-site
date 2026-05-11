@@ -302,6 +302,105 @@
     .guest-row-h:last-of-type { border-bottom: none; }
     .hgc-btn { width: 28px; height: 28px; border: 1px solid var(--border); background: var(--white); border-radius: 50%; font-size: 16px; cursor: pointer; color: var(--text-mid); display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
     .hgc-btn:hover { border-color: var(--orange); color: var(--orange); }
+  
+
+    /* SunExpress.com inspired hero and search tabs */
+    .hero {
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.88) 0%, rgba(255,255,255,.55) 38%, rgba(255,255,255,.08) 70%),
+        radial-gradient(circle at 85% 25%, rgba(255,101,0,.28), transparent 16%),
+        linear-gradient(135deg, #dff3fb 0%, #83c9e7 35%, #f4efe4 66%, #7fc27e 100%);
+      padding: 5.5rem 2.5rem 8.5rem;
+      min-height: 520px;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 46%;
+      background: linear-gradient(12deg, rgba(255,255,255,.88), rgba(255,255,255,0) 65%);
+      pointer-events: none;
+    }
+    .hero-sun, .hero-ring1, .hero-ring2, .hero-arc { display: none; }
+    .hero-content { max-width: 600px; }
+    .hero-eyebrow { color: var(--sx-action); font-weight: 700; }
+    .hero-title {
+      display: inline-block;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 42px;
+      line-height: 1.13;
+      color: #242424;
+      background: rgba(255,255,255,.88);
+      border-radius: 10px;
+      padding: .2rem .65rem;
+      box-shadow: 0 4px 18px rgba(0,0,0,.06);
+    }
+    .hero-title em { color: #242424; }
+    .hero-sub {
+      display: table;
+      color: #333;
+      background: rgba(255,255,255,.88);
+      border-radius: 10px;
+      padding: .45rem .8rem;
+      font-size: 18px;
+      margin-top: .7rem;
+      max-width: 480px;
+      box-shadow: 0 4px 18px rgba(0,0,0,.06);
+    }
+    .hero-ctas { margin-top: 1.2rem; }
+    .hero-ctas .btn-ghost { color: #242424 !important; border-color: #242424 !important; background: #fff; border-radius: 999px !important; }
+    .search-wrap { margin: -70px auto 0; }
+    .search-box {
+      flex-wrap: wrap;
+      align-items: stretch;
+      gap: 8px;
+      padding: 0.75rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.18);
+      border: 1px solid rgba(0,0,0,.16);
+    }
+    .package-tabs {
+      width: 100%;
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid #E2E2E2;
+      margin: -0.2rem 0 .5rem;
+      overflow-x: auto;
+    }
+    .package-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: .55rem 1.05rem;
+      font-size: 13px;
+      font-weight: 700;
+      color: #666;
+      text-decoration: none;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+    }
+    .package-tab.active { color: #242424; border-bottom-color: var(--sx-action); }
+    .package-tab:hover { color: #242424; background: #F7F7F7; }
+    .s-field {
+      border: 1px solid #BDBDBD;
+      border-radius: 8px;
+      padding: .6rem .8rem !important;
+      min-width: 150px;
+    }
+    .s-field:first-child { padding-left: .8rem !important; }
+    .s-label { color: #6b6b6b; letter-spacing: .3px; text-transform: none; }
+    .s-val { color: #242424; }
+    .s-sub { color: #555; }
+    .search-box .cs-btn { align-self: stretch; display: inline-flex; align-items: center; justify-content: center; margin-left: 0; padding: .7rem 2rem; }
+    @media(max-width:700px){
+      .hero { min-height: 480px; padding: 4rem 1.25rem 7rem; }
+      .hero-title { font-size: 30px; }
+      .hero-sub { font-size: 15px; }
+      .search-wrap { margin-top: -54px; }
+      .package-tabs { padding-bottom: 0; }
+      .search-box .cs-btn { width: 100%; }
+    }
+
   </style>
   <script src="i18n.js" defer></script>
   <script src="animations.js" defer></script>
@@ -364,6 +463,11 @@
 <!-- SEARCH -->
 <div class="search-wrap">
   <div class="search-box">
+    <div class="package-tabs" aria-label="Holiday product tabs">
+      <a href="index.html" class="package-tab active">☀️ <span>Sun &amp; Beach</span></a>
+      <a href="search.html" class="package-tab">🔗 <span>Create Your Own</span></a>
+      <a href="https://www.sunexpress.com/" class="package-tab" target="_blank" rel="noopener">✈️ <span>Flights</span></a>
+    </div>
     <div class="s-field">
       <span class="s-label"><span data-i18n="search.from">Nereden</span></span>
       <span class="s-val">İstanbul (SAW)</span>

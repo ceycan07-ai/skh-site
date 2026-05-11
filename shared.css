@@ -286,3 +286,72 @@ button:focus:not(:focus-visible) { outline: none; }
 
 /* Remove old nav-logo text styles */
 a.nav-logo { font-family: unset; font-size: unset; font-weight: unset; letter-spacing: unset; }
+
+/* ══════════════════════════════════════════
+   SunExpress.com inspired visual refresh
+   White header, light surfaces, orange action buttons
+   ══════════════════════════════════════════ */
+:root {
+  --sx-page-bg: #F7F7F7;
+  --sx-surface: #FFFFFF;
+  --sx-text-strong: #242424;
+  --sx-text-soft: #666666;
+  --sx-border-soft: #D6D6D6;
+  --sx-action: #FF6500;
+  --sx-action-dark: #E65B00;
+  --sx-blue-action: #005EB8;
+}
+body { background: var(--sx-page-bg); color: var(--sx-text-strong); }
+.sx-nav {
+  background: var(--sx-surface);
+  color: var(--sx-text-strong);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.10);
+  border-bottom: 1px solid #E6E6E6;
+}
+.sx-nav::before {
+  content: 'Joint venture of  Lufthansa  |  Turkish Airlines';
+  position: absolute;
+  left: 2.5rem;
+  top: -18px;
+  font-size: 10px;
+  color: #777;
+  letter-spacing: .1px;
+}
+.sx-nav.scrolled { background: rgba(255,255,255,0.96); box-shadow: 0 4px 18px rgba(0,0,0,0.10); }
+.nav-logo, .nav-logo:visited { color: var(--sx-text-strong); }
+.logo-text-main { color: var(--sx-text-strong); }
+.logo-text-sub { color: var(--blue-dark); }
+.logo-icon line { stroke: var(--sx-action); }
+.nav-links a { color: #444; }
+.nav-links a:hover, .nav-links a.active {
+  color: var(--sx-text-strong);
+  border-bottom-color: var(--sx-action);
+  background: transparent;
+}
+.nav-actions .btn-ghost {
+  color: var(--sx-text-strong);
+  border: 1px solid #222;
+  background: #fff;
+  border-radius: 999px;
+}
+.btn-primary, .btn-primary-lg, .cs-btn, .card-cta, .promo-btn {
+  background: var(--sx-action);
+  border-radius: 999px;
+  box-shadow: none;
+}
+.btn-primary:hover, .btn-primary-lg:hover, .cs-btn:hover, .card-cta:hover, .promo-btn:hover { background: var(--sx-action-dark); }
+.section-title { color: var(--sx-text-strong); font-family: 'DM Sans', sans-serif; font-weight: 700; }
+.section { background: transparent; }
+.deal-card, .perk-card, .compact-search, .hotel-card, .room-card, .booking-card, .summary-card, .filter-card, .result-card, .highlight-card, .mini-card, .practical-card {
+  background: var(--sx-surface);
+  border-color: var(--sx-border-soft);
+  box-shadow: 0 4px 18px rgba(0,0,0,0.05);
+}
+.see-all, .deal-tag, .dest-badge, .badge-orange { color: var(--sx-action); }
+.deal-tag, .badge-orange { background: #FFF1E8; }
+.dest-badge { background: var(--sx-action); color: #fff; }
+.sx-footer { background: #232323; }
+.sx-footer .nav-logo, .sx-footer .logo-text-main { color: #fff; }
+.sx-footer .logo-text-sub { color: #fff; opacity: .75; }
+.lang-btn.active { background: var(--sx-action); color: #fff; border-color: var(--sx-action); }
+@media(max-width:900px){ .sx-nav::before{display:none;} }
