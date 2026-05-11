@@ -372,6 +372,8 @@
     }
     .os-badge { font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 4px; }
   </style>
+  <script src="i18n.js" defer></script>
+  <script src="animations.js" defer></script>
 </head>
 <body>
 
@@ -379,13 +381,13 @@
 <nav class="sx-nav">
   <a href="index.html" class="nav-logo">SunExpress <em>Holidays</em></a>
   <ul class="nav-links">
-    <li><a href="index.html">Tatiller</a></li>
-    <li><a href="search.html">Arama</a></li>
-    <li><a href="dest-antalya.html">Destinasyonlar</a></li>
-    <li><a href="booking.html" class="active">Rezervasyon</a></li>
+    <li><a href="index.html"><span data-i18n="nav.holidays">Tatiller</span></a></li>
+    <li><a href="search.html"><span data-i18n="nav.search">Arama</span></a></li>
+    <li><a href="dest-antalya.html"><span data-i18n="nav.destinations">Destinasyonlar</span></a></li>
+    <li><a href="booking.html" class="active"><span data-i18n="nav.booking">Rezervasyon</span></a></li>
   </ul>
   <div class="nav-actions">
-    <button class="btn-ghost">Giriş Yap</button>
+    <button class="btn-ghost"><span data-i18n="nav.login">Giriş Yap</span></button>
   </div>
 </nav>
 
@@ -396,31 +398,31 @@
       <a href="index.html">Ana Sayfa</a> ›
       <a href="search.html">Antalya</a> ›
       <a href="hotel.html">Rixos Premium Belek</a> ›
-      <span>Rezervasyon</span>
+      <span><span data-i18n="nav.booking">Rezervasyon</span></span>
     </div>
-    <h1>Rezervasyon bilgileri</h1>
+    <h1><span data-i18n="book.title">Rezervasyon bilgileri</span></h1>
     <p>Rixos Premium Belek · 15–22 Temmuz 2025 · 2 Yetişkin · Ultra her şey dahil</p>
 
     <!-- Progress -->
     <div class="progress-bar" style="margin-top: 1.75rem;">
       <div class="progress-step done">
         <div class="step-circle">✓</div>
-        <span>Otel seçimi</span>
+        <span><span data-i18n="book.step1">Otel seçimi</span></span>
       </div>
       <div class="step-line"></div>
       <div class="progress-step done">
         <div class="step-circle">✓</div>
-        <span>Uçuş seçimi</span>
+        <span><span data-i18n="book.flight_title">Uçuş seçimi</span></span>
       </div>
       <div class="step-line"></div>
       <div class="progress-step active">
         <div class="step-circle">3</div>
-        <span>Yolcu bilgileri</span>
+        <span><span data-i18n="book.pax_title">Yolcu bilgileri</span></span>
       </div>
       <div class="step-line"></div>
       <div class="progress-step">
         <div class="step-circle">4</div>
-        <span>Ödeme</span>
+        <span><span data-i18n="footer.payment">Ödeme</span></span>
       </div>
       <div class="step-line"></div>
       <div class="progress-step">
@@ -435,12 +437,12 @@
 <div class="booking-layout">
   <div>
 
-    <!-- SECTION 1: İletişim bilgileri -->
+    <!-- SECTION 1: <span data-i18n="book.contact_title">İletişim bilgileri</span> -->
     <div class="form-section">
       <div class="form-section-header">
         <div class="form-section-num">1</div>
         <div>
-          <div class="form-section-title">İletişim bilgileri</div>
+          <div class="form-section-title"><span data-i18n="book.contact_title">İletişim bilgileri</span></div>
           <div class="form-section-sub">Rezervasyon onayı bu adrese gönderilecek</div>
         </div>
       </div>
@@ -468,12 +470,12 @@
       </div>
     </div>
 
-    <!-- SECTION 2: Yolcu bilgileri -->
+    <!-- SECTION 2: <span data-i18n="book.pax_title">Yolcu bilgileri</span> -->
     <div class="form-section">
       <div class="form-section-header">
         <div class="form-section-num">2</div>
         <div>
-          <div class="form-section-title">Yolcu bilgileri</div>
+          <div class="form-section-title"><span data-i18n="book.pax_title">Yolcu bilgileri</span></div>
           <div class="form-section-sub">Pasaportunuzdaki bilgilerle aynı olmalıdır</div>
         </div>
       </div>
@@ -531,12 +533,12 @@
       </div>
     </div>
 
-    <!-- SECTION 3: Uçuş seçimi -->
+    <!-- SECTION 3: <span data-i18n="book.flight_title">Uçuş seçimi</span> -->
     <div class="form-section">
       <div class="form-section-header">
         <div class="form-section-num">3</div>
         <div>
-          <div class="form-section-title">Uçuş seçimi</div>
+          <div class="form-section-title"><span data-i18n="book.flight_title">Uçuş seçimi</span></div>
           <div class="form-section-sub">İstanbul SAW → Antalya AYT · 15 Temmuz 2025</div>
         </div>
       </div>
@@ -592,7 +594,7 @@
       <div class="form-section-header">
         <div class="form-section-num">4</div>
         <div>
-          <div class="form-section-title">Ekstra hizmetler</div>
+          <div class="form-section-title"><span data-i18n="book.extras_title">Ekstra hizmetler</span></div>
           <div class="form-section-sub">İsteğe bağlı eklemeler</div>
         </div>
       </div>
@@ -634,12 +636,12 @@
       </div>
     </div>
 
-    <!-- SECTION 5: Özel istekler -->
+    <!-- SECTION 5: <span data-i18n="book.special_title">Özel istekler</span> -->
     <div class="form-section">
       <div class="form-section-header">
         <div class="form-section-num">5</div>
         <div>
-          <div class="form-section-title">Özel istekler</div>
+          <div class="form-section-title"><span data-i18n="book.special_title">Özel istekler</span></div>
           <div class="form-section-sub">Garanti edilemez, ancak iletilecektir</div>
         </div>
       </div>
@@ -682,7 +684,7 @@
         </label>
       </div>
 
-      <button class="submit-btn">Ödeme adımına geç →</button>
+      <button class="submit-btn"><span data-i18n="book.next_payment">Ödeme adımına geç →</span></button>
       <div class="submit-trust">
         <span>🔒 SSL korumalı</span>
         <span>·</span>
@@ -755,26 +757,26 @@
   <div class="footer-inner">
     <div class="footer-brand">
       <a href="index.html" class="nav-logo">SunExpress <em>Holidays</em></a>
-      <p>Güneş Ekspres Havacılık A.Ş. bünyesinde faaliyet gösteren tatil platformu.</p>
+      <p data-i18n="footer.tagline">Güneş Ekspres Havacılık A.Ş. bünyesinde faaliyet gösteren tatil platformu.</p>
     </div>
     <div class="footer-col">
       <h4>Yardım</h4>
       <ul>
-        <li><a href="#">SSS</a></li>
-        <li><a href="#">İptal Koşulları</a></li>
-        <li><a href="#">İletişim</a></li>
+        <li><a href="#"><span data-i18n="footer.faq">SSS</span></a></li>
+        <li><a href="#"><span data-i18n="footer.cancel">İptal Koşulları</span></a></li>
+        <li><a href="#"><span data-i18n="footer.contact">İletişim</span></a></li>
       </ul>
     </div>
     <div class="footer-col">
       <h4>Güvenlik</h4>
       <ul>
-        <li><a href="#">KVKK</a></li>
-        <li><a href="#">Gizlilik</a></li>
+        <li><a href="#"><span data-i18n="footer.kvkk">KVKK</span></a></li>
+        <li><a href="#"><span data-i18n="footer.privacy">Gizlilik</span></a></li>
         <li><a href="#">Kullanım Şartları</a></li>
       </ul>
     </div>
     <div class="footer-col">
-      <h4>İletişim</h4>
+      <h4><span data-i18n="footer.contact">İletişim</span></h4>
       <ul>
         <li><a href="#">0850 XXX XX XX</a></li>
         <li><a href="#">holidays@sunexpress.com</a></li>
@@ -782,7 +784,7 @@
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© 2025 SunExpress Holidays · Güneş Ekspres Havacılık A.Ş.</span>
+    <span><span data-i18n="footer.copyright">© 2025 SunExpress Holidays · Güneş Ekspres Havacılık A.Ş.</span></span>
     <span>🔒 SSL Güvenli · Datatrans ödeme altyapısı</span>
   </div>
 </footer>

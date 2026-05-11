@@ -395,6 +395,8 @@
       margin-bottom: 1.25rem;
     }
   </style>
+  <script src="i18n.js" defer></script>
+  <script src="animations.js" defer></script>
 </head>
 <body>
 
@@ -402,14 +404,14 @@
 <nav class="sx-nav">
   <a href="index.html" class="nav-logo">SunExpress <em>Holidays</em></a>
   <ul class="nav-links">
-    <li><a href="index.html">Tatiller</a></li>
-    <li><a href="search.html">Arama</a></li>
-    <li><a href="dest-antalya.html">Destinasyonlar</a></li>
-    <li><a href="booking.html">Rezervasyon</a></li>
+    <li><a href="index.html"><span data-i18n="nav.holidays">Tatiller</span></a></li>
+    <li><a href="search.html"><span data-i18n="nav.search">Arama</span></a></li>
+    <li><a href="dest-antalya.html"><span data-i18n="nav.destinations">Destinasyonlar</span></a></li>
+    <li><a href="booking.html"><span data-i18n="nav.booking">Rezervasyon</span></a></li>
   </ul>
   <div class="nav-actions">
-    <button class="btn-ghost">Giriş Yap</button>
-    <a href="booking.html" class="btn-primary">Rezervasyon Yap</a>
+    <button class="btn-ghost"><span data-i18n="nav.login">Giriş Yap</span></button>
+    <a href="booking.html" class="btn-primary"><span data-i18n="nav.book_now">Rezervasyon Yap</span></a>
   </div>
 </nav>
 
@@ -461,19 +463,19 @@
         <div class="score-count">2.847 TrustYou değerlendirmesi</div>
       </div>
       <div style="margin-left: auto; font-size: 12px; color: var(--text-muted); text-align: right;">
-        Temizlik: <strong>9.4</strong><br>
-        Konum: <strong>9.2</strong><br>
+        <span data-i18n="hotel.cleanliness">Temizlik</span>: <strong>9.4</strong><br>
+        <span data-i18n="hotel.location">Konum</span>: <strong>9.2</strong><br>
         Yemek: <strong>9.0</strong>
       </div>
     </div>
 
     <!-- Tabs -->
     <div class="htabs">
-      <div class="htab active">Genel Bilgi</div>
+      <div class="htab active"><span data-i18n="hotel.general">Genel Bilgi</span></div>
       <div class="htab">Odalar</div>
       <div class="htab">Olanaklar</div>
-      <div class="htab">Değerlendirmeler</div>
-      <div class="htab">Konum</div>
+      <div class="htab"><span data-i18n="hotel.reviews_tab">Değerlendirmeler</span></div>
+      <div class="htab"><span data-i18n="hotel.location">Konum</span></div>
     </div>
 
     <!-- DESCRIPTION -->
@@ -565,16 +567,16 @@
     </div>
 
     <!-- REVIEWS -->
-    <p class="section-sub-title" style="margin-top: 1.5rem;">Misafir Değerlendirmeleri</p>
+    <p class="section-sub-title" style="margin-top: 1.5rem;">Misafir <span data-i18n="hotel.reviews_tab">Değerlendirmeler</span>i</p>
 
     <div class="review-bars">
       <div class="review-bar-row">
-        <div class="review-bar-label">Temizlik</div>
+        <div class="review-bar-label"><span data-i18n="hotel.cleanliness">Temizlik</span></div>
         <div class="bar-track"><div class="bar-fill" style="width: 94%"></div></div>
         <div class="review-bar-score">9.4</div>
       </div>
       <div class="review-bar-row">
-        <div class="review-bar-label">Konum</div>
+        <div class="review-bar-label"><span data-i18n="hotel.location">Konum</span></div>
         <div class="bar-track"><div class="bar-fill" style="width: 92%"></div></div>
         <div class="review-bar-score">9.2</div>
       </div>
@@ -584,12 +586,12 @@
         <div class="review-bar-score">9.0</div>
       </div>
       <div class="review-bar-row">
-        <div class="review-bar-label">Personel</div>
+        <div class="review-bar-label"><span data-i18n="hotel.staff">Personel</span></div>
         <div class="bar-track"><div class="bar-fill" style="width: 93%"></div></div>
         <div class="review-bar-score">9.3</div>
       </div>
       <div class="review-bar-row">
-        <div class="review-bar-label">Değer/Para</div>
+        <div class="review-bar-label"><span data-i18n="hotel.value">Değer/Para</span></div>
         <div class="bar-track"><div class="bar-fill" style="width: 88%"></div></div>
         <div class="review-bar-score">8.8</div>
       </div>
@@ -622,7 +624,7 @@
   <aside>
     <div class="booking-widget">
       <div class="bw-price-row">
-        <span class="bw-from">kişi başı</span>
+        <span class="bw-from"><span data-i18n="hotel.per_person">kişi başı</span></span>
         <span class="bw-price">€649</span>
       </div>
       <div class="bw-per">7 gece · uçak dahil</div>
@@ -679,7 +681,7 @@
         <div class="bw-line"><span>Toplam (2 kişi)</span><span>€1.298</span></div>
       </div>
 
-      <a href="booking.html" class="bw-book-btn">Rezervasyon Yap →</a>
+      <a href="booking.html" class="bw-book-btn"><span data-i18n="hotel.book">Rezervasyon Yap →</span></a>
       <div class="bw-trust">🔒 Datatrans güvenli ödeme · Ücretsiz iptal</div>
     </div>
   </aside>
@@ -691,10 +693,10 @@
   <div class="footer-inner">
     <div class="footer-brand">
       <a href="index.html" class="nav-logo">SunExpress <em>Holidays</em></a>
-      <p>Güneş Ekspres Havacılık A.Ş. bünyesinde faaliyet gösteren tatil platformu.</p>
+      <p data-i18n="footer.tagline">Güneş Ekspres Havacılık A.Ş. bünyesinde faaliyet gösteren tatil platformu.</p>
     </div>
     <div class="footer-col">
-      <h4>Destinasyonlar</h4>
+      <h4><span data-i18n="nav.destinations">Destinasyonlar</span></h4>
       <ul>
         <li><a href="dest-antalya.html">Antalya</a></li>
         <li><a href="dest-bodrum.html">Bodrum</a></li>
@@ -705,22 +707,22 @@
     <div class="footer-col">
       <h4>Yardım</h4>
       <ul>
-        <li><a href="#">SSS</a></li>
-        <li><a href="#">İptal Koşulları</a></li>
-        <li><a href="#">İletişim</a></li>
+        <li><a href="#"><span data-i18n="footer.faq">SSS</span></a></li>
+        <li><a href="#"><span data-i18n="footer.cancel">İptal Koşulları</span></a></li>
+        <li><a href="#"><span data-i18n="footer.contact">İletişim</span></a></li>
       </ul>
     </div>
     <div class="footer-col">
       <h4>Şirket</h4>
       <ul>
-        <li><a href="#">Hakkımızda</a></li>
-        <li><a href="#">KVKK</a></li>
-        <li><a href="#">Gizlilik</a></li>
+        <li><a href="#"><span data-i18n="footer.about">Hakkımızda</span></a></li>
+        <li><a href="#"><span data-i18n="footer.kvkk">KVKK</span></a></li>
+        <li><a href="#"><span data-i18n="footer.privacy">Gizlilik</span></a></li>
       </ul>
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© 2025 SunExpress Holidays · Güneş Ekspres Havacılık A.Ş.</span>
+    <span><span data-i18n="footer.copyright">© 2025 SunExpress Holidays · Güneş Ekspres Havacılık A.Ş.</span></span>
     <span>🔒 SSL Güvenli · Datatrans ödeme altyapısı</span>
   </div>
 </footer>

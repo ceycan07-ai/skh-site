@@ -96,20 +96,22 @@
     .intro-text { font-size: 14px; color: var(--text-mid); line-height: 1.7; }
     .intro-text strong { color: var(--blue-dark); }
   </style>
+  <script src="i18n.js" defer></script>
+  <script src="animations.js" defer></script>
 </head>
 <body>
 
 <nav class="sx-nav">
   <a href="index.html" class="nav-logo">SunExpress <em>Holidays</em></a>
   <ul class="nav-links">
-    <li><a href="index.html">Tatiller</a></li>
-    <li><a href="search.html">Arama</a></li>
-    <li><a href="dest-antalya.html" class="active">Destinasyonlar</a></li>
-    <li><a href="booking.html">Rezervasyon</a></li>
+    <li><a href="index.html"><span data-i18n="nav.holidays">Tatiller</span></a></li>
+    <li><a href="search.html"><span data-i18n="nav.search">Arama</span></a></li>
+    <li><a href="dest-antalya.html" class="active"><span data-i18n="nav.destinations">Destinasyonlar</span></a></li>
+    <li><a href="booking.html"><span data-i18n="nav.booking">Rezervasyon</span></a></li>
   </ul>
   <div class="nav-actions">
-    <button class="btn-ghost">Giriş Yap</button>
-    <a href="booking.html" class="btn-primary">Rezervasyon Yap</a>
+    <button class="btn-ghost"><span data-i18n="nav.login">Giriş Yap</span></button>
+    <a href="booking.html" class="btn-primary"><span data-i18n="nav.book_now">Rezervasyon Yap</span></a>
   </div>
 </nav>
 
@@ -151,7 +153,7 @@
     </div>
   </div>
 
-  <div class="section-header"><h2 class="section-title">Hurghada'yı keşfedin</h2></div>
+  <div class="section-header"><h2 class="section-title"><span data-i18n="hrg.title1">Hurghada</span>yı keşfedin</h2></div>
   <div class="highlights-grid">
     <div class="highlight-card"><div class="highlight-img hi-1">🐠</div><div class="highlight-body"><div class="highlight-name">Mercan resifleri</div><div class="highlight-desc">Dünyanın en zengin mercan ekosistemlerinden biri. Şnorkelle bile renk cümbüşüne tanıklık edebilirsiniz.</div></div></div>
     <div class="highlight-card"><div class="highlight-img hi-2">🤿</div><div class="highlight-body"><div class="highlight-name">Dalış cennetleri</div><div class="highlight-desc">SS Thistlegorm batığı başta olmak üzere dünyaca ünlü dalış noktaları. Tüm seviyeler için ideal.</div></div></div>
@@ -163,7 +165,7 @@
 </div>
 
 <div class="section" style="padding-top: 0;">
-  <div class="section-header"><h2 class="section-title">Öne çıkan oteller</h2><a href="search.html" class="see-all">Tümünü gör →</a></div>
+  <div class="section-header"><h2 class="section-title"><span data-i18n="dest.hotels_region">Öne çıkan oteller</span></h2><a href="search.html" class="see-all"><span data-i18n="home.see_all">Tümünü gör →</span></a></div>
   <div class="mini-cards">
     <a href="hotel.html" class="mini-card">
       <div class="mc-img hi-1">🏖</div>
@@ -172,7 +174,7 @@
         <div class="mc-region">Sahl Hasheesh · ★★★★★ · HDD</div>
         <div class="mc-price-row">
           <div><div class="mc-price">€749</div><div class="mc-nights">/ 7 gece</div></div>
-          <a href="hotel.html" class="card-cta" style="font-size: 12px; padding: 5px 10px;">İncele</a>
+          <a href="hotel.html" class="card-cta" style="font-size: 12px; padding: 5px 10px;"><span data-i18n="dest.detail_btn">İncele</span></a>
         </div>
       </div>
     </a>
@@ -183,7 +185,7 @@
         <div class="mc-region">Hurghada · ★★★★★ · Ultra HDD</div>
         <div class="mc-price-row">
           <div><div class="mc-price">€899</div><div class="mc-nights">/ 7 gece</div></div>
-          <a href="hotel.html" class="card-cta" style="font-size: 12px; padding: 5px 10px;">İncele</a>
+          <a href="hotel.html" class="card-cta" style="font-size: 12px; padding: 5px 10px;"><span data-i18n="dest.detail_btn">İncele</span></a>
         </div>
       </div>
     </a>
@@ -194,7 +196,7 @@
         <div class="mc-region">Soma Bay · ★★★★★ · HDD</div>
         <div class="mc-price-row">
           <div><div class="mc-price">€649</div><div class="mc-nights">/ 7 gece</div></div>
-          <a href="hotel.html" class="card-cta" style="font-size: 12px; padding: 5px 10px;">İncele</a>
+          <a href="hotel.html" class="card-cta" style="font-size: 12px; padding: 5px 10px;"><span data-i18n="dest.detail_btn">İncele</span></a>
         </div>
       </div>
     </a>
@@ -202,7 +204,7 @@
 </div>
 
 <div class="section" style="padding-top: 0;">
-  <div class="section-header"><h2 class="section-title">Pratik bilgiler</h2></div>
+  <div class="section-header"><h2 class="section-title"><span data-i18n="dest.practical">Pratik bilgiler</span></h2></div>
   <div class="practical-grid">
     <div class="practical-card"><div class="practical-icon">✈️</div><div class="practical-title">Nasıl gidilir?</div><div class="practical-text">İstanbul SAW → Hurghada HRG direkt charter uçuş yaklaşık 2 saat 30 dakika. SunExpress haftada 2 sefer düzenlemektedir. Havalimanından otellere transfer pakete dahildir.</div></div>
     <div class="practical-card"><div class="practical-icon">🗓</div><div class="practical-title">Her mevsim tatil</div><div class="practical-text">Hurghada yılın 365 günü güneşlidir. Kış aylarında (Kasım–Mart) sıcaklık 20–25°C'de seyreder. Yaz aylarında 35°C üzerinde olabilir ancak deniz sürekli davet eder.</div></div>
@@ -216,7 +218,7 @@
     <h2>Kızıldeniz'i keşfetmeye hazır mısın?</h2>
     <p>2025 yeni destinasyonu — erken rezervasyonda özel fiyatlar</p>
     <div class="dest-cta-btns">
-      <a href="search.html" class="btn-primary-lg">Paketleri gör →</a>
+      <a href="search.html" class="btn-primary-lg"><span data-i18n="dest.see_pkgs">Paketleri gör →</span></a>
       <a href="dest-antalya.html" class="btn-ghost" style="border-color: rgba(255,255,255,0.4); padding: 0.9rem 2rem; font-size: 15px; border-radius: var(--radius-md); text-decoration: none; color: rgba(255,255,255,0.8);">Diğer destinasyonlar</a>
     </div>
   </div>
@@ -224,12 +226,12 @@
 
 <footer class="sx-footer">
   <div class="footer-inner">
-    <div class="footer-brand"><a href="index.html" class="nav-logo">SunExpress <em>Holidays</em></a><p>Güneş Ekspres Havacılık A.Ş. bünyesinde faaliyet gösteren tatil platformu.</p></div>
-    <div class="footer-col"><h4>Destinasyonlar</h4><ul><li><a href="dest-antalya.html">Antalya</a></li><li><a href="dest-bodrum.html">Bodrum</a></li><li><a href="dest-izmir.html">İzmir</a></li><li><a href="#">Hurghada</a></li></ul></div>
-    <div class="footer-col"><h4>Yardım</h4><ul><li><a href="#">SSS</a></li><li><a href="#">İptal</a></li><li><a href="#">İletişim</a></li></ul></div>
-    <div class="footer-col"><h4>Şirket</h4><ul><li><a href="#">Hakkımızda</a></li><li><a href="#">KVKK</a></li></ul></div>
+    <div class="footer-brand"><a href="index.html" class="nav-logo">SunExpress <em>Holidays</em></a><p data-i18n="footer.tagline">Güneş Ekspres Havacılık A.Ş. bünyesinde faaliyet gösteren tatil platformu.</p></div>
+    <div class="footer-col"><h4><span data-i18n="nav.destinations">Destinasyonlar</span></h4><ul><li><a href="dest-antalya.html">Antalya</a></li><li><a href="dest-bodrum.html">Bodrum</a></li><li><a href="dest-izmir.html">İzmir</a></li><li><a href="#">Hurghada</a></li></ul></div>
+    <div class="footer-col"><h4>Yardım</h4><ul><li><a href="#"><span data-i18n="footer.faq">SSS</span></a></li><li><a href="#"><span data-i18n="footer.cancel">İptal</span></a></li><li><a href="#"><span data-i18n="footer.contact">İletişim</span></a></li></ul></div>
+    <div class="footer-col"><h4>Şirket</h4><ul><li><a href="#"><span data-i18n="footer.about">Hakkımızda</span></a></li><li><a href="#"><span data-i18n="footer.kvkk">KVKK</span></a></li></ul></div>
   </div>
-  <div class="footer-bottom"><span>© 2025 SunExpress Holidays · Güneş Ekspres Havacılık A.Ş.</span><span>🔒 SSL Güvenli · Datatrans</span></div>
+  <div class="footer-bottom"><span><span data-i18n="footer.copyright">© 2025 SunExpress Holidays · Güneş Ekspres Havacılık A.Ş.</span></span><span>🔒 SSL Güvenli · Datatrans</span></div>
 </footer>
 </body>
 </html>

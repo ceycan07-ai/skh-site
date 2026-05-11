@@ -275,20 +275,22 @@
     .dest-cta p { font-size: 15px; color: rgba(255,255,255,0.6); margin-bottom: 1.75rem; }
     .dest-cta-btns { display: flex; gap: 1rem; justify-content: center; }
   </style>
+  <script src="i18n.js" defer></script>
+  <script src="animations.js" defer></script>
 </head>
 <body>
 
 <nav class="sx-nav">
   <a href="index.html" class="nav-logo">SunExpress <em>Holidays</em></a>
   <ul class="nav-links">
-    <li><a href="index.html">Tatiller</a></li>
-    <li><a href="search.html">Arama</a></li>
-    <li><a href="dest-antalya.html" class="active">Destinasyonlar</a></li>
-    <li><a href="booking.html">Rezervasyon</a></li>
+    <li><a href="index.html"><span data-i18n="nav.holidays">Tatiller</span></a></li>
+    <li><a href="search.html"><span data-i18n="nav.search">Arama</span></a></li>
+    <li><a href="dest-antalya.html" class="active"><span data-i18n="nav.destinations">Destinasyonlar</span></a></li>
+    <li><a href="booking.html"><span data-i18n="nav.booking">Rezervasyon</span></a></li>
   </ul>
   <div class="nav-actions">
-    <button class="btn-ghost">Giriş Yap</button>
-    <a href="booking.html" class="btn-primary">Rezervasyon Yap</a>
+    <button class="btn-ghost"><span data-i18n="nav.login">Giriş Yap</span></button>
+    <a href="booking.html" class="btn-primary"><span data-i18n="nav.book_now">Rezervasyon Yap</span></a>
   </div>
 </nav>
 
@@ -352,7 +354,7 @@
 <!-- WEATHER -->
 <div class="section" style="padding-top: 0.5rem;">
   <div class="section-header">
-    <h2 class="section-title">Hava durumu</h2>
+    <h2 class="section-title"><span data-i18n="antalya.weather_h">Hava durumu</span></h2>
     <span style="font-size: 12px; color: var(--text-muted);">Antalya — Temmuz 2025</span>
   </div>
   <div class="weather-strip">
@@ -367,7 +369,7 @@
 
   <!-- HIGHLIGHTS -->
   <div class="section-header" style="margin-top: 1.5rem;">
-    <h2 class="section-title">Antalya'yı keşfedin</h2>
+    <h2 class="section-title"><span data-i18n="antalya.explore_h">Antalyayı keşfedin</span></h2>
   </div>
   <div class="highlights-grid">
     <div class="highlight-card">
@@ -418,8 +420,8 @@
 <!-- HOTELS BY REGION -->
 <div class="section" style="padding-top: 0;">
   <div class="section-header">
-    <h2 class="section-title">Bölgeye göre oteller</h2>
-    <a href="search.html" class="see-all">Tümünü gör →</a>
+    <h2 class="section-title"><span data-i18n="dest.hotels_region">Bölgeye göre oteller</span></h2>
+    <a href="search.html" class="see-all"><span data-i18n="home.see_all">Tümünü gör →</span></a>
   </div>
   <div class="region-tabs">
     <button class="region-tab active">Belek</button>
@@ -437,7 +439,7 @@
         <div class="mc-region">Belek · ★★★★★ · Ultra HDD</div>
         <div class="mc-price-row">
           <div><div class="mc-price">€649</div><div class="mc-nights">/ 7 gece</div></div>
-          <a href="hotel.html" class="card-cta" style="font-size: 12px; padding: 5px 10px;">İncele</a>
+          <a href="hotel.html" class="card-cta" style="font-size: 12px; padding: 5px 10px;"><span data-i18n="dest.detail_btn">İncele</span></a>
         </div>
       </div>
     </a>
@@ -448,7 +450,7 @@
         <div class="mc-region">Belek · ★★★★★ · Her şey dahil</div>
         <div class="mc-price-row">
           <div><div class="mc-price">€720</div><div class="mc-nights">/ 7 gece</div></div>
-          <a href="hotel.html" class="card-cta" style="font-size: 12px; padding: 5px 10px;">İncele</a>
+          <a href="hotel.html" class="card-cta" style="font-size: 12px; padding: 5px 10px;"><span data-i18n="dest.detail_btn">İncele</span></a>
         </div>
       </div>
     </a>
@@ -459,7 +461,7 @@
         <div class="mc-region">Belek · ★★★★★ · Her şey dahil</div>
         <div class="mc-price-row">
           <div><div class="mc-price">€680</div><div class="mc-nights">/ 7 gece</div></div>
-          <a href="hotel.html" class="card-cta" style="font-size: 12px; padding: 5px 10px;">İncele</a>
+          <a href="hotel.html" class="card-cta" style="font-size: 12px; padding: 5px 10px;"><span data-i18n="dest.detail_btn">İncele</span></a>
         </div>
       </div>
     </a>
@@ -469,7 +471,7 @@
 <!-- PRACTICAL INFO -->
 <div class="section" style="padding-top: 0;">
   <div class="section-header">
-    <h2 class="section-title">Pratik bilgiler</h2>
+    <h2 class="section-title"><span data-i18n="dest.practical">Pratik bilgiler</span></h2>
   </div>
   <div class="practical-grid">
     <div class="practical-card">
@@ -498,10 +500,10 @@
 <!-- CTA -->
 <div class="section" style="padding-top: 0; padding-bottom: 3.5rem;">
   <div class="dest-cta">
-    <h2>Antalya'yı hemen planla</h2>
+    <h2><span data-i18n="antalya.cta_title">Antalyayı hemen planla</span></h2>
     <p>Erken rezervasyona özel %15 indirim · 31 Temmuz'a kadar geçerli</p>
     <div class="dest-cta-btns">
-      <a href="search.html" class="btn-primary-lg">Paketleri gör →</a>
+      <a href="search.html" class="btn-primary-lg"><span data-i18n="dest.see_pkgs">Paketleri gör →</span></a>
       <button class="btn-ghost" style="border-color: rgba(255,255,255,0.4); padding: 0.9rem 2rem; font-size: 15px; border-radius: var(--radius-md);">Diğer destinasyonlar</button>
     </div>
   </div>
@@ -511,10 +513,10 @@
   <div class="footer-inner">
     <div class="footer-brand">
       <a href="index.html" class="nav-logo">SunExpress <em>Holidays</em></a>
-      <p>Güneş Ekspres Havacılık A.Ş. bünyesinde faaliyet gösteren tatil platformu.</p>
+      <p data-i18n="footer.tagline">Güneş Ekspres Havacılık A.Ş. bünyesinde faaliyet gösteren tatil platformu.</p>
     </div>
     <div class="footer-col">
-      <h4>Destinasyonlar</h4>
+      <h4><span data-i18n="nav.destinations">Destinasyonlar</span></h4>
       <ul>
         <li><a href="dest-antalya.html">Antalya</a></li>
         <li><a href="dest-bodrum.html">Bodrum</a></li>
@@ -522,11 +524,11 @@
         <li><a href="dest-dalaman.html">Dalaman</a></li>
       </ul>
     </div>
-    <div class="footer-col"><h4>Yardım</h4><ul><li><a href="#">SSS</a></li><li><a href="#">İptal</a></li><li><a href="#">İletişim</a></li></ul></div>
-    <div class="footer-col"><h4>Şirket</h4><ul><li><a href="#">Hakkımızda</a></li><li><a href="#">KVKK</a></li></ul></div>
+    <div class="footer-col"><h4>Yardım</h4><ul><li><a href="#"><span data-i18n="footer.faq">SSS</span></a></li><li><a href="#"><span data-i18n="footer.cancel">İptal</span></a></li><li><a href="#"><span data-i18n="footer.contact">İletişim</span></a></li></ul></div>
+    <div class="footer-col"><h4>Şirket</h4><ul><li><a href="#"><span data-i18n="footer.about">Hakkımızda</span></a></li><li><a href="#"><span data-i18n="footer.kvkk">KVKK</span></a></li></ul></div>
   </div>
   <div class="footer-bottom">
-    <span>© 2025 SunExpress Holidays · Güneş Ekspres Havacılık A.Ş.</span>
+    <span><span data-i18n="footer.copyright">© 2025 SunExpress Holidays · Güneş Ekspres Havacılık A.Ş.</span></span>
     <span>🔒 SSL Güvenli · Datatrans</span>
   </div>
 </footer>

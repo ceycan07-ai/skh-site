@@ -282,6 +282,8 @@
     .promo-sub { font-size: 14px; color: rgba(255,255,255,0.55); }
     .promo-btn { position: relative; z-index: 2; }
   </style>
+  <script src="i18n.js" defer></script>
+  <script src="animations.js" defer></script>
 </head>
 <body>
 
@@ -289,14 +291,14 @@
 <nav class="sx-nav">
   <a href="index.html" class="nav-logo">SunExpress <em>Holidays</em></a>
   <ul class="nav-links">
-    <li><a href="index.html" class="active">Tatiller</a></li>
-    <li><a href="search.html">Arama</a></li>
-    <li><a href="dest-antalya.html">Destinasyonlar</a></li>
-    <li><a href="booking.html">Rezervasyon</a></li>
+    <li><a href="index.html" class="active"><span data-i18n="nav.holidays">Tatiller</span></a></li>
+    <li><a href="search.html"><span data-i18n="nav.search">Arama</span></a></li>
+    <li><a href="dest-antalya.html"><span data-i18n="nav.destinations">Destinasyonlar</span></a></li>
+    <li><a href="booking.html"><span data-i18n="nav.booking">Rezervasyon</span></a></li>
   </ul>
   <div class="nav-actions">
-    <button class="btn-ghost">Giriş Yap</button>
-    <a href="booking.html" class="btn-primary">Rezervasyon Yap</a>
+    <button class="btn-ghost"><span data-i18n="nav.login">Giriş Yap</span></button>
+    <a href="booking.html" class="btn-primary"><span data-i18n="nav.book_now">Rezervasyon Yap</span></a>
   </div>
 </nav>
 
@@ -308,10 +310,10 @@
   <div class="hero-content">
     <p class="hero-eyebrow">✈ Antalya · Bodrum · İzmir · Dalaman · Hurghada</p>
     <h1 class="hero-title">Hayalinizin<br>tatili <em>burada.</em></h1>
-    <p class="hero-sub">Uçuş + otel paketleri, özel fiyatlarla. SunExpress güvencesiyle Akdeniz'in en gözde destinasyonlarına.</p>
+    <p class="hero-sub">Uçuş + otel paketleri, özel fiyatlarla. <span data-i18n="perk.sx_trust">SunExpress güvencesi</span>yle Akdeniz'in en gözde destinasyonlarına.</p>
     <div class="hero-ctas">
-      <a href="search.html" class="btn-primary-lg">Paketleri keşfet →</a>
-      <a href="dest-antalya.html" class="btn-ghost" style="padding: 0.9rem 2rem; font-size: 15px; border-radius: var(--radius-md); text-decoration: none; color: rgba(255,255,255,0.8);">Destinasyonlar</a>
+      <a href="search.html" class="btn-primary-lg"><span data-i18n="home.explore_pkgs">Paketleri keşfet →</span></a>
+      <a href="dest-antalya.html" class="btn-ghost" style="padding: 0.9rem 2rem; font-size: 15px; border-radius: var(--radius-md); text-decoration: none; color: rgba(255,255,255,0.8);"><span data-i18n="nav.destinations">Destinasyonlar</span></a>
     </div>
   </div>
   <div class="hero-arc"></div>
@@ -321,27 +323,27 @@
 <div class="search-wrap">
   <div class="search-box">
     <div class="s-field">
-      <span class="s-label">Nereden</span>
+      <span class="s-label"><span data-i18n="search.from">Nereden</span></span>
       <span class="s-val">İstanbul (SAW)</span>
       <span class="s-sub">Sabiha Gökçen</span>
     </div>
     <div class="s-field">
-      <span class="s-label">Nereye</span>
+      <span class="s-label"><span data-i18n="search.to">Nereye</span></span>
       <span class="s-val">Tüm destinasyonlar</span>
       <span class="s-sub">AYT, BJV, ADB, DLM, HRG</span>
     </div>
     <div class="s-field">
-      <span class="s-label">Gidiş</span>
+      <span class="s-label"><span data-i18n="search.depart">Gidiş</span></span>
       <span class="s-val">15 Temmuz</span>
       <span class="s-sub">2025, Salı</span>
     </div>
     <div class="s-field">
-      <span class="s-label">Dönüş</span>
+      <span class="s-label"><span data-i18n="search.return">Dönüş</span></span>
       <span class="s-val">22 Temmuz</span>
       <span class="s-sub">7 gece</span>
     </div>
     <div class="s-field">
-      <span class="s-label">Kişi</span>
+      <span class="s-label"><span data-i18n="search.guests">Kişi</span></span>
       <span class="s-val">2 Yetişkin</span>
       <span class="s-sub">0 Çocuk</span>
     </div>
@@ -352,8 +354,8 @@
 <!-- DESTINATIONS -->
 <div class="section" style="padding-top: 3.5rem;">
   <div class="section-header">
-    <h2 class="section-title">Popüler destinasyonlar</h2>
-    <a href="dest-antalya.html" class="see-all">Tümünü gör →</a>
+    <h2 class="section-title"><span data-i18n="home.pop_dest">Popüler destinasyonlar</span></h2>
+    <a href="dest-antalya.html" class="see-all"><span data-i18n="home.see_all">Tümünü gör →</span></a>
   </div>
   <div class="dest-grid">
     <a href="dest-antalya.html" class="dest-card big">
@@ -419,8 +421,8 @@
 <!-- DEALS -->
 <div class="section" style="padding-top: 0;">
   <div class="section-header">
-    <h2 class="section-title">Bu haftanın fırsatları</h2>
-    <a href="search.html" class="see-all">Tümünü gör →</a>
+    <h2 class="section-title"><span data-i18n="home.deals">Bu haftanın fırsatları</span></h2>
+    <a href="search.html" class="see-all"><span data-i18n="home.see_all">Tümünü gör →</span></a>
   </div>
   <div class="deals-grid">
     <a href="hotel.html" class="deal-card">
@@ -468,36 +470,36 @@
 
 <!-- PERKS -->
 <div class="section" style="padding-top: 0;">
-  <div class="section-header"><h2 class="section-title">Neden SunExpress Holidays?</h2></div>
+  <div class="section-header"><h2 class="section-title"><span data-i18n="home.why">Neden SunExpress Holidays?</span></h2></div>
   <div class="perks-grid">
     <div class="perk-card">
       <div class="perk-icon">🔒</div>
-      <div class="perk-title">Güvenli ödeme</div>
+      <div class="perk-title"><span data-i18n="perk.secure_pay">Güvenli ödeme</span></div>
       <div class="perk-text">Datatrans altyapısıyla 3D Secure korumalı ödeme. Kartınız her zaman güvende.</div>
     </div>
     <div class="perk-card">
       <div class="perk-icon">📦</div>
-      <div class="perk-title">Paket kolaylığı</div>
+      <div class="perk-title"><span data-i18n="perk.package">Paket kolaylığı</span></div>
       <div class="perk-text">Uçuş + otel + transfer tek rezervasyonda. Karmaşıklık yok, ekstra maliyet yok.</div>
     </div>
     <div class="perk-card">
       <div class="perk-icon">🎧</div>
-      <div class="perk-title">7/24 Türkçe destek</div>
+      <div class="perk-title"><span data-i18n="perk.support">7/24 Türkçe destek</span></div>
       <div class="perk-text">Tatil öncesi ve sırasında her sorunuza Türkçe yanıt veriyoruz. SLA garantisi ile.</div>
     </div>
     <div class="perk-card">
       <div class="perk-icon">✈️</div>
-      <div class="perk-title">SunExpress güvencesi</div>
+      <div class="perk-title"><span data-i18n="perk.sx_trust">SunExpress güvencesi</span></div>
       <div class="perk-text">30 yılı aşkın Lufthansa–THY ortak havacılık deneyimiyle tatil planlamanız emin ellerde.</div>
     </div>
     <div class="perk-card">
       <div class="perk-icon">⭐</div>
-      <div class="perk-title">Özenle seçilmiş oteller</div>
+      <div class="perk-title"><span data-i18n="perk.hotels">Özenle seçilmiş oteller</span></div>
       <div class="perk-text">GIATA & TrustYou verileriyle doğrulanmış gerçek yorumlara dayalı otel seçimi.</div>
     </div>
     <div class="perk-card">
       <div class="perk-icon">💳</div>
-      <div class="perk-title">Esnek iptaller</div>
+      <div class="perk-title"><span data-i18n="perk.flexible">Esnek iptaller</span></div>
       <div class="perk-text">Değişen planlarınıza uyum sağlayan esnek rezervasyon koşulları ve ücretsiz iptal.</div>
     </div>
   </div>
@@ -507,12 +509,12 @@
 <div class="section" style="padding-top: 0; padding-bottom: 3.5rem;">
   <div class="promo-banner">
     <div class="promo-text">
-      <p class="promo-eyebrow">Özel kampanya</p>
-      <h3 class="promo-title">Erken rezervasyona özel %15 indirim</h3>
+      <p class="promo-eyebrow"><span data-i18n="home.promo_eyebrow">Özel kampanya</span></p>
+      <h3 class="promo-title"><span data-i18n="home.promo_title">Erken rezervasyona özel %15 indirim</span></h3>
       <p class="promo-sub">31 Temmuz 2025 tarihine kadar yapılan tüm rezervasyonlarda geçerlidir.</p>
     </div>
     <div class="promo-btn">
-      <a href="search.html" class="btn-primary-lg">Kampanyayı keşfet →</a>
+      <a href="search.html" class="btn-primary-lg"><span data-i18n="home.promo_btn">Kampanyayı keşfet →</span></a>
     </div>
   </div>
 </div>
@@ -522,10 +524,10 @@
   <div class="footer-inner">
     <div class="footer-brand">
       <a href="index.html" class="nav-logo">SunExpress <em>Holidays</em></a>
-      <p>Güneş Ekspres Havacılık A.Ş. bünyesinde faaliyet gösteren tatil platformu. Akdeniz'in en güzel destinasyonlarına uçuş + otel paketleri.</p>
+      <p data-i18n="footer.tagline">Güneş Ekspres Havacılık A.Ş. bünyesinde faaliyet gösteren tatil platformu. Akdeniz'in en güzel destinasyonlarına uçuş + otel paketleri.</p>
     </div>
     <div class="footer-col">
-      <h4>Destinasyonlar</h4>
+      <h4><span data-i18n="nav.destinations">Destinasyonlar</span></h4>
       <ul>
         <li><a href="dest-antalya.html">Antalya</a></li>
         <li><a href="dest-bodrum.html">Bodrum</a></li>
@@ -537,24 +539,24 @@
     <div class="footer-col">
       <h4>Yardım</h4>
       <ul>
-        <li><a href="#">SSS</a></li>
-        <li><a href="#">İptal Koşulları</a></li>
-        <li><a href="#">Ödeme</a></li>
-        <li><a href="#">İletişim</a></li>
+        <li><a href="#"><span data-i18n="footer.faq">SSS</span></a></li>
+        <li><a href="#"><span data-i18n="footer.cancel">İptal Koşulları</span></a></li>
+        <li><a href="#"><span data-i18n="footer.payment">Ödeme</span></a></li>
+        <li><a href="#"><span data-i18n="footer.contact">İletişim</span></a></li>
       </ul>
     </div>
     <div class="footer-col">
       <h4>Şirket</h4>
       <ul>
-        <li><a href="#">Hakkımızda</a></li>
-        <li><a href="#">Kariyer</a></li>
-        <li><a href="#">KVKK</a></li>
-        <li><a href="#">Gizlilik</a></li>
+        <li><a href="#"><span data-i18n="footer.about">Hakkımızda</span></a></li>
+        <li><a href="#"><span data-i18n="footer.career">Kariyer</span></a></li>
+        <li><a href="#"><span data-i18n="footer.kvkk">KVKK</span></a></li>
+        <li><a href="#"><span data-i18n="footer.privacy">Gizlilik</span></a></li>
       </ul>
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© 2025 SunExpress Holidays · Güneş Ekspres Havacılık A.Ş.</span>
+    <span><span data-i18n="footer.copyright">© 2025 SunExpress Holidays · Güneş Ekspres Havacılık A.Ş.</span></span>
     <span>🔒 SSL Güvenli · Datatrans ödeme altyapısı</span>
   </div>
 </footer>
