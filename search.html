@@ -1,1079 +1,807 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="de">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Arama Sonuçları — SunExpress Holidays</title>
+  <title>Suchergebnisse — SunExpress Holidays</title>
   <link rel="stylesheet" href="shared.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.30.0/dist/tabler-icons.min.css" />
   <style>
-    .results-hero {
-      background: var(--blue-dark);
-      padding: 1.5rem 2.5rem 4rem;
-      position: relative;
-      overflow: hidden;
-    }
-    .results-hero::after {
-      content: '';
-      position: absolute;
-      bottom: -2px;
-      left: 0;
-      width: 100%;
-      height: 56px;
-      background: var(--cream);
-      clip-path: ellipse(55% 100% at 50% 100%);
-    }
-    .results-hero-inner {
-      max-width: 1080px;
-      margin: 0 auto;
-    }
-    .results-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 26px;
-      color: white;
-      font-weight: 700;
-      margin-bottom: 0.25rem;
-    }
-    .results-sub {
-      font-size: 13px;
-      color: rgba(255,255,255,0.55);
-      margin-bottom: 1.5rem;
+    /* ── SEARCH BAR (compact, top of results) ── */
+    .results-searchbar {
+      background: var(--sxs-blue);
+      padding: 20px var(--sp-xl);
     }
 
-    /* Layout */
+    /* ── LAYOUT ── */
     .results-layout {
-      max-width: 1080px;
-      margin: -20px auto 0;
-      padding: 0 2.5rem 3rem;
-      display: grid;
-      grid-template-columns: 260px 1fr;
-      gap: 1.75rem;
-      align-items: start;
-    }
-
-    /* ── FILTERS SIDEBAR ── */
-    .filters {
-      background: var(--white);
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border);
-      padding: 1.5rem;
-      position: sticky;
-      top: 80px;
-    }
-
-    .filters-title {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--blue-dark);
-      margin-bottom: 1.25rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .filters-clear {
-      font-size: 11px;
-      color: var(--orange);
-      cursor: pointer;
-      font-weight: 500;
-    }
-
-    .filter-group { margin-bottom: 1.5rem; }
-    .filter-group:last-child { margin-bottom: 0; }
-
-    .filter-label {
-      font-size: 11px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      font-weight: 500;
-      margin-bottom: 0.75rem;
-    }
-
-    .price-range {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      font-size: 13px;
-      color: var(--text-mid);
-    }
-    .price-range input[type=range] {
-      width: 100%;
-      accent-color: var(--orange);
-      margin: 0.5rem 0;
-    }
-    .price-vals {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
-
-    .check-group { display: flex; flex-direction: column; gap: 8px; }
-    .check-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      color: var(--text-mid);
-      cursor: pointer;
-    }
-    .check-item input[type=checkbox] { accent-color: var(--orange); width: 15px; height: 15px; cursor: pointer; }
-
-    .star-filter { display: flex; gap: 6px; flex-wrap: wrap; }
-    .star-btn {
-      border: 1px solid var(--border);
-      background: var(--white);
-      border-radius: 6px;
-      padding: 4px 10px;
-      font-size: 12px;
-      cursor: pointer;
-      color: var(--text-muted);
-      transition: all 0.18s;
-    }
-    .star-btn.active, .star-btn:hover {
-      border-color: var(--orange);
-      background: var(--orange-lt);
-      color: var(--orange);
-      font-weight: 600;
-    }
-
-    .filter-divider {
-      height: 1px;
-      background: var(--border);
-      margin: 1.25rem 0;
-    }
-
-    /* ── RESULTS AREA ── */
-    .results-area { display: flex; flex-direction: column; gap: 0; }
-
-    .sort-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.25rem;
-    }
-    .result-count {
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-    .result-count strong { color: var(--text); }
-    .sort-select {
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 0.4rem 0.75rem;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
-      color: var(--text);
-      background: var(--white);
-      cursor: pointer;
-      outline: none;
-    }
-
-    /* ── HOTEL CARD ── */
-    .hotel-card {
-      background: var(--white);
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border);
-      overflow: hidden;
       display: grid;
       grid-template-columns: 280px 1fr;
-      margin-bottom: 1rem;
-      transition: box-shadow 0.22s, transform 0.22s;
-      cursor: pointer;
-      text-decoration: none;
-      color: inherit;
-    }
-    .hotel-card:hover {
-      box-shadow: var(--shadow-lg);
-      transform: translateY(-3px);
+      gap: var(--sp-xl);
+      padding: var(--sp-xl);
+      max-width: 1280px;
+      margin: 0 auto;
     }
 
-    .hotel-img {
-      position: relative;
+    /* ── FILTER SIDEBAR ── */
+    .filter-sidebar { display: flex; flex-direction: column; gap: 16px; }
+
+    .filter-panel {
+      background: var(--sxs-white);
+      border-radius: var(--r-lg);
+      box-shadow: var(--shadow-md);
       overflow: hidden;
-      background: var(--blue-dark);
-      min-height: 220px;
     }
-    .hotel-img-bg {
-      width: 100%;
-      height: 100%;
-      min-height: 220px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 72px;
-      opacity: 0.4;
+    .filter-panel-head {
+      padding: 14px 16px;
+      font-size: 13px; font-weight: 700; color: var(--sxs-blue);
+      border-bottom: 1px solid var(--sxs-grey1);
+      display: flex; align-items: center; justify-content: space-between;
+      cursor: pointer; user-select: none;
+    }
+    .filter-panel-head i { font-size: 16px; transition: transform .2s; }
+    .filter-panel-head.collapsed i { transform: rotate(-90deg); }
+    .filter-panel-body { padding: 12px 16px; }
+    .filter-panel-body.hidden { display: none; }
+
+    /* Checkbox filters */
+    .filter-option {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 7px 0; cursor: pointer; user-select: none;
+    }
+    .filter-option:hover .filter-label { color: var(--sxs-blue); }
+    .filter-left { display: flex; align-items: center; gap: 10px; }
+    .filter-check {
+      width: 18px; height: 18px;
+      border: 2px solid var(--sxs-grey2);
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: background .15s, border-color .15s;
+    }
+    .filter-check.checked { background: var(--sxs-blue); border-color: var(--sxs-blue); }
+    .filter-check.checked::after { content: ''; width: 10px; height: 6px; border-left: 2px solid #fff; border-bottom: 2px solid #fff; transform: rotate(-45deg) translateY(-1px); display: block; }
+    .filter-label { font-size: 13px; color: var(--sxs-black); }
+    .filter-count { font-size: 11px; color: var(--sxs-grey3); background: var(--sxs-grey1); padding: 2px 7px; border-radius: var(--r-full); }
+
+    /* Star filter */
+    .star-filter { display: flex; flex-direction: column; gap: 6px; }
+    .star-row { display: flex; align-items: center; gap: 8px; padding: 5px 0; cursor: pointer; }
+    .star-row:hover .filter-label { color: var(--sxs-blue); }
+    .mini-stars { display: flex; gap: 2px; color: var(--sxs-orange-light); font-size: 13px; }
+
+    /* Price range */
+    .price-range-wrap { padding: 4px 0; }
+    .price-range-labels { display: flex; justify-content: space-between; font-size: 12px; color: var(--sxs-grey3); margin-bottom: 8px; }
+    .price-range-labels span { font-weight: 600; color: var(--sxs-black); }
+    input[type=range] {
+      width: 100%; accent-color: var(--sxs-blue);
+      height: 4px; cursor: pointer;
+    }
+
+    /* Active filters chips */
+    .active-filters {
+      display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
+      margin-bottom: 20px;
+    }
+    .active-filters-label { font-size: 12px; color: var(--sxs-grey3); font-weight: 600; margin-right: 4px; }
+    .filter-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--sxs-greyblue-2); color: var(--sxs-blue);
+      font-size: 12px; font-weight: 600;
+      padding: 5px 10px; border-radius: var(--r-full);
+      border: 1px solid var(--sxs-greyblue-1);
+      cursor: pointer; transition: background .15s;
+    }
+    .filter-chip:hover { background: var(--sxs-greyblue-1); }
+    .filter-chip i { font-size: 14px; }
+    .clear-all {
+      font-size: 12px; font-weight: 600; color: var(--sxs-orange);
+      cursor: pointer; text-decoration: underline; margin-left: auto;
+    }
+    .clear-all:hover { color: var(--sxs-orange-dark); }
+
+    /* ── RESULTS ── */
+    .results-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .results-count { font-size: 15px; font-weight: 700; color: var(--sxs-blue); }
+    .results-count span { color: var(--sxs-grey3); font-size: 13px; font-weight: 400; }
+    .sort-select {
+      font-family: var(--font); font-size: 13px; font-weight: 600;
+      color: var(--sxs-black); border: 1px solid var(--sxs-grey2);
+      border-radius: var(--r-md); padding: 8px 32px 8px 12px;
+      background: var(--sxs-white); cursor: pointer; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238c8c8c' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 10px center;
+    }
+
+    .results-grid { display: flex; flex-direction: column; gap: 16px; }
+
+    /* Result card */
+    .result-card {
+      background: var(--sxs-white);
+      border-radius: var(--r-lg);
+      box-shadow: var(--shadow-md);
+      display: flex; overflow: hidden;
+      transition: box-shadow .2s, transform .15s;
+      animation: fadeIn .3s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    .result-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-1px); }
+    .result-card.hidden { display: none; }
+
+    .result-img {
+      width: 220px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; color: rgba(255,255,255,.9);
+      padding: 0 12px; text-align: center;
       position: relative;
     }
-    .hotel-img-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to right, transparent 60%, rgba(255,255,255,0.08));
-    }
-    .hotel-tag {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      background: var(--orange);
-      color: white;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      padding: 4px 10px;
-      border-radius: 6px;
-    }
-    .hotel-fav {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      width: 32px;
-      height: 32px;
-      background: rgba(255,255,255,0.9);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 15px;
-      cursor: pointer;
-    }
-    .img-dots {
-      position: absolute;
-      bottom: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 4px;
-    }
-    .img-dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.4);
-    }
-    .img-dot.active { background: white; }
-
-    .hotel-body { padding: 1.5rem 1.5rem 1.25rem; display: flex; flex-direction: column; }
-
-    .hotel-meta {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 0.5rem;
-      flex-wrap: wrap;
-    }
-    .hotel-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--blue-dark);
-      margin-bottom: 0.25rem;
-    }
-    .hotel-location {
-      font-size: 12px;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      margin-bottom: 0.75rem;
-    }
-    .hotel-desc {
-      font-size: 13px;
-      color: var(--text-mid);
-      line-height: 1.65;
-      margin-bottom: 1rem;
-      flex: 1;
-    }
-    .hotel-amenities {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 1rem;
-    }
-    .amenity {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 11px;
-      color: var(--text-muted);
-      background: var(--cream);
-      padding: 3px 8px;
-      border-radius: 5px;
-    }
-    .hotel-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      border-top: 1px solid var(--border);
-      padding-top: 1rem;
-      margin-top: auto;
-    }
-    .hotel-review {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .review-score {
-      background: var(--blue-dark);
-      color: white;
-      font-size: 13px;
-      font-weight: 700;
-      padding: 4px 8px;
-      border-radius: 6px;
-    }
-    .review-text { font-size: 12px; color: var(--text-muted); }
-    .hotel-price-area { text-align: right; }
-    .price-from { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-    .price-val {
-      font-family: 'Playfair Display', serif;
-      font-size: 26px;
-      font-weight: 700;
-      color: var(--blue-dark);
-      line-height: 1.1;
-    }
-    .price-per { font-size: 11px; color: var(--text-muted); margin-bottom: 0.5rem; }
-    .card-cta {
-      background: var(--orange);
-      color: white;
-      border: none;
-      border-radius: var(--radius-sm);
-      padding: 0.55rem 1.25rem;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: opacity 0.18s;
-      text-decoration: none;
-      display: inline-block;
-    }
-    .card-cta:hover { opacity: 0.88; }
-
-    /* ── HOTEL BG COLORS ── */
-    .hbg-1 { background: linear-gradient(140deg, #1A428A 0%, #009FE3 100%); }
-    .hbg-2 { background: linear-gradient(140deg, #0f6b5e, #1a9fe3 100%); }
-    .hbg-3 { background: linear-gradient(140deg, #5e2a8a, #009FE3 100%); }
-    .hbg-4 { background: linear-gradient(140deg, #1A428A, #2e7d9e 100%); }
-    .hbg-5 { background: linear-gradient(140deg, #8a3a1a, #EB630C 100%); }
-    .hbg-6 { background: linear-gradient(140deg, #1a5c2a, #009FE3 100%); }
-
-    /* ── PROMO STRIP ── */
-    .promo-strip {
-      background: linear-gradient(90deg, var(--blue-dark), var(--blue-mid));
-      border-radius: var(--radius-md);
-      padding: 1rem 1.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-      gap: 1rem;
-    }
-    .promo-strip p { font-size: 13px; color: white; }
-    .promo-strip strong { color: var(--orange); }
-    .promo-strip a {
-      background: var(--orange);
-      color: white;
-      border: none;
-      border-radius: 6px;
-      padding: 0.4rem 1rem;
-      font-size: 12px;
-      font-weight: 500;
-      cursor: pointer;
-      text-decoration: none;
-      white-space: nowrap;
+    .result-img-badge {
+      position: absolute; top: 10px; left: 10px;
     }
 
-    /* ── PAGINATION ── */
+    .result-body { flex: 1; padding: 20px; }
+    .result-hotel { font-size: 17px; font-weight: 700; color: var(--sxs-blue); margin-bottom: 4px; }
+    .result-dest { font-size: 12px; color: var(--sxs-grey3); margin-bottom: 8px; display: flex; align-items: center; gap: 4px; }
+    .result-meta { display: flex; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; }
+    .result-meta-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--sxs-black); }
+    .result-meta-item i { color: var(--sxs-blue); font-size: 15px; }
+
+    .result-price-col {
+      width: 180px; flex-shrink: 0;
+      border-left: 1px solid var(--sxs-grey1);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 20px; gap: 12px;
+    }
+    .result-price-from { font-size: 11px; color: var(--sxs-grey3); text-transform: uppercase; letter-spacing: .5px; }
+    .result-price { font-size: 28px; font-weight: 700; color: var(--sxs-orange); line-height: 1; }
+    .result-price-pp { font-size: 11px; color: var(--sxs-grey3); }
+    .result-price-total { font-size: 11px; color: var(--sxs-grey3); }
+    .result-availability { font-size: 11px; color: #d3550a; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+
+    /* No results */
+    .no-results {
+      text-align: center; padding: 60px 20px;
+      background: var(--sxs-white); border-radius: var(--r-lg);
+      box-shadow: var(--shadow-md);
+    }
+    .no-results i { font-size: 48px; color: var(--sxs-grey2); margin-bottom: 16px; display: block; }
+    .no-results h3 { font-size: 18px; font-weight: 700; color: var(--sxs-blue); margin-bottom: 8px; }
+    .no-results p { font-size: 14px; color: var(--sxs-grey3); }
+
+    /* Loading shimmer */
+    .skeleton {
+      background: linear-gradient(90deg, var(--sxs-grey1) 25%, var(--sxs-grey2) 50%, var(--sxs-grey1) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.2s infinite;
+      border-radius: var(--r-md);
+    }
+    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+    /* Pagination */
     .pagination {
-      display: flex;
-      justify-content: center;
-      gap: 6px;
-      margin-top: 1.5rem;
+      display: flex; align-items: center; justify-content: center;
+      gap: 8px; margin-top: 32px;
     }
     .page-btn {
-      width: 36px;
-      height: 36px;
-      border: 1px solid var(--border);
-      background: var(--white);
-      border-radius: var(--radius-sm);
-      font-size: 13px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.18s;
-      color: var(--text-mid);
-    }
-    .page-btn:hover { border-color: var(--orange); color: var(--orange); }
-    .page-btn.active { background: var(--orange); border-color: var(--orange); color: white; font-weight: 600; }
-
-    /* ── PRICE BLOCK (new) ── */
-    .price-block {
-      text-align: right;
-      margin-bottom: 0.5rem;
-    }
-    .price-label {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      color: var(--text-muted);
-      font-weight: 500;
-      margin-bottom: 2px;
-    }
-    .price-amount {
-      display: flex;
-      align-items: baseline;
-      gap: 1px;
-      justify-content: flex-end;
-    }
-    .price-currency {
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--blue-dark);
-      margin-top: 2px;
-    }
-    .price-num {
-      font-family: 'Playfair Display', serif;
-      font-size: 34px;
-      font-weight: 700;
-      color: var(--blue-dark);
-      line-height: 1;
-    }
-    .price-detail {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-    .hotel-price-area {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 0.5rem;
-    }
-
-    /* ── DROPDOWN ── */
-    .cs-field { position: relative; }
-    .search-dropdown {
-      position: absolute;
-      top: calc(100% + 8px);
-      left: 0;
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      box-shadow: var(--shadow-lg);
-      z-index: 300;
-      min-width: 200px;
-      display: none;
-      padding: 6px;
-      animation: ddFadeIn 0.18s ease;
-    }
-    @keyframes ddFadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
-    .search-dropdown.open { display: block; }
-    .dd-item {
-      padding: 9px 12px;
-      font-size: 13px;
-      color: var(--text-mid);
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-    .dd-item:hover { background: var(--cream); }
-    .dd-item.active { background: var(--blue-pale); color: var(--blue-dark); font-weight: 500; }
-
-    .guest-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 12px;
-      font-size: 13px;
-      color: var(--text-mid);
-      border-bottom: 1px solid var(--border);
-    }
-    .guest-row:last-of-type { border-bottom: none; }
-    .guest-ctrl { display: flex; align-items: center; gap: 10px; }
-    .gc-btn {
-      width: 28px; height: 28px;
-      border: 1px solid var(--border);
-      background: var(--white);
-      border-radius: 50%;
-      font-size: 16px;
-      cursor: pointer;
-      color: var(--text-mid);
+      width: 36px; height: 36px; border-radius: var(--r-md);
+      border: 1px solid var(--sxs-grey2); background: var(--sxs-white);
+      font-family: var(--font); font-size: 13px; font-weight: 600;
+      color: var(--sxs-black); cursor: pointer; transition: all .15s;
       display: flex; align-items: center; justify-content: center;
-      transition: all 0.15s;
     }
-    .gc-btn:hover { border-color: var(--orange); color: var(--orange); }
-    .gc-done {
-      width: 100%;
-      background: var(--orange);
-      color: white;
-      border: none;
-      border-radius: var(--radius-sm);
-      padding: 8px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      margin-top: 6px;
-    }
+    .page-btn:hover { border-color: var(--sxs-blue); color: var(--sxs-blue); }
+    .page-btn.active { background: var(--sxs-blue); color: var(--sxs-white); border-color: var(--sxs-blue); }
+    .page-btn:disabled { opacity: .4; cursor: not-allowed; }
 
-    .cs-date-input {
-      border: none;
-      background: transparent;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text);
-      outline: none;
-      cursor: pointer;
-      width: 100%;
-      padding: 0;
-    }
-    .cs-date-input::-webkit-calendar-picker-indicator { opacity: 0.4; cursor: pointer; }
+    /* Color helpers for cards */
+    .ci1{background:linear-gradient(160deg,#009fe3,#00458f)}
+    .ci2{background:linear-gradient(160deg,#f9b200,#eb690b)}
+    .ci3{background:linear-gradient(160deg,#84d0f0,#009fe3)}
+    .ci4{background:linear-gradient(160deg,#04306d,#009fe3)}
+    .ci5{background:linear-gradient(160deg,#009fe3,#eb690b)}
+    .ci6{background:linear-gradient(160deg,#eb690b,#f9b200)}
+    .ci7{background:linear-gradient(160deg,#00458f,#84d0f0)}
+    .ci8{background:linear-gradient(160deg,#f39200,#00458f)}
+    .ci9{background:linear-gradient(160deg,#009fe3,#04306d)}
   </style>
-  <script src="i18n.js" defer></script>
-  <script src="animations.js" defer></script>
 </head>
 <body>
 
-<!-- NAV -->
-<nav class="sx-nav">
-  <a href="index.html" class="nav-logo" aria-label="SunExpress Holidays">
-    <div class="logo-wrap">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52" class="logo-icon">
-  <line x1="26" y1="24" x2="14" y2="4"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="26" y1="24" x2="18" y2="3"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="26" y1="24" x2="22" y2="2"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="26" y1="24" x2="26" y2="2"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="26" y1="24" x2="30" y2="2"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="26" y1="24" x2="34" y2="3"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="26" y1="24" x2="38" y2="4"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="26" y1="24" x2="10" y2="8"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="26" y1="24" x2="42" y2="8"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <path d="M 8 26 A 18 18 0 0 0 44 26 Z" fill="#1A428A"/>
-  <path d="M 8 26 Q 17 18 26 22 Q 35 26 44 22 L 44 26 Z" fill="#EB630C"/>
-  <path d="M 8 26 Q 17 21 26 23 Q 35 25 44 23 L 44 22 Q 35 26 26 22 Q 17 18 8 26 Z" fill="white" opacity="0.25"/>
-</svg>
-      <div class="logo-text-block">
-        <span class="logo-text-main">SunExpress</span>
-        <span class="logo-text-sub">Holidays</span>
-      </div>
-    </div>
-  </a>
-  <ul class="nav-links">
-    <li><a href="index.html"><span data-i18n="nav.holidays">Tatiller</span></a></li>
-    <li><a href="search.html" class="active"><span data-i18n="nav.search">Arama</span></a></li>
-    <li><a href="dest-antalya.html"><span data-i18n="nav.destinations">Destinasyonlar</span></a></li>
-    <li><a href="booking.html"><span data-i18n="nav.booking">Rezervasyon</span></a></li>
-  </ul>
-  <div class="nav-actions">
-    <button class="btn-ghost"><span data-i18n="nav.login">Giriş Yap</span></button>
-    <a href="booking.html" class="btn-primary"><span data-i18n="nav.book_now">Rezervasyon Yap</span></a>
+  <div id="site-header" data-page="results"></div>
+
+  <!-- COMPACT SEARCH BAR -->
+  <div class="results-searchbar">
+    <div id="search-mask"></div>
   </div>
-</nav>
 
-<!-- RESULTS HERO + SEARCH -->
+  <!-- RESULTS LAYOUT -->
+  <div class="results-layout">
 
-<!-- RESULTS HERO + SEARCH -->
-<div class="results-hero">
-  <div class="results-hero-inner">
-    <div class="breadcrumb" style="margin-bottom: 1rem;">
-      <a href="index.html">Ana Sayfa</a> › <span data-i18n="sr.title">Antalya tatil paketleri</span>
-    </div>
-    <p class="results-title" data-i18n="sr.title">Antalya tatil paketleri</p>
-    <p class="results-sub">Frankfurt FRA · 15–22 Jul 2025 · 2 <span data-i18n="search.adults">Yetişkin</span></p>
+    <!-- ── FILTER SIDEBAR ── -->
+    <aside class="filter-sidebar" id="filter-sidebar">
 
-    <!-- Interactive Search Mask -->
-    <div class="compact-search" id="searchMask">
+      <!-- Reset -->
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:14px;font-weight:700;color:var(--sxs-blue)">Filter</span>
+        <button class="clear-all" id="clear-all-btn" style="display:none" onclick="clearAllFilters()">
+          Alle zurücksetzen
+        </button>
+      </div>
 
-      <!-- FROM -->
-      <div class="cs-field" id="csFrom" onclick="toggleDropdown('ddFrom')">
-        <span class="cs-label" data-i18n="search.from">Nereden</span>
-        <span class="cs-val" id="fromVal">Frankfurt (FRA)</span>
-        <div class="search-dropdown" id="ddFrom">
-          <div class="dd-item active" data-val="Frankfurt (FRA)" data-key="origin.fra" onclick="selectFrom(this)">Frankfurt (FRA)</div>
-          <div class="dd-item" data-val="Munich (MUC)" data-key="origin.muc" onclick="selectFrom(this)">München (MUC)</div>
-          <div class="dd-item" data-val="Düsseldorf (DUS)" data-key="origin.dus" onclick="selectFrom(this)">Düsseldorf (DUS)</div>
-          <div class="dd-item" data-val="Hamburg (HAM)" data-key="origin.ham" onclick="selectFrom(this)">Hamburg (HAM)</div>
-          <div class="dd-item" data-val="Berlin (BER)" data-key="origin.ber" onclick="selectFrom(this)">Berlin (BER)</div>
-          <div class="dd-item" data-val="Wien (VIE)" data-key="origin.vie" onclick="selectFrom(this)">Wien (VIE)</div>
-          <div class="dd-item" data-val="London (LHR)" data-key="origin.lhr" onclick="selectFrom(this)">London (LHR)</div>
-          <div class="dd-item" data-val="Istanbul (SAW)" data-key="origin.saw" onclick="selectFrom(this)">Istanbul SAW</div>
+      <!-- Verpflegung -->
+      <div class="filter-panel">
+        <div class="filter-panel-head" onclick="togglePanel(this)">
+          <span><i class="ti ti-utensils" aria-hidden="true" style="margin-right:8px;color:var(--sxs-orange)"></i>Verpflegung</span>
+          <i class="ti ti-chevron-down"></i>
         </div>
-      </div>
-
-      <!-- TO -->
-      <div class="cs-field" id="csTo" onclick="toggleDropdown('ddTo')">
-        <span class="cs-label" data-i18n="search.to">Nereye</span>
-        <span class="cs-val" id="toVal">Antalya (AYT)</span>
-        <div class="search-dropdown" id="ddTo">
-          <div class="dd-item active" data-val="Antalya (AYT)" data-key="dest.ayt" onclick="selectTo(this)">Antalya (AYT)</div>
-          <div class="dd-item" data-val="Bodrum (BJV)" data-key="dest.bjv" onclick="selectTo(this)">Bodrum (BJV)</div>
-          <div class="dd-item" data-val="İzmir (ADB)" data-key="dest.adb" onclick="selectTo(this)">İzmir (ADB)</div>
-          <div class="dd-item" data-val="Dalaman (DLM)" data-key="dest.dlm" onclick="selectTo(this)">Dalaman (DLM)</div>
-          <div class="dd-item" data-val="Hurghada (HRG)" data-key="dest.hrg" onclick="selectTo(this)">Hurghada (HRG)</div>
-          <div class="dd-item" data-val="Marmaris (RMF)" data-key="dest.rmf" onclick="selectTo(this)">Marmaris (RMF)</div>
-        </div>
-      </div>
-
-      <!-- DATES -->
-      <div class="cs-field">
-        <span class="cs-label" data-i18n="search.depart">Gidiş</span>
-        <input type="date" class="cs-date-input" id="departDate" value="2025-07-15" onchange="updateNights()" />
-      </div>
-      <div class="cs-field">
-        <span class="cs-label" data-i18n="search.return">Dönüş</span>
-        <input type="date" class="cs-date-input" id="returnDate" value="2025-07-22" onchange="updateNights()" />
-        <span class="cs-sub" id="nightsLabel">7 <span data-i18n="search.nights">gece</span></span>
-      </div>
-
-      <!-- GUESTS -->
-      <div class="cs-field" id="csGuests" onclick="toggleDropdown('ddGuests')">
-        <span class="cs-label" data-i18n="search.guests">Kişi</span>
-        <span class="cs-val" id="guestsVal">2 <span data-i18n="search.adults">Yetişkin</span></span>
-        <div class="search-dropdown" id="ddGuests" style="min-width:240px;">
-          <div class="guest-row">
-            <span data-i18n="search.adults">Yetişkin</span>
-            <div class="guest-ctrl">
-              <button class="gc-btn" onclick="changeGuest('adults',-1,event)">−</button>
-              <span id="adultCount">2</span>
-              <button class="gc-btn" onclick="changeGuest('adults',1,event)">+</button>
-            </div>
+        <div class="filter-panel-body" id="panel-verpflegung">
+          <div class="filter-option" onclick="toggleFilter('verpflegung','all-inclusive')">
+            <div class="filter-left"><div class="filter-check" data-filter="verpflegung" data-val="all-inclusive"></div><span class="filter-label">All-Inclusive</span></div>
+            <span class="filter-count" data-count="verpflegung-all-inclusive">5</span>
           </div>
-          <div class="guest-row">
-            <span data-i18n="search.children">Çocuk</span>
-            <div class="guest-ctrl">
-              <button class="gc-btn" onclick="changeGuest('children',-1,event)">−</button>
-              <span id="childCount">0</span>
-              <button class="gc-btn" onclick="changeGuest('children',1,event)">+</button>
-            </div>
+          <div class="filter-option" onclick="toggleFilter('verpflegung','halbpension')">
+            <div class="filter-left"><div class="filter-check" data-filter="verpflegung" data-val="halbpension"></div><span class="filter-label">Halbpension</span></div>
+            <span class="filter-count" data-count="verpflegung-halbpension">3</span>
           </div>
-          <button class="gc-done" onclick="closeDropdown('ddGuests')" data-i18n="dest.discover">Tamam</button>
-        </div>
-      </div>
-
-      <a href="search.html" class="cs-btn" data-i18n="search.btn">Ara →</a>
-    </div>
-  </div>
-</div>
-
-<!-- MAIN -->
-<div class="results-layout">
-
-  <!-- FILTERS -->
-  <aside class="filters reveal">
-    <div class="filters-title">
-      <span data-i18n="sr.filters">Filtreler</span>
-      <span class="filters-clear" data-i18n="sr.clear">Temizle</span>
-    </div>
-
-    <div class="filter-group">
-      <div class="filter-label" data-i18n="sr.price_range">Fiyat Aralığı</div>
-      <input type="range" min="200" max="2000" value="1200" style="width:100%; accent-color: var(--orange);" />
-      <div class="price-vals"><span>€200</span><span>€1.200</span></div>
-    </div>
-
-    <div class="filter-divider"></div>
-
-    <div class="filter-group">
-      <div class="filter-label" data-i18n="sr.stars">Yıldız</div>
-      <div class="star-filter">
-        <button class="star-btn">★ 2</button>
-        <button class="star-btn">★ 3</button>
-        <button class="star-btn active">★ 4</button>
-        <button class="star-btn active">★ 5</button>
-      </div>
-    </div>
-
-    <div class="filter-divider"></div>
-
-    <div class="filter-group">
-      <div class="filter-label" data-i18n="sr.board">Pansiyon Tipi</div>
-      <div class="check-group">
-        <label class="check-item"><input type="checkbox" checked /> <span data-i18n="sr.all_inc_s">Her şey dahil</span></label>
-        <label class="check-item"><input type="checkbox" checked /> <span data-i18n="sr.ultra_ai_s">Ultra her şey dahil</span></label>
-        <label class="check-item"><input type="checkbox" /> <span data-i18n="sr.half_board_s">Yarım pansiyon</span></label>
-        <label class="check-item"><input type="checkbox" /> <span data-i18n="sr.bb_s">Oda kahvaltı</span></label>
-        <label class="check-item"><input type="checkbox" /> <span data-i18n="sr.room_only_s">Sadece oda</span></label>
-      </div>
-    </div>
-
-    <div class="filter-divider"></div>
-
-    <div class="filter-group">
-      <div class="filter-label" data-i18n="sr.amenities">Olanaklar</div>
-      <div class="check-group">
-        <label class="check-item"><input type="checkbox" checked /> <span data-i18n="sr.am_pool">Havuz</span></label>
-        <label class="check-item"><input type="checkbox" checked /> <span data-i18n="sr.am_beach">Plaj erişimi</span></label>
-        <label class="check-item"><input type="checkbox" /> <span data-i18n="sr.am_spa">Spa & Wellness</span></label>
-        <label class="check-item"><input type="checkbox" /> <span data-i18n="sr.am_kids">Çocuk kulübü</span></label>
-        <label class="check-item"><input type="checkbox" /> <span data-i18n="sr.am_wifi">Ücretsiz Wi-Fi</span></label>
-        <label class="check-item"><input type="checkbox" /> <span data-i18n="sr.am_sports">Spor alanları</span></label>
-      </div>
-    </div>
-
-    <div class="filter-divider"></div>
-
-    <div class="filter-group">
-      <div class="filter-label" data-i18n="sr.trust_score">TrustYou Puanı</div>
-      <div class="star-filter">
-        <button class="star-btn">7+</button>
-        <button class="star-btn active">8+</button>
-        <button class="star-btn">9+</button>
-      </div>
-    </div>
-  </aside>
-
-  <!-- RESULTS -->
-  <div class="results-area">
-    <div class="sort-bar reveal">
-      <p class="result-count" data-i18n-html="sr.results_count"><strong>47 tesis</strong> bulundu</p>
-      <select class="sort-select">
-        <option data-i18n="sr.sort_rec">Önerilen sıralama</option>
-        <option data-i18n="sr.sort_price_asc">Fiyat: Düşükten yükseğe</option>
-        <option data-i18n="sr.sort_price_desc">Fiyat: Yüksekten düşüğe</option>
-        <option data-i18n="sr.sort_trust">TrustYou puanına göre</option>
-        <option data-i18n="sr.sort_stars2">Yıldıza göre</option>
-      </select>
-    </div>
-
-    <!-- Promo strip -->
-    <div class="promo-strip reveal">
-      <p data-i18n-html="sr.promo_full">🎉 <strong>Erken rezervasyon:</strong> Bu haftaya özel seçili otellerde %15 indirim!</p>
-      <a href="#" data-i18n="sr.promo_cta">Fırsatları gör</a>
-    </div>
-
-    <!-- ═══ CARD 1 ═══ -->
-    <a href="hotel.html" class="hotel-card reveal">
-      <div class="hotel-img">
-        <div class="hotel-img-bg hbg-1">🏖</div>
-        <div class="hotel-img-overlay"></div>
-        <div class="hotel-tag" data-i18n="tag.early">Erken rezervasyon</div>
-        <div class="hotel-fav">♡</div>
-        <div class="img-dots">
-          <div class="img-dot active"></div><div class="img-dot"></div><div class="img-dot"></div><div class="img-dot"></div>
-        </div>
-      </div>
-      <div class="hotel-body">
-        <div class="hotel-meta">
-          <span class="badge badge-blue">★★★★★</span>
-          <span class="badge badge-orange" data-i18n="sr.ultra_ai_s">Ultra her şey dahil</span>
-        </div>
-        <div class="hotel-name">Rixos Premium Belek</div>
-        <div class="hotel-location" data-i18n="loc.belek">📍 Belek, Antalya · Plaja 50m</div>
-        <p class="hotel-desc" data-i18n="hdesc.rixos">Belek'in incisi Rixos Premium, 650 metre özel plajı, 14 restoranı ve eğlence dolu programıyla aileler için mükemmel bir tatil sunuyor.</p>
-        <div class="hotel-amenities">
-          <span class="amenity" data-i18n="am.pools5">🏊 5 Havuz</span>
-          <span class="amenity" data-i18n="am.private_beach">🏖 Özel plaj</span>
-          <span class="amenity" data-i18n="am.spa">🧖 Spa</span>
-          <span class="amenity" data-i18n="am.kids_club">👶 Çocuk kulübü</span>
-          <span class="amenity" data-i18n="am.tennis">🎾 Tenis</span>
-          <span class="amenity" data-i18n="am.wifi">📶 Wi-Fi</span>
-        </div>
-        <div class="hotel-footer">
-          <div class="hotel-review">
-            <div class="review-score">9.1</div>
-            <div>
-              <div class="stars">★★★★★</div>
-              <div class="review-text"><span data-i18n="sr.excellent">Mükemmel</span> · <span data-i18n="sr.rev_2847">2.847 yorum</span></div>
-            </div>
+          <div class="filter-option" onclick="toggleFilter('verpflegung','uebernachtung-fruehstueck')">
+            <div class="filter-left"><div class="filter-check" data-filter="verpflegung" data-val="uebernachtung-fruehstueck"></div><span class="filter-label">Übernachtung + Frühstück</span></div>
+            <span class="filter-count" data-count="verpflegung-uebernachtung-fruehstueck">2</span>
           </div>
-          <div class="hotel-price-area">
-            <div class="price-block">
-              <div class="price-label" data-i18n="sr.per_person_lbl">Kişi başı</div>
-              <div class="price-amount">
-                <span class="price-currency">€</span>
-                <span class="price-num">649</span>
-              </div>
-              <div class="price-detail" data-i18n="sr.nights7_flight">7 gece · uçak dahil</div>
-            </div>
-            <a href="hotel.html" class="card-cta" data-i18n="sr.details">İncele →</a>
+          <div class="filter-option" onclick="toggleFilter('verpflegung','nur-uebernachtung')">
+            <div class="filter-left"><div class="filter-check" data-filter="verpflegung" data-val="nur-uebernachtung"></div><span class="filter-label">Nur Übernachtung</span></div>
+            <span class="filter-count" data-count="verpflegung-nur-uebernachtung">1</span>
           </div>
         </div>
       </div>
-    </a>
 
-    <!-- ═══ CARD 2 ═══ -->
-    <a href="hotel.html" class="hotel-card reveal">
-      <div class="hotel-img">
-        <div class="hotel-img-bg hbg-2">🌿</div>
-        <div class="hotel-img-overlay"></div>
-        <div class="hotel-fav">♡</div>
-        <div class="img-dots">
-          <div class="img-dot active"></div><div class="img-dot"></div><div class="img-dot"></div>
+      <!-- Ausstattung -->
+      <div class="filter-panel">
+        <div class="filter-panel-head" onclick="togglePanel(this)">
+          <span><i class="ti ti-building-community" aria-hidden="true" style="margin-right:8px;color:var(--sxs-orange)"></i>Ausstattung</span>
+          <i class="ti ti-chevron-down"></i>
         </div>
-      </div>
-      <div class="hotel-body">
-        <div class="hotel-meta">
-          <span class="badge badge-blue">★★★★★</span>
-          <span class="badge badge-orange" data-i18n="sr.all_inc_s">Her şey dahil</span>
-          <span class="badge badge-green" data-i18n="tag.sustainable">Sürdürülebilir</span>
-        </div>
-        <div class="hotel-name">Maxx Royal Kemer Resort</div>
-        <div class="hotel-location" data-i18n="loc.kemer">📍 Kemer, Antalya · Plaja 0m</div>
-        <p class="hotel-desc" data-i18n="hdesc.maxx">Doğanın kalbinde lüks deneyim. Toros dağlarının eteklerinde konumlanan resort, kristal berraklığındaki koyuyla huzur arayanlar için idealdir.</p>
-        <div class="hotel-amenities">
-          <span class="amenity" data-i18n="am.pools4">🏊 4 Havuz</span>
-          <span class="amenity" data-i18n="am.private_beach">🏖 Özel koy</span>
-          <span class="amenity" data-i18n="am.hamam">🛁 Hamam</span>
-          <span class="amenity" data-i18n="am.live_music">🎶 Canlı müzik</span>
-          <span class="amenity" data-i18n="am.wifi">📶 Wi-Fi</span>
-        </div>
-        <div class="hotel-footer">
-          <div class="hotel-review">
-            <div class="review-score">9.3</div>
-            <div>
-              <div class="stars">★★★★★</div>
-              <div class="review-text"><span data-i18n="sr.superb">Olağanüstü</span> · <span data-i18n="sr.rev_1532">1.532 yorum</span></div>
-            </div>
+        <div class="filter-panel-body" id="panel-ausstattung">
+          <div class="filter-option" onclick="toggleFilter('ausstattung','pool')">
+            <div class="filter-left"><div class="filter-check" data-filter="ausstattung" data-val="pool"></div><span class="filter-label">Pool</span></div>
+            <span class="filter-count" data-count="ausstattung-pool">7</span>
           </div>
-          <div class="hotel-price-area">
-            <div class="price-block">
-              <div class="price-label" data-i18n="sr.per_person_lbl">Kişi başı</div>
-              <div class="price-amount">
-                <span class="price-currency">€</span>
-                <span class="price-num">819</span>
-              </div>
-              <div class="price-detail" data-i18n="sr.nights7_flight">7 gece · uçak dahil</div>
-            </div>
-            <a href="hotel.html" class="card-cta" data-i18n="sr.details">İncele →</a>
+          <div class="filter-option" onclick="toggleFilter('ausstattung','spa')">
+            <div class="filter-left"><div class="filter-check" data-filter="ausstattung" data-val="spa"></div><span class="filter-label">Spa & Wellness</span></div>
+            <span class="filter-count" data-count="ausstattung-spa">4</span>
+          </div>
+          <div class="filter-option" onclick="toggleFilter('ausstattung','strand')">
+            <div class="filter-left"><div class="filter-check" data-filter="ausstattung" data-val="strand"></div><span class="filter-label">Strand direkt</span></div>
+            <span class="filter-count" data-count="ausstattung-strand">4</span>
+          </div>
+          <div class="filter-option" onclick="toggleFilter('ausstattung','wasserpark')">
+            <div class="filter-left"><div class="filter-check" data-filter="ausstattung" data-val="wasserpark"></div><span class="filter-label">Wasserpark</span></div>
+            <span class="filter-count" data-count="ausstattung-wasserpark">2</span>
+          </div>
+          <div class="filter-option" onclick="toggleFilter('ausstattung','kinderclub')">
+            <div class="filter-left"><div class="filter-check" data-filter="ausstattung" data-val="kinderclub"></div><span class="filter-label">Kinderclub</span></div>
+            <span class="filter-count" data-count="ausstattung-kinderclub">3</span>
+          </div>
+          <div class="filter-option" onclick="toggleFilter('ausstattung','fitness')">
+            <div class="filter-left"><div class="filter-check" data-filter="ausstattung" data-val="fitness"></div><span class="filter-label">Fitnessraum</span></div>
+            <span class="filter-count" data-count="ausstattung-fitness">5</span>
           </div>
         </div>
       </div>
-    </a>
 
-    <!-- ═══ CARD 3 ═══ -->
-    <a href="hotel.html" class="hotel-card reveal">
-      <div class="hotel-img">
-        <div class="hotel-img-bg hbg-3">🏰</div>
-        <div class="hotel-img-overlay"></div>
-        <div class="hotel-tag" data-i18n="tag.last_rooms">Son odalar</div>
-        <div class="hotel-fav">♡</div>
-        <div class="img-dots">
-          <div class="img-dot active"></div><div class="img-dot"></div><div class="img-dot"></div><div class="img-dot"></div><div class="img-dot"></div>
+      <!-- Sterne -->
+      <div class="filter-panel">
+        <div class="filter-panel-head" onclick="togglePanel(this)">
+          <span><i class="ti ti-star" aria-hidden="true" style="margin-right:8px;color:var(--sxs-orange)"></i>Hotelkategorie</span>
+          <i class="ti ti-chevron-down"></i>
         </div>
-      </div>
-      <div class="hotel-body">
-        <div class="hotel-meta">
-          <span class="badge badge-blue">★★★★★</span>
-          <span class="badge badge-orange" data-i18n="sr.ultra_ai_s">Ultra her şey dahil</span>
-        </div>
-        <div class="hotel-name">Titanic Mardan Palace</div>
-        <div class="hotel-location" data-i18n="loc.kundu">📍 Kundu, Antalya · Plaja 0m</div>
-        <p class="hotel-desc" data-i18n="hdesc.titanic">Avrupa'nın en büyük tatil köyü. 3.000 m² açık havuzu, özel lagünü ve olağanüstü gastronomisiyle eşsiz bir deneyim sunuyor.</p>
-        <div class="hotel-amenities">
-          <span class="amenity" data-i18n="am.lagoon">🏊 Lagün havuz</span>
-          <span class="amenity" data-i18n="am.private_beach">🏖 Özel plaj</span>
-          <span class="amenity" data-i18n="am.casino">🎰 Casino</span>
-          <span class="amenity" data-i18n="am.restaurants14">🍽 14 restoran</span>
-          <span class="amenity" data-i18n="am.wifi">📶 Wi-Fi</span>
-        </div>
-        <div class="hotel-footer">
-          <div class="hotel-review">
-            <div class="review-score">8.7</div>
-            <div>
-              <div class="stars">★★★★★</div>
-              <div class="review-text"><span data-i18n="sr.great">Harika</span> · <span data-i18n="sr.rev_3119">3.119 yorum</span></div>
+        <div class="filter-panel-body">
+          <div class="star-filter" id="star-filter">
+            <div class="star-row" onclick="toggleFilter('sterne','5')">
+              <div class="filter-check" data-filter="sterne" data-val="5"></div>
+              <div class="mini-stars"><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i></div>
+              <span class="filter-count" data-count="sterne-5">3</span>
             </div>
-          </div>
-          <div class="hotel-price-area">
-            <div class="price-block">
-              <div class="price-label" data-i18n="sr.per_person_lbl">Kişi başı</div>
-              <div class="price-amount">
-                <span class="price-currency">€</span>
-                <span class="price-num">975</span>
-              </div>
-              <div class="price-detail" data-i18n="sr.nights7_flight">7 gece · uçak dahil</div>
+            <div class="star-row" onclick="toggleFilter('sterne','4')">
+              <div class="filter-check" data-filter="sterne" data-val="4"></div>
+              <div class="mini-stars"><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star"></i></div>
+              <span class="filter-count" data-count="sterne-4">4</span>
             </div>
-            <a href="hotel.html" class="card-cta" data-i18n="sr.details">İncele →</a>
+            <div class="star-row" onclick="toggleFilter('sterne','3')">
+              <div class="filter-check" data-filter="sterne" data-val="3"></div>
+              <div class="mini-stars"><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star"></i><i class="ti ti-star"></i></div>
+              <span class="filter-count" data-count="sterne-3">2</span>
+            </div>
           </div>
         </div>
       </div>
-    </a>
 
-    <!-- ═══ CARD 4 ═══ -->
-    <a href="hotel.html" class="hotel-card reveal">
-      <div class="hotel-img">
-        <div class="hotel-img-bg hbg-4">⚓</div>
-        <div class="hotel-img-overlay"></div>
-        <div class="hotel-fav">♡</div>
-        <div class="img-dots">
-          <div class="img-dot active"></div><div class="img-dot"></div><div class="img-dot"></div>
+      <!-- Preis -->
+      <div class="filter-panel">
+        <div class="filter-panel-head" onclick="togglePanel(this)">
+          <span><i class="ti ti-currency-euro" aria-hidden="true" style="margin-right:8px;color:var(--sxs-orange)"></i>Preis p.P.</span>
+          <i class="ti ti-chevron-down"></i>
         </div>
-      </div>
-      <div class="hotel-body">
-        <div class="hotel-meta">
-          <span class="badge badge-blue">★★★★</span>
-          <span class="badge badge-orange" data-i18n="sr.all_inc_s">Her şey dahil</span>
-        </div>
-        <div class="hotel-name">Club Med Palmiye</div>
-        <div class="hotel-location" data-i18n="loc.kemer2">📍 Kemer, Antalya · Plaja 20m</div>
-        <p class="hotel-desc" data-i18n="hdesc.clubmed">Aileler ve çiftler için her şey dahil konsepti. Avrupa standartlarında konfor ve geniş aktivite programıyla uygun fiyatın ötesinde değer sunar.</p>
-        <div class="hotel-amenities">
-          <span class="amenity" data-i18n="am.pools3">🏊 3 Havuz</span>
-          <span class="amenity" data-i18n="am.private_beach">🏖 Kum plaj</span>
-          <span class="amenity" data-i18n="am.sports_act">🎯 Spor aktiviteleri</span>
-          <span class="amenity" data-i18n="am.wifi">📶 Wi-Fi</span>
-        </div>
-        <div class="hotel-footer">
-          <div class="hotel-review">
-            <div class="review-score">8.2</div>
-            <div>
-              <div class="stars">★★★★</div>
-              <div class="review-text"><span data-i18n="sr.good">Çok iyi</span> · <span data-i18n="sr.rev_987">987 yorum</span></div>
+        <div class="filter-panel-body">
+          <div class="price-range-wrap">
+            <div class="price-range-labels">
+              <span>€ 0</span>
+              <span id="price-max-label">bis € 2.000</span>
             </div>
-          </div>
-          <div class="hotel-price-area">
-            <div class="price-block">
-              <div class="price-label" data-i18n="sr.per_person_lbl">Kişi başı</div>
-              <div class="price-amount">
-                <span class="price-currency">€</span>
-                <span class="price-num">499</span>
-              </div>
-              <div class="price-detail" data-i18n="sr.nights7_flight">7 gece · uçak dahil</div>
-            </div>
-            <a href="hotel.html" class="card-cta" data-i18n="sr.details">İncele →</a>
+            <input type="range" id="price-range" min="200" max="2000" step="50" value="2000"
+                   oninput="onPriceChange(this.value)" />
           </div>
         </div>
       </div>
-    </a>
 
-    </a>
+      <!-- Destination -->
+      <div class="filter-panel">
+        <div class="filter-panel-head" onclick="togglePanel(this)">
+          <span><i class="ti ti-map-pin" aria-hidden="true" style="margin-right:8px;color:var(--sxs-orange)"></i>Reiseziel</span>
+          <i class="ti ti-chevron-down"></i>
+        </div>
+        <div class="filter-panel-body">
+          <div class="filter-option" onclick="toggleFilter('ziel','antalya')">
+            <div class="filter-left"><div class="filter-check" data-filter="ziel" data-val="antalya"></div><span class="filter-label">Antalya</span></div>
+            <span class="filter-count" data-count="ziel-antalya">4</span>
+          </div>
+          <div class="filter-option" onclick="toggleFilter('ziel','bodrum')">
+            <div class="filter-left"><div class="filter-check" data-filter="ziel" data-val="bodrum"></div><span class="filter-label">Bodrum</span></div>
+            <span class="filter-count" data-count="ziel-bodrum">2</span>
+          </div>
+          <div class="filter-option" onclick="toggleFilter('ziel','hurghada')">
+            <div class="filter-left"><div class="filter-check" data-filter="ziel" data-val="hurghada"></div><span class="filter-label">Hurghada</span></div>
+            <span class="filter-count" data-count="ziel-hurghada">2</span>
+          </div>
+          <div class="filter-option" onclick="toggleFilter('ziel','dalaman')">
+            <div class="filter-left"><div class="filter-check" data-filter="ziel" data-val="dalaman"></div><span class="filter-label">Dalaman</span></div>
+            <span class="filter-count" data-count="ziel-dalaman">1</span>
+          </div>
+        </div>
+      </div>
 
-    <!-- Pagination -->
-    <div class="pagination">
-      <button class="page-btn active">1</button>
-      <button class="page-btn">2</button>
-      <button class="page-btn">3</button>
-      <button class="page-btn">…</button>
-      <button class="page-btn">12</button>
-      <button class="page-btn">›</button>
+    </aside>
+
+    <!-- ── RESULTS COLUMN ── -->
+    <div class="results-column">
+
+      <!-- Active filter chips -->
+      <div class="active-filters" id="active-filters" style="display:none"></div>
+
+      <!-- Header row -->
+      <div class="results-header">
+        <div>
+          <div class="results-count" id="results-count">9 Angebote <span>für Antalya, 15.–22. Juli</span></div>
+        </div>
+        <select class="sort-select" id="sort-select" onchange="sortResults(this.value)">
+          <option value="empfehlung">Empfehlung</option>
+          <option value="preis-asc">Preis: aufsteigend</option>
+          <option value="preis-desc">Preis: absteigend</option>
+          <option value="bewertung">Bewertung</option>
+          <option value="sterne">Kategorie</option>
+        </select>
+      </div>
+
+      <!-- Results list -->
+      <div class="results-grid" id="results-grid"></div>
+
+      <!-- No results -->
+      <div class="no-results" id="no-results" style="display:none">
+        <i class="ti ti-search-off"></i>
+        <h3>Keine Treffer gefunden</h3>
+        <p>Passen Sie Ihre Filter an, um mehr Ergebnisse zu sehen.</p>
+        <button class="btn-outline" style="margin-top:16px" onclick="clearAllFilters()">
+          Alle Filter zurücksetzen
+        </button>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination" id="pagination">
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <button class="page-btn" style="width:auto;padding:0 12px">
+          <i class="ti ti-arrow-right"></i>
+        </button>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- FOOTER -->
-<footer class="sx-footer">
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <a href="index.html" class="nav-logo footer-logo" aria-label="SunExpress Holidays">
-    <div class="logo-wrap">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52" class="logo-icon">
-  <line x1="26" y1="24" x2="14" y2="4"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="26" y1="24" x2="18" y2="3"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="26" y1="24" x2="22" y2="2"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="26" y1="24" x2="26" y2="2"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="26" y1="24" x2="30" y2="2"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="26" y1="24" x2="34" y2="3"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="26" y1="24" x2="38" y2="4"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="26" y1="24" x2="10" y2="8"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="26" y1="24" x2="42" y2="8"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <path d="M 8 26 A 18 18 0 0 0 44 26 Z" fill="#1A428A"/>
-  <path d="M 8 26 Q 17 18 26 22 Q 35 26 44 22 L 44 26 Z" fill="#EB630C"/>
-  <path d="M 8 26 Q 17 21 26 23 Q 35 25 44 23 L 44 22 Q 35 26 26 22 Q 17 18 8 26 Z" fill="white" opacity="0.25"/>
-</svg>
-      <div class="logo-text-block">
-        <span class="logo-text-main">SunExpress</span>
-        <span class="logo-text-sub">Holidays</span>
-      </div>
-    </div>
-  </a>
-      <p data-i18n="footer.tagline">Güneş Ekspres Havacılık A.Ş. bünyesinde faaliyet gösteren tatil platformu. Akdeniz'in en güzel destinasyonlarına uçuş + otel paketleri.</p>
-    </div>
-    <div class="footer-col">
-      <h4><span data-i18n="nav.destinations">Destinasyonlar</span></h4>
-      <ul>
-        <li><a href="dest-antalya.html">Antalya</a></li>
-        <li><a href="dest-bodrum.html">Bodrum</a></li>
-        <li><a href="dest-izmir.html">İzmir</a></li>
-        <li><a href="dest-dalaman.html">Dalaman</a></li>
-        <li><a href="#">Hurghada</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h4 data-i18n="footer.help">Yardım</h4>
-      <ul>
-        <li><a href="#"><span data-i18n="footer.faq">SSS</span></a></li>
-        <li><a href="#"><span data-i18n="footer.cancel">İptal Koşulları</span></a></li>
-        <li><a href="#"><span data-i18n="footer.payment">Ödeme</span></a></li>
-        <li><a href="#"><span data-i18n="footer.contact">İletişim</span></a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h4 data-i18n="footer.company">Şirket</h4>
-      <ul>
-        <li><a href="#"><span data-i18n="footer.about">Hakkımızda</span></a></li>
-        <li><a href="#"><span data-i18n="footer.career">Kariyer</span></a></li>
-        <li><a href="#"><span data-i18n="footer.kvkk">KVKK</span></a></li>
-        <li><a href="#"><span data-i18n="footer.privacy">Gizlilik</span></a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <span><span data-i18n="footer.copyright">© 2025 SunExpress Holidays · Güneş Ekspres Havacılık A.Ş.</span></span>
-    <span>🔒 SSL Güvenli · Datatrans ödeme altyapısı</span>
-  </div>
-</footer>
+  <div id="site-footer"></div>
+  <script src="components.js"></script>
+  <script>
+  /* ─────────────────────────────────────────
+     HOTEL DATA
+  ───────────────────────────────────────── */
+  const HOTELS = [
+    {
+      id: 1, colorClass: 'ci1',
+      name: 'Rixos Premium Belek',
+      dest: 'Belek, Antalya', ziel: 'antalya',
+      sterne: 5, bewertung: 4.8, bewertungCount: 2841,
+      price: 1249, nights: 7,
+      verpflegung: ['all-inclusive'],
+      ausstattung: ['pool', 'spa', 'strand', 'fitness', 'kinderclub'],
+      badge: { text: 'Beliebt', cls: 'badge-orange' },
+      highlights: ['Privater Sandstrand', '9 Pools', 'Kinderclub'],
+      availability: 'Nur noch 3 Zimmer frei'
+    },
+    {
+      id: 2, colorClass: 'ci2',
+      name: 'Bodrum Bay Resort',
+      dest: 'Turgutreis, Bodrum', ziel: 'bodrum',
+      sterne: 4, bewertung: 4.2, bewertungCount: 1204,
+      price: 879, nights: 7,
+      verpflegung: ['halbpension'],
+      ausstattung: ['pool', 'strand', 'spa'],
+      badge: { text: 'Neu', cls: 'badge-blue' },
+      highlights: ['Meeresblick', 'Infinity Pool', 'Spa'],
+      availability: null
+    },
+    {
+      id: 3, colorClass: 'ci3',
+      name: 'Steigenberger Aqua Magic',
+      dest: 'Hurghada, Ägypten', ziel: 'hurghada',
+      sterne: 5, bewertung: 4.6, bewertungCount: 3120,
+      price: 749, nights: 7,
+      verpflegung: ['all-inclusive'],
+      ausstattung: ['pool', 'wasserpark', 'strand', 'fitness'],
+      badge: { text: 'Angebot', cls: 'badge-yellow' },
+      highlights: ['Wasserpark', 'Direkter Strandzugang', 'All-Inclusive'],
+      availability: 'Nur noch 5 Zimmer frei'
+    },
+    {
+      id: 4, colorClass: 'ci4',
+      name: 'Maxx Royal Kemer Resort',
+      dest: 'Kemer, Antalya', ziel: 'antalya',
+      sterne: 5, bewertung: 4.9, bewertungCount: 987,
+      price: 1549, nights: 7,
+      verpflegung: ['all-inclusive'],
+      ausstattung: ['pool', 'spa', 'strand', 'fitness', 'kinderclub', 'wasserpark'],
+      badge: { text: 'Premium', cls: 'badge-blue' },
+      highlights: ['Ultra All-Inclusive', 'Private Beach', 'Kids Club'],
+      availability: 'Nur noch 2 Zimmer frei'
+    },
+    {
+      id: 5, colorClass: 'ci5',
+      name: 'Club Aldiana Türkei',
+      dest: 'Side, Antalya', ziel: 'antalya',
+      sterne: 4, bewertung: 4.4, bewertungCount: 2100,
+      price: 999, nights: 7,
+      verpflegung: ['all-inclusive'],
+      ausstattung: ['pool', 'strand', 'fitness', 'kinderclub'],
+      badge: null,
+      highlights: ['Familien-Resort', 'Animationsprogramm', 'Strandlage'],
+      availability: null
+    },
+    {
+      id: 6, colorClass: 'ci6',
+      name: 'Kempinski Hotel Barbaros Bay',
+      dest: 'Bodrum, Türkei', ziel: 'bodrum',
+      sterne: 5, bewertung: 4.7, bewertungCount: 678,
+      price: 1899, nights: 7,
+      verpflegung: ['halbpension', 'nur-uebernachtung'],
+      ausstattung: ['pool', 'spa', 'strand', 'fitness'],
+      badge: { text: 'Luxus', cls: 'badge-orange' },
+      highlights: ['Luxus-Spa', 'Fine Dining', 'Privater Strand'],
+      availability: null
+    },
+    {
+      id: 7, colorClass: 'ci7',
+      name: 'Titanic Beach Lara',
+      dest: 'Lara, Antalya', ziel: 'antalya',
+      sterne: 5, bewertung: 4.5, bewertungCount: 4201,
+      price: 1099, nights: 7,
+      verpflegung: ['all-inclusive'],
+      ausstattung: ['pool', 'spa', 'strand', 'wasserpark', 'fitness', 'kinderclub'],
+      badge: { text: 'Bestseller', cls: 'badge-orange' },
+      highlights: ['Riesiger Wasserpark', 'Strandlage', 'All-Inclusive'],
+      availability: 'Nur noch 4 Zimmer frei'
+    },
+    {
+      id: 8, colorClass: 'ci8',
+      name: 'TUI BLUE Palm Garden',
+      dest: 'Hurghada, Ägypten', ziel: 'hurghada',
+      sterne: 4, bewertung: 4.1, bewertungCount: 892,
+      price: 699, nights: 7,
+      verpflegung: ['uebernachtung-fruehstueck'],
+      ausstattung: ['pool', 'strand'],
+      badge: { text: 'Günstig', cls: 'badge-yellow' },
+      highlights: ['Zentrale Lage', 'Pool', 'Strandnah'],
+      availability: null
+    },
+    {
+      id: 9, colorClass: 'ci9',
+      name: 'Dalaman Beach Hotel',
+      dest: 'Dalaman, Türkei', ziel: 'dalaman',
+      sterne: 3, bewertung: 3.9, bewertungCount: 445,
+      price: 549, nights: 7,
+      verpflegung: ['halbpension', 'uebernachtung-fruehstueck'],
+      ausstattung: ['pool', 'fitness'],
+      badge: null,
+      highlights: ['Kompaktes Hotel', 'Familien geeignet', 'Ruhige Lage'],
+      availability: null
+    },
+  ];
 
+  /* ─────────────────────────────────────────
+     FILTER STATE
+  ───────────────────────────────────────── */
+  const filterState = {
+    verpflegung: new Set(),
+    ausstattung: new Set(),
+    sterne: new Set(),
+    ziel: new Set(),
+    maxPrice: 2000
+  };
 
-<script>
-/* ── SEARCH MASK INTERACTIVITY ── */
-let adults = 2, children = 0;
+  /* ─────────────────────────────────────────
+     TOGGLE FILTER
+  ───────────────────────────────────────── */
+  function toggleFilter(group, val) {
+    const set = filterState[group];
+    if (set.has(val)) set.delete(val); else set.add(val);
 
-function toggleDropdown(id) {
-  document.querySelectorAll('.search-dropdown').forEach(dd => {
-    if (dd.id !== id) dd.classList.remove('open');
+    // Update checkbox visuals
+    document.querySelectorAll(`[data-filter="${group}"][data-val="${val}"]`).forEach(el => {
+      el.classList.toggle('checked', set.has(val));
+    });
+
+    applyFilters();
+  }
+
+  function togglePanel(head) {
+    head.classList.toggle('collapsed');
+    const body = head.nextElementSibling;
+    body.classList.toggle('hidden');
+  }
+
+  function onPriceChange(val) {
+    filterState.maxPrice = parseInt(val);
+    document.getElementById('price-max-label').textContent = `bis € ${parseInt(val).toLocaleString('de')}`;
+    applyFilters();
+  }
+
+  /* ─────────────────────────────────────────
+     APPLY FILTERS — core logic
+  ───────────────────────────────────────── */
+  function applyFilters() {
+    const filtered = HOTELS.filter(h => {
+      if (filterState.verpflegung.size > 0) {
+        const match = [...filterState.verpflegung].some(v => h.verpflegung.includes(v));
+        if (!match) return false;
+      }
+      if (filterState.ausstattung.size > 0) {
+        const match = [...filterState.ausstattung].every(v => h.ausstattung.includes(v));
+        if (!match) return false;
+      }
+      if (filterState.sterne.size > 0) {
+        if (!filterState.sterne.has(String(h.sterne))) return false;
+      }
+      if (filterState.ziel.size > 0) {
+        if (!filterState.ziel.has(h.ziel)) return false;
+      }
+      if (h.price > filterState.maxPrice) return false;
+      return true;
+    });
+
+    renderResults(filtered);
+    renderActiveChips();
+    updateCounts(filtered);
+
+    const anyActive = Object.entries(filterState).some(([k, v]) =>
+      k === 'maxPrice' ? v < 2000 : v.size > 0
+    );
+    document.getElementById('clear-all-btn').style.display = anyActive ? 'inline' : 'none';
+  }
+
+  /* ─────────────────────────────────────────
+     SORT
+  ───────────────────────────────────────── */
+  function sortResults(method) {
+    const grid = document.getElementById('results-grid');
+    const cards = [...grid.querySelectorAll('.result-card:not(.hidden)')];
+
+    cards.sort((a, b) => {
+      const pa = parseInt(a.dataset.price), pb = parseInt(b.dataset.price);
+      const ba = parseFloat(a.dataset.bewertung), bb = parseFloat(b.dataset.bewertung);
+      const sa = parseInt(a.dataset.sterne), sb = parseInt(b.dataset.sterne);
+      if (method === 'preis-asc')  return pa - pb;
+      if (method === 'preis-desc') return pb - pa;
+      if (method === 'bewertung')  return bb - ba;
+      if (method === 'sterne')     return sb - sa;
+      return 0;
+    });
+
+    cards.forEach(c => grid.appendChild(c));
+  }
+
+  /* ─────────────────────────────────────────
+     RENDER RESULTS
+  ───────────────────────────────────────── */
+  function renderResults(hotels) {
+    const grid = document.getElementById('results-grid');
+    const noResults = document.getElementById('no-results');
+    const pagination = document.getElementById('pagination');
+    const countEl = document.getElementById('results-count');
+
+    grid.innerHTML = '';
+
+    if (hotels.length === 0) {
+      noResults.style.display = 'block';
+      pagination.style.display = 'none';
+      countEl.innerHTML = `<span>Keine Ergebnisse</span>`;
+      return;
+    }
+
+    noResults.style.display = 'none';
+    pagination.style.display = 'flex';
+    countEl.innerHTML = `${hotels.length} Angebote <span>für Antalya, 15.–22. Juli</span>`;
+
+    hotels.forEach(h => {
+      const starsHTML = Array.from({length: 5}, (_, i) =>
+        `<i class="ti ti-star-filled${i >= h.sterne ? ' empty' : ''}" aria-hidden="true"
+          style="color:${i < h.sterne ? 'var(--sxs-orange-light)' : 'var(--sxs-grey2)'}"></i>`
+      ).join('');
+
+      const tagsHTML = [
+        ...h.verpflegung.map(v => verpflegungLabel(v)),
+        ...h.ausstattung.slice(0, 3).map(a => ausstattungLabel(a))
+      ].map(t => `<span class="offer-tag">${t}</span>`).join('');
+
+      const badgeHTML = h.badge
+        ? `<span class="badge ${h.badge.cls} result-img-badge">${h.badge.text}</span>` : '';
+
+      const availHTML = h.availability
+        ? `<div class="result-availability"><i class="ti ti-flame" aria-hidden="true"></i>${h.availability}</div>` : '';
+
+      const card = document.createElement('article');
+      card.className = 'result-card';
+      card.dataset.id = h.id;
+      card.dataset.price = h.price;
+      card.dataset.bewertung = h.bewertung;
+      card.dataset.sterne = h.sterne;
+
+      card.innerHTML = `
+        <div class="result-img ${h.colorClass}">
+          ${badgeHTML}
+          <span>${h.name}</span>
+        </div>
+        <div class="result-body">
+          <div class="result-hotel">${h.name}</div>
+          <div class="result-dest"><i class="ti ti-map-pin" aria-hidden="true"></i>${h.dest}</div>
+          <div class="stars" style="margin-bottom:10px">${starsHTML}<span>${h.bewertung} (${h.bewertungCount.toLocaleString('de')})</span></div>
+          <div class="result-meta">
+            <div class="result-meta-item"><i class="ti ti-moon" aria-hidden="true"></i>${h.nights} Nächte</div>
+            <div class="result-meta-item"><i class="ti ti-plane" aria-hidden="true"></i>Direktflug inkl.</div>
+            <div class="result-meta-item"><i class="ti ti-transfer" aria-hidden="true"></i>Transfer inkl.</div>
+          </div>
+          <div class="offer-tags">${tagsHTML}</div>
+        </div>
+        <div class="result-price-col">
+          <div>
+            <div class="result-price-from">Ab</div>
+            <div class="result-price">€ ${h.price.toLocaleString('de')}</div>
+            <div class="result-price-pp">pro Person</div>
+            <div class="result-price-total">${h.nights} Nächte, 2 Erw.</div>
+          </div>
+          ${availHTML}
+          <a href="#" class="btn-primary" style="width:100%;justify-content:center">
+            Jetzt buchen
+          </a>
+          <a href="#" class="link-more" style="font-size:12px">Details ansehen</a>
+        </div>`;
+
+      grid.appendChild(card);
+    });
+
+    // Re-apply current sort
+    const sortVal = document.getElementById('sort-select').value;
+    if (sortVal !== 'empfehlung') sortResults(sortVal);
+  }
+
+  /* ─────────────────────────────────────────
+     RENDER ACTIVE CHIPS
+  ───────────────────────────────────────── */
+  function renderActiveChips() {
+    const container = document.getElementById('active-filters');
+    const chips = [];
+
+    filterState.verpflegung.forEach(v => chips.push({ group: 'verpflegung', val: v, label: verpflegungLabel(v) }));
+    filterState.ausstattung.forEach(v => chips.push({ group: 'ausstattung', val: v, label: ausstattungLabel(v) }));
+    filterState.sterne.forEach(v => chips.push({ group: 'sterne', val: v, label: `${v} Sterne` }));
+    filterState.ziel.forEach(v => chips.push({ group: 'ziel', val: v, label: v.charAt(0).toUpperCase() + v.slice(1) }));
+    if (filterState.maxPrice < 2000) chips.push({ group: 'price', val: null, label: `bis € ${filterState.maxPrice.toLocaleString('de')}` });
+
+    if (chips.length === 0) {
+      container.style.display = 'none';
+      return;
+    }
+
+    container.style.display = 'flex';
+    container.innerHTML = `<span class="active-filters-label">Aktive Filter:</span>` +
+      chips.map(c => `
+        <span class="filter-chip" onclick="${c.group === 'price' ? 'clearPriceFilter()' : `toggleFilter('${c.group}','${c.val}')`}">
+          ${c.label} <i class="ti ti-x" aria-hidden="true"></i>
+        </span>`).join('');
+  }
+
+  function clearPriceFilter() {
+    filterState.maxPrice = 2000;
+    document.getElementById('price-range').value = 2000;
+    document.getElementById('price-max-label').textContent = 'bis € 2.000';
+    applyFilters();
+  }
+
+  function clearAllFilters() {
+    ['verpflegung','ausstattung','sterne','ziel'].forEach(g => {
+      filterState[g].clear();
+      document.querySelectorAll(`[data-filter="${g}"]`).forEach(el => el.classList.remove('checked'));
+    });
+    clearPriceFilter();
+  }
+
+  /* ─────────────────────────────────────────
+     UPDATE COUNTS (live)
+  ───────────────────────────────────────── */
+  function updateCounts(visibleHotels) {
+    // For each filter option, show how many results would match
+    const groups = {
+      verpflegung: ['all-inclusive','halbpension','uebernachtung-fruehstueck','nur-uebernachtung'],
+      ausstattung: ['pool','spa','strand','wasserpark','kinderclub','fitness'],
+      sterne: ['5','4','3'],
+      ziel: ['antalya','bodrum','hurghada','dalaman']
+    };
+
+    Object.entries(groups).forEach(([group, vals]) => {
+      vals.forEach(val => {
+        const el = document.querySelector(`[data-count="${group}-${val}"]`);
+        if (!el) return;
+        // Count: how many of ALL hotels match this value + current other filters
+        const stateWithout = { ...filterState };
+        const tempSet = new Set(filterState[group]);
+        tempSet.add(val);
+        const count = HOTELS.filter(h => {
+          if (group === 'verpflegung') { if (!h.verpflegung.includes(val)) return false; }
+          else if (group === 'ausstattung') { if (!h.ausstattung.includes(val)) return false; }
+          else if (group === 'sterne') { if (String(h.sterne) !== val) return false; }
+          else if (group === 'ziel') { if (h.ziel !== val) return false; }
+          return true;
+        }).length;
+        el.textContent = count;
+      });
+    });
+  }
+
+  /* ─────────────────────────────────────────
+     LABEL HELPERS
+  ───────────────────────────────────────── */
+  const LABELS = {
+    verpflegung: {
+      'all-inclusive': 'All-Inclusive',
+      'halbpension': 'Halbpension',
+      'uebernachtung-fruehstueck': 'Übernachtung + Frühstück',
+      'nur-uebernachtung': 'Nur Übernachtung'
+    },
+    ausstattung: {
+      'pool': 'Pool',
+      'spa': 'Spa & Wellness',
+      'strand': 'Strandlage',
+      'wasserpark': 'Wasserpark',
+      'kinderclub': 'Kinderclub',
+      'fitness': 'Fitness'
+    }
+  };
+  function verpflegungLabel(v) { return LABELS.verpflegung[v] || v; }
+  function ausstattungLabel(v) { return LABELS.ausstattung[v] || v; }
+
+  /* ── INIT ── */
+  document.addEventListener('DOMContentLoaded', () => {
+    renderResults(HOTELS);
   });
-  document.getElementById(id).classList.toggle('open');
-}
-
-function selectFrom(el) {
-  document.getElementById('fromVal').textContent = el.dataset.val;
-  document.querySelectorAll('#ddFrom .dd-item').forEach(i => i.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('ddFrom').classList.remove('open');
-}
-
-function selectTo(el) {
-  document.getElementById('toVal').textContent = el.dataset.val;
-  document.querySelectorAll('#ddTo .dd-item').forEach(i => i.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('ddTo').classList.remove('open');
-}
-
-function closeDropdown(id) {
-  document.getElementById(id).classList.remove('open');
-}
-
-function changeGuest(type, delta, e) {
-  e.stopPropagation();
-  if (type === 'adults') { adults = Math.max(1, adults + delta); document.getElementById('adultCount').textContent = adults; }
-  else { children = Math.max(0, children + delta); document.getElementById('childCount').textContent = children; }
-  const lang = (typeof I18N !== 'undefined') ? I18N.current : 'tr';
-  const adultLbl = {tr:'Yetişkin',de:'Erwachsene',en:'Adults'}[lang];
-  const childLbl = {tr:'Çocuk',de:'Kinder',en:'Children'}[lang];
-  const sep = children > 0 ? `, ${children} ${childLbl}` : '';
-  document.getElementById('guestsVal').innerHTML = `${adults} ${adultLbl}${sep}`;
-}
-
-function updateNights() {
-  const d1 = new Date(document.getElementById('departDate').value);
-  const d2 = new Date(document.getElementById('returnDate').value);
-  const nights = Math.round((d2 - d1) / 86400000);
-  if (nights > 0) {
-    const lang = (typeof I18N !== 'undefined') ? I18N.current : 'tr';
-    const lbl = {tr:'gece',de:'Nächte',en:'nights'}[lang];
-    document.getElementById('nightsLabel').textContent = `${nights} ${lbl}`;
-  }
-}
-
-// Close dropdowns on outside click
-document.addEventListener('click', e => {
-  if (!e.target.closest('.cs-field')) {
-    document.querySelectorAll('.search-dropdown').forEach(dd => dd.classList.remove('open'));
-  }
-});
-</script>
-
+  </script>
 </body>
 </html>
