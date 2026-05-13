@@ -631,12 +631,140 @@ function closeAll(){
 }
 function doSearch(){window.location.href='search.html';}
 
-/* ══ AUTO-INIT ══ */
-document.addEventListener('DOMContentLoaded',()=>{
-  const h=document.getElementById('site-header');
-  if(h){const p=h.dataset.page||'home';h.outerHTML=renderHeader(p);}
-  const f=document.getElementById('site-footer');
-  if(f) f.outerHTML=renderFooter();
-  const sm=document.getElementById('search-mask');
-  if(sm) renderSearchMask('search-mask');
+/* ══ AUTO-INIT — replaced by CMS-aware version below ══ */
+
+/* ══════════════════════════════════════════════════════════
+   CMS DATA LAYER — reads from /data/*.json
+   Falls back to hardcoded values if fetch fails (offline/dev)
+   ══════════════════════════════════════════════════════════ */
+
+let CMS_DESTS = null;   // loaded destinations from JSON
+let CMS_NAV   = null;   // loaded navigation from JSON
+
+/* Detect base path (works on GitHub Pages sub-paths) */
+function _basePath(){
+  const scripts = document.querySelectorAll('script[src*="components.js"]');
+  if(scripts.length){
+    const src = scripts[scripts.length-1].src;
+    return src.replace(/components\.js.*$/, '');
+  }
+  return '/';
+}
+
+async function loadCMSData(){
+  const base = _basePath();
+  try{
+    const [dr, nr] = await Promise.all([
+      fetch(base + 'data/destinations.json?_=' + Date.now()),
+      fetch(base + 'data/navigation.json?_='   + Date.now()),
+    ]);
+    if(dr.ok) CMS_DESTS = (await dr.json()).destinations || [];
+    if(nr.ok) CMS_NAV   = await nr.json();
+  } catch(e){
+    console.warn('CMS data load failed, using fallback:', e);
+  }
+}
+
+/* ── Derived destination lists from CMS (root-only for search mask) ── */
+function getCMSDestsSunbeach(){
+  if(!CMS_DESTS) return DESTINATIONS_SUNBEACH;
+  // Root destinations that have a known beach airport
+  const BEACH_CODES = ['AYT','BJV','DLM','HRG','RMF','ADB'];
+  return CMS_DESTS
+    .filter(d => !d.parent && BEACH_CODES.includes(d.code))
+    .map(d => ({ code: d.code, name: d.name?.[currentLang] || d.name?.de || d.id, regionKey: d.regionKey, flag: d.flag || '' }));
+}
+function getCMSDestsOwn(){
+  if(!CMS_DESTS) return DESTINATIONS_OWN;
+  return CMS_DESTS
+    .filter(d => !d.parent)
+    .map(d => ({ code: d.code, name: d.name?.[currentLang] || d.name?.de || d.id, regionKey: d.regionKey, flag: d.flag || '' }));
+}
+
+/* ── Override renderHeader to use CMS nav ── */
+function renderHeaderCMS(activePage){
+  // If no CMS nav loaded, fall back to i18n-based header
+  if(!CMS_NAV?.header?.[currentLang]){
+    return renderHeader(activePage);
+  }
+  const navLinks = CMS_NAV.header[currentLang].filter(l => l.active !== false);
+  // Map href to page id for active detection
+  const pageMap = { 'index.html':'home', 'search.html':'search', 'destinations.html':'dest', 'hotels.html':'hotels' };
+  return `<header class="site-header">
+    <a class="header-logo" href="index.html"><img src="logo.svg" alt="SunExpress Holidays" style="height:44px;width:auto"/></a>
+    <nav class="header-nav">${navLinks.map(n=>{
+      const pid = pageMap[n.href] || n.id || '';
+      return `<a href="${n.href}" class="${pid===activePage?'active':''}">${n.label}</a>`;
+    }).join('')}</nav>
+    <div class="header-actions">
+      <div class="lang-selector">${['de','en','tr'].map(l=>`<button class="lang-btn ${l===currentLang?'active':''}" onclick="setLang('${l}')">${l.toUpperCase()}</button>`).join('')}</div>
+      <button class="btn btn-outline btn-sm"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.22 1.18 2 2 0 012.22 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.09a16 16 0 006 6l.56-.56a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/></svg> ${t('header','contact')}</button>
+      <button class="btn btn-primary btn-sm"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg> ${t('header','favorites')}</button>
+    </div>
+  </header>`;
+}
+
+/* ── Override renderFooter to use CMS nav ── */
+function renderFooterCMS(){
+  if(!CMS_NAV?.footer?.[currentLang]){
+    return renderFooter();
+  }
+  const fo = CMS_NAV.footer[currentLang];
+  const cols = (fo.columns || []).map(col => `
+    <div class="footer-col">
+      <h5>${col.title}</h5>
+      ${col.links.map(l=>`<a href="${l.href}">${l.label}</a>`).join('')}
+    </div>`).join('');
+  return `<footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand"><img src="logo.svg" alt="SunExpress Holidays" class="footer-logo"/><p>${fo.tagline||''}</p></div>
+      ${cols}
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 SunExpress Holidays — Güneş Ekspres Havacılık A.Ş., Antalya</p>
+      <div class="footer-chips"><span class="footer-chip">Turkish Airlines</span><span class="footer-chip">Lufthansa</span><span class="footer-chip">Star Alliance</span></div>
+    </div>
+  </footer>`;
+}
+
+/* ── Override renderSearchMask to use CMS destinations ── */
+function renderSearchMaskCMS(containerId){
+  // Patch the global arrays used by renderSearchMask
+  if(CMS_DESTS){
+    window._cmsDestsPatched = true;
+    // Temporarily replace DESTINATIONS_SUNBEACH / OWN with CMS versions
+    window._origSB = DESTINATIONS_SUNBEACH.slice();
+    window._origOW = DESTINATIONS_OWN.slice();
+    DESTINATIONS_SUNBEACH.length = 0;
+    getCMSDestsSunbeach().forEach(d => DESTINATIONS_SUNBEACH.push(d));
+    DESTINATIONS_OWN.length = 0;
+    getCMSDestsOwn().forEach(d => DESTINATIONS_OWN.push(d));
+  }
+  renderSearchMask(containerId);
+}
+
+/* ── Override destinations page to use CMS data ── */
+function getCMSDestById(id){
+  if(!CMS_DESTS) return null;
+  return CMS_DESTS.find(d => d.id === id || d.code.toLowerCase() === id.toLowerCase()) || null;
+}
+function getCMSDestChildren(id){
+  if(!CMS_DESTS) return [];
+  return CMS_DESTS.filter(d => d.parent === id);
+}
+
+/* ── Updated AUTO-INIT — loads CMS data first, then renders ── */
+// Remove old DOMContentLoaded and replace with CMS-aware version
+document.addEventListener('DOMContentLoaded', async () => {
+  // Load CMS data before rendering anything
+  await loadCMSData();
+
+  const h = document.getElementById('site-header');
+  if(h){ const p = h.dataset.page || 'home'; h.outerHTML = renderHeaderCMS(p); }
+
+  const f = document.getElementById('site-footer');
+  if(f) f.outerHTML = renderFooterCMS();
+
+  const sm = document.getElementById('search-mask');
+  if(sm) renderSearchMaskCMS('search-mask');
 });

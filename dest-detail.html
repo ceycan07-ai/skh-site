@@ -120,31 +120,49 @@
       ]},
   };
 
-  document.addEventListener('DOMContentLoaded',()=>{
+  document.addEventListener('DOMContentLoaded', async ()=>{
+    await loadCMSData();
     const params=new URLSearchParams(location.search);
     const code=params.get('dest')||'ayt';
-    const d=ALL_DESTS[code]||ALL_DESTS.ayt;
-    const reg=region(d.rk);
-    const desc=(d.desc[currentLang]||d.desc.de);
-    const info=(d.info[currentLang]||d.info.de);
+
+    // Try CMS first, fall back to ALL_DESTS
+    let cmsD = getCMSDestById(code);
+    const d = cmsD ? null : (ALL_DESTS[code]||ALL_DESTS.ayt);
+
+    const nameStr = cmsD ? (cmsD.name?.[currentLang]||cmsD.name?.de||cmsD.id) : d.name;
+    const descStr = cmsD ? (cmsD.desc?.[currentLang]||cmsD.desc?.de||'') : (d.desc[currentLang]||d.desc.de);
+    const flagStr = cmsD ? (cmsD.flag||'') : d.flag;
+    const regKey  = cmsD ? cmsD.regionKey : d.rk;
+    const reg     = region(regKey);
+    const query   = cmsD ? (cmsD.query||cmsD.id) : d.q;
+    const hlArr   = cmsD ? (cmsD.highlights||[]) : [];
+    const info    = d ? (d.info[currentLang]||d.info.de) : [];
     const vpL=tObj('sp').vp||{};
     const sp=tObj('sp');
 
-    document.title=`${d.name} — SunExpress Holidays`;
+    document.title=`${nameStr} — SunExpress Holidays`;
     document.getElementById('bc-home').textContent=t('nav','home');
     document.getElementById('bc-dest').textContent=t('nav','dest');
-    document.getElementById('bc-current').textContent=d.name;
-    document.getElementById('dest-badges').innerHTML=`<span class="badge badge-orange">${d.flag} ${reg}</span>`;
-    document.getElementById('dest-name').textContent=d.name;
-    document.getElementById('dest-desc').textContent=desc;
-    fetchUnsplashImg(d.q,'dest-hero');
+    document.getElementById('bc-current').textContent=nameStr;
+    document.getElementById('dest-badges').innerHTML=`<span class="badge badge-orange">${flagStr} ${reg}</span>`;
+    document.getElementById('dest-name').textContent=nameStr;
+    document.getElementById('dest-desc').textContent=descStr;
+    fetchUnsplashImg(query,'dest-hero');
 
-    document.getElementById('info-grid').innerHTML=info.map(i=>`<div class="info-card"><h4>${i.icon} ${i.title}</h4><p>${i.text}</p></div>`).join('');
+    // Info cards: from ALL_DESTS if available, else show highlights as cards
+    if(info.length){
+      document.getElementById('info-grid').innerHTML=info.map(i=>`<div class="info-card"><h4>${i.icon} ${i.title}</h4><p>${i.text}</p></div>`).join('');
+    } else {
+      document.getElementById('info-grid').innerHTML=hlArr.map(h=>`<div class="info-card"><h4>✦ ${h}</h4><p></p></div>`).join('');
+    }
 
     document.getElementById('offers-title').textContent=sp.offersTitle||tObj('home').offersTitle||'';
-    document.getElementById('offers-sub').textContent=`${d.name} — ${sp.perPerson||''} ${t('search','nights')}`;
-    document.getElementById('offers-grid').innerHTML=d.offers.map(o=>`<div class="offer-card2">
-      <div class="offer-img2 ${d.ci}" id="${o.id}"><div class="offer-img2-overlay"></div><div class="offer-img2-name">${o.hotel}</div></div>
+    document.getElementById('offers-sub').textContent=`${nameStr} — ${sp.perPerson||''}`;
+
+    // Offers: only show if ALL_DESTS has them
+    const offers = d?.offers || [];
+    document.getElementById('offers-grid').innerHTML=offers.map(o=>`<div class="offer-card2">
+      <div class="offer-img2 ${d?.ci||'ci1'}" id="${o.id}"><div class="offer-img2-overlay"></div><div class="offer-img2-name">${o.hotel}</div></div>
       <div class="offer-body2">
         <div class="offer-stars2">${'★'.repeat(o.stars)}</div>
         <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:6px">${o.hotel}</div>
@@ -155,7 +173,7 @@
         </div>
       </div>
     </div>`).join('');
-    d.offers.forEach(o=>fetchUnsplashImg(o.q,o.id));
+    offers.forEach(o=>fetchUnsplashImg(o.q,o.id));
   });
   </script>
 </body>

@@ -57,34 +57,45 @@
      highlights:['Tauchen','Delfine','Ruhig','Natur']},
   ];
 
-  document.addEventListener('DOMContentLoaded',()=>{
+  document.addEventListener('DOMContentLoaded', async ()=>{
+    await loadCMSData();
     document.getElementById('page-title').textContent = t('nav','dest');
     document.getElementById('page-sub').textContent = tObj('home').destSub||'';
     document.getElementById('bc-home').textContent = t('nav','home');
     document.getElementById('bc-dest').textContent = t('nav','dest');
-    const bd=tObj('badges');
-    document.getElementById('dest-grid').innerHTML = DEST_DATA.map(d=>{
-      const reg=region(d.rk);
-      const desc=(d.desc[currentLang]||d.desc.de);
-      return `<a href="dest-detail.html?dest=${d.code}" class="dest-big-card">
-        <div class="dest-big-img ${d.ci}" id="dimg-${d.code}">
+
+    // Use CMS destinations if available, otherwise fall back to DEST_DATA
+    const dests = CMS_DESTS
+      ? CMS_DESTS.filter(d => !d.parent)
+      : DEST_DATA.map(d=>({id:d.code.toLowerCase(),code:d.code,regionKey:d.rk,flag:d.flag,price:d.price,badge:d.bk,query:d.q,name:{de:d.name,en:d.name,tr:d.name},desc:d.desc,highlights:d.highlights}));
+
+    const sp=tObj('sp');
+    document.getElementById('dest-grid').innerHTML = dests.map((d,idx)=>{
+      const reg=region(d.regionKey);
+      const nameStr = d.name?.[currentLang] || d.name?.de || d.id;
+      const descStr = d.desc?.[currentLang] || d.desc?.de || '';
+      const hlArr = d.highlights || [];
+      const imgId = 'dimg-'+d.id;
+      const ciCls = 'ci'+((idx%9)+1);
+      return `<a href="dest-detail.html?dest=${d.id}" class="dest-big-card">
+        <div class="dest-big-img ${ciCls}" id="${imgId}">
           <div class="dest-big-overlay"></div>
           <div class="dest-big-content">
-            <div class="dest-big-name">${d.flag} ${d.name}</div>
-            <div class="dest-big-country">${d.code.toUpperCase()} · ${reg}</div>
+            <div class="dest-big-name">${d.flag||''} ${nameStr}</div>
+            <div class="dest-big-country">${d.code} · ${reg}</div>
           </div>
         </div>
         <div class="dest-big-body">
-          <p class="dest-big-desc">${desc}</p>
-          <div class="dest-highlights">${d.highlights.map(h=>`<span class="dest-highlight">${h}</span>`).join('')}</div>
+          <p class="dest-big-desc">${descStr}</p>
+          <div class="dest-highlights">${hlArr.map(h=>`<span class="dest-highlight">${h}</span>`).join('')}</div>
           <div class="dest-big-footer">
-            <div><div style="font-size:11px;color:var(--grey-3)">ab</div><div class="dest-big-price">€ ${d.price} <span>/ Person</span></div></div>
-            <span class="btn btn-primary btn-sm">${tObj('sp').bookNow||'Buchen'} →</span>
+            <div><div style="font-size:11px;color:var(--grey-3)">ab</div><div class="dest-big-price">€ ${d.price||'—'} <span>/ Person</span></div></div>
+            <span class="btn btn-primary btn-sm">${sp.bookNow||'Buchen'} →</span>
           </div>
         </div>
       </a>`;
     }).join('');
-    DEST_DATA.forEach(d=>fetchUnsplashImg(d.q,`dimg-${d.code}`));
+    dests.forEach(d=>fetchUnsplashImg(d.query||d.id,'dimg-'+d.id));
   });
   </script>
 </body>
