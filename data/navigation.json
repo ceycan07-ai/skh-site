@@ -1,0 +1,144 @@
+{
+  "header": {
+    "de": [
+      { "id": "home",   "label": "Startseite",   "href": "index.html",        "active": true },
+      { "id": "offers", "label": "Angebote",      "href": "search.html",       "active": true },
+      { "id": "dest",   "label": "Ziele",         "href": "destinations.html", "active": true },
+      { "id": "hotels", "label": "Hotels",        "href": "hotels.html",       "active": true },
+      { "id": "help",   "label": "Hilfe",         "href": "#",                 "active": true }
+    ],
+    "en": [
+      { "id": "home",   "label": "Home",          "href": "index.html",        "active": true },
+      { "id": "offers", "label": "Offers",        "href": "search.html",       "active": true },
+      { "id": "dest",   "label": "Destinations",  "href": "destinations.html", "active": true },
+      { "id": "hotels", "label": "Hotels",        "href": "hotels.html",       "active": true },
+      { "id": "help",   "label": "Help",          "href": "#",                 "active": true }
+    ],
+    "tr": [
+      { "id": "home",   "label": "Ana Sayfa",     "href": "index.html",        "active": true },
+      { "id": "offers", "label": "Teklifler",     "href": "search.html",       "active": true },
+      { "id": "dest",   "label": "Destinasyonlar","href": "destinations.html", "active": true },
+      { "id": "hotels", "label": "Oteller",       "href": "hotels.html",       "active": true },
+      { "id": "help",   "label": "Yardım",        "href": "#",                 "active": true }
+    ]
+  },
+  "footer": {
+    "de": {
+      "tagline": "Ihr Spezialist für Sonnenurlaub. Ein Unternehmen von Turkish Airlines & Lufthansa.",
+      "columns": [
+        {
+          "id": "dest",
+          "title": "Reiseziele",
+          "links": [
+            { "label": "Antalya",    "href": "dest-detail.html?dest=ayt" },
+            { "label": "Bodrum",     "href": "dest-detail.html?dest=bjv" },
+            { "label": "İzmir",      "href": "dest-detail.html?dest=adb" },
+            { "label": "Dalaman",    "href": "dest-detail.html?dest=dlm" },
+            { "label": "Hurghada",   "href": "dest-detail.html?dest=hrg" },
+            { "label": "Marsa Alam", "href": "dest-detail.html?dest=rmf" }
+          ]
+        },
+        {
+          "id": "service",
+          "title": "Service",
+          "links": [
+            { "label": "Buchungsmanager", "href": "#" },
+            { "label": "Online Check-in", "href": "#" },
+            { "label": "Gepäckinfo",      "href": "#" },
+            { "label": "Transfers",       "href": "#" },
+            { "label": "FAQ",             "href": "#" }
+          ]
+        },
+        {
+          "id": "company",
+          "title": "Unternehmen",
+          "links": [
+            { "label": "Über uns",    "href": "#" },
+            { "label": "Presse",      "href": "#" },
+            { "label": "Karriere",    "href": "#" },
+            { "label": "AGB",         "href": "#" },
+            { "label": "Datenschutz", "href": "#" }
+          ]
+        }
+      ]
+    },
+    "en": {
+      "tagline": "Your sun holiday specialist. A joint venture of Turkish Airlines & Lufthansa.",
+      "columns": [
+        {
+          "id": "dest",
+          "title": "Destinations",
+          "links": [
+            { "label": "Antalya",    "href": "dest-detail.html?dest=ayt" },
+            { "label": "Bodrum",     "href": "dest-detail.html?dest=bjv" },
+            { "label": "İzmir",      "href": "dest-detail.html?dest=adb" },
+            { "label": "Dalaman",    "href": "dest-detail.html?dest=dlm" },
+            { "label": "Hurghada",   "href": "dest-detail.html?dest=hrg" },
+            { "label": "Marsa Alam", "href": "dest-detail.html?dest=rmf" }
+          ]
+        },
+        {
+          "id": "service",
+          "title": "Service",
+          "links": [
+            { "label": "Booking Manager",  "href": "#" },
+            { "label": "Online Check-in",  "href": "#" },
+            { "label": "Baggage Info",     "href": "#" },
+            { "label": "Transfers",        "href": "#" },
+            { "label": "FAQ",              "href": "#" }
+          ]
+        },
+        {
+          "id": "company",
+          "title": "Company",
+          "links": [
+            { "label": "About Us",  "href": "#" },
+            { "label": "Press",     "href": "#" },
+            { "label": "Careers",   "href": "#" },
+            { "label": "T&C",       "href": "#" },
+            { "label": "Privacy",   "href": "#" }
+          ]
+        }
+      ]
+    },
+    "tr": {
+      "tagline": "Güneş tatili uzmanınız. Turkish Airlines ve Lufthansa ortak girişimi.",
+      "columns": [
+        {
+          "id": "dest",
+          "title": "Destinasyonlar",
+          "links": [
+            { "label": "Antalya",    "href": "dest-detail.html?dest=ayt" },
+            { "label": "Bodrum",     "href": "dest-detail.html?dest=bjv" },
+            { "label": "İzmir",      "href": "dest-detail.html?dest=adb" },
+            { "label": "Dalaman",    "href": "dest-detail.html?dest=dlm" },
+            { "label": "Hurghada",   "href": "dest-detail.html?dest=hrg" },
+            { "label": "Marsa Alam", "href": "dest-detail.html?dest=rmf" }
+          ]
+        },
+        {
+          "id": "service",
+          "title": "Servis",
+          "links": [
+            { "label": "Rezervasyon Yöneticisi", "href": "#" },
+            { "label": "Online Check-in",        "href": "#" },
+            { "label": "Bagaj Bilgisi",          "href": "#" },
+            { "label": "Transferler",            "href": "#" },
+            { "label": "SSS",                    "href": "#" }
+          ]
+        },
+        {
+          "id": "company",
+          "title": "Şirket",
+          "links": [
+            { "label": "Hakkımızda", "href": "#" },
+            { "label": "Basın",      "href": "#" },
+            { "label": "Kariyer",    "href": "#" },
+            { "label": "Şartlar",    "href": "#" },
+            { "label": "Gizlilik",   "href": "#" }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>SXH Admin — Dashboard</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',system-ui,sans-serif;background:#f4f6f9;min-height:100vh;}
+    /* Sidebar */
+    .sidebar{position:fixed;left:0;top:0;bottom:0;width:240px;background:#00458f;display:flex;flex-direction:column;z-index:100;}
+    .sidebar-logo{padding:20px 20px 16px;border-bottom:1px solid rgba(255,255,255,.1);}
+    .sidebar-logo img{height:36px;filter:brightness(0) invert(1);}
+    .sidebar-logo span{display:block;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-top:4px;}
+    .sidebar-nav{flex:1;padding:12px 0;overflow-y:auto;}
+    .nav-section{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.4);padding:12px 20px 6px;}
+    .nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;color:rgba(255,255,255,.75);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;text-decoration:none;border-left:3px solid transparent;}
+    .nav-item:hover{background:rgba(255,255,255,.08);color:#fff;}
+    .nav-item.active{background:rgba(255,255,255,.12);color:#fff;border-left-color:#eb690b;}
+    .nav-item svg{flex-shrink:0;opacity:.7;}
+    .nav-item.active svg{opacity:1;}
+    .sidebar-footer{padding:16px 20px;border-top:1px solid rgba(255,255,255,.1);}
+    .user-chip{display:flex;align-items:center;gap:10px;}
+    .user-avatar{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;}
+    .user-name{font-size:13px;font-weight:600;color:#fff;}
+    .user-role{font-size:10px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px;}
+    .logout-btn{margin-left:auto;background:none;border:none;color:rgba(255,255,255,.5);cursor:pointer;padding:4px;}
+    .logout-btn:hover{color:#fff;}
+    /* Main */
+    .main{margin-left:240px;padding:32px;}
+    .page-header{margin-bottom:28px;}
+    .page-header h1{font-size:26px;font-weight:700;color:#00458f;}
+    .page-header p{font-size:14px;color:#8c8c8c;margin-top:4px;}
+    /* Stats */
+    .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px;}
+    .stat-card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);border-top:3px solid var(--c);}
+    .stat-icon{width:40px;height:40px;border-radius:10px;background:var(--bg);display:flex;align-items:center;justify-content:center;margin-bottom:12px;}
+    .stat-val{font-size:28px;font-weight:700;color:#1a1a2e;}
+    .stat-label{font-size:12px;color:#8c8c8c;margin-top:2px;}
+    /* Cards */
+    .cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+    .card{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+    .card-title{font-size:15px;font-weight:700;color:#00458f;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;}
+    .card-title a{font-size:12px;font-weight:600;color:#eb690b;text-decoration:none;}
+    .draft-item{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0f0f0;}
+    .draft-item:last-child{border-bottom:none;}
+    .draft-name{font-size:13px;font-weight:600;color:#1a1a2e;}
+    .draft-meta{font-size:11px;color:#8c8c8c;margin-top:2px;}
+    .draft-actions{display:flex;gap:6px;}
+    .btn-sm{padding:5px 12px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;border:none;font-family:inherit;}
+    .btn-publish{background:#00458f;color:#fff;}
+    .btn-discard{background:#f4f6f9;color:#666;}
+    .btn-publish:hover{background:#003a7a;}
+    .activity-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid #f0f0f0;}
+    .activity-item:last-child{border-bottom:none;}
+    .activity-dot{width:8px;height:8px;border-radius:50%;background:#00458f;flex-shrink:0;margin-top:4px;}
+    .activity-text{font-size:13px;color:#444;line-height:1.5;}
+    .activity-time{font-size:11px;color:#8c8c8c;margin-top:2px;}
+    .empty-state{text-align:center;padding:24px;color:#8c8c8c;font-size:13px;}
+    .role-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;}
+    .role-admin{background:#dbeafe;color:#1d4ed8;}
+    .role-editor{background:#dcfce7;color:#16a34a;}
+    .editor-notice{background:#fffbeb;border:1px solid #fbbf24;border-radius:10px;padding:14px 18px;margin-bottom:20px;font-size:13px;color:#92400e;display:none;}
+    .editor-notice.show{display:flex;align-items:center;gap:10px;}
+  </style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <img src="../logo.svg" alt="SXH"/>
+    <span>Admin Panel</span>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">Genel</div>
+    <a class="nav-item active" href="dashboard.html">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </a>
+    <div class="nav-section">İçerik</div>
+    <a class="nav-item" href="destinations.html">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      Destinasyonlar
+    </a>
+    <a class="nav-item" href="navigation.html">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      Navigasyon
+    </a>
+    <div class="nav-section">Site</div>
+    <a class="nav-item" href="../index.html" target="_blank">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      Siteyi Görüntüle
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-chip">
+      <div class="user-avatar" id="ua"></div>
+      <div><div class="user-name" id="un"></div><div class="user-role" id="ur"></div></div>
+      <button class="logout-btn" onclick="logout()" title="Çıkış">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </div>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="editor-notice" id="editor-notice">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <span>Editor modu: Değişiklikleriniz taslak olarak kaydedilir. Yayınlamak için Admin gereklidir.</span>
+  </div>
+
+  <div class="page-header">
+    <h1>Dashboard</h1>
+    <p>SunExpress Holidays içerik yönetim paneli</p>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card" style="--c:#00458f;--bg:#dbeafe">
+      <div class="stat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00458f" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+      <div class="stat-val" id="stat-dest">—</div>
+      <div class="stat-label">Destinasyonlar</div>
+    </div>
+    <div class="stat-card" style="--c:#eb690b;--bg:#ffedd5">
+      <div class="stat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#eb690b" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+      <div class="stat-val" id="stat-drafts">—</div>
+      <div class="stat-label">Bekleyen Taslak</div>
+    </div>
+    <div class="stat-card" style="--c:#16a34a;--bg:#dcfce7">
+      <div class="stat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="stat-val" id="stat-nav">—</div>
+      <div class="stat-label">Nav Linkleri</div>
+    </div>
+    <div class="stat-card" style="--c:#7c3aed;--bg:#ede9fe">
+      <div class="stat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      <div class="stat-val" id="stat-updated">—</div>
+      <div class="stat-label">Son Güncelleme</div>
+    </div>
+  </div>
+
+  <div class="cards-grid">
+    <div class="card">
+      <div class="card-title">
+        Bekleyen Taslaklar
+        <a href="destinations.html">Tümünü gör →</a>
+      </div>
+      <div id="drafts-list"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Son Aktiviteler</div>
+      <div id="activity-list"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+  // Auth check
+  const role = sessionStorage.getItem('sxh-role');
+  const user = sessionStorage.getItem('sxh-user') || 'User';
+  if(!role) location.href = 'index.html';
+
+  document.getElementById('ua').textContent = user.charAt(0).toUpperCase();
+  document.getElementById('un').textContent = user;
+  document.getElementById('ur').textContent = role === 'admin' ? 'Administrator' : 'Editor';
+  if(role === 'editor') document.getElementById('editor-notice').classList.add('show');
+
+  function logout(){
+    sessionStorage.clear();
+    location.href = 'index.html';
+  }
+
+  // Load stats
+  async function loadStats(){
+    try{
+      const r = await fetch('../data/destinations.json?_='+Date.now());
+      const d = await r.json();
+      document.getElementById('stat-dest').textContent = d.destinations.length;
+    } catch(e){ document.getElementById('stat-dest').textContent = '—'; }
+
+    try{
+      const r = await fetch('../data/navigation.json?_='+Date.now());
+      const d = await r.json();
+      const count = (d.header?.de?.length || 0);
+      document.getElementById('stat-nav').textContent = count;
+    } catch(e){}
+
+    // Drafts from localStorage
+    const drafts = getDrafts();
+    document.getElementById('stat-drafts').textContent = drafts.length;
+    renderDrafts(drafts);
+
+    // Last updated
+    const lastUp = localStorage.getItem('sxh-last-updated');
+    document.getElementById('stat-updated').textContent = lastUp || 'Nie';
+
+    // Activity
+    renderActivity();
+  }
+
+  function getDrafts(){
+    try{ return JSON.parse(localStorage.getItem('sxh-drafts') || '[]'); } catch(e){ return []; }
+  }
+
+  function renderDrafts(drafts){
+    const el = document.getElementById('drafts-list');
+    if(!drafts.length){ el.innerHTML = '<div class="empty-state">Bekleyen taslak yok ✓</div>'; return; }
+    el.innerHTML = drafts.map((d,i) => `
+      <div class="draft-item">
+        <div>
+          <div class="draft-name">${d.name || d.id || 'Taslak'}</div>
+          <div class="draft-meta">${d.type || 'Destinasyon'} · ${d.date || ''}</div>
+        </div>
+        <div class="draft-actions">
+          ${role==='admin'?`<button class="btn-sm btn-publish" onclick="publishDraft(${i})">Yayınla</button>`:''}
+          <button class="btn-sm btn-discard" onclick="discardDraft(${i})">Sil</button>
+        </div>
+      </div>`).join('');
+  }
+
+  function publishDraft(i){
+    const drafts = getDrafts();
+    const draft = drafts[i];
+    // Push to GitHub
+    pushToGitHub(draft).then(ok => {
+      if(ok){
+        drafts.splice(i,1);
+        localStorage.setItem('sxh-drafts', JSON.stringify(drafts));
+        localStorage.setItem('sxh-last-updated', new Date().toLocaleDateString('de'));
+        addActivity(`"${draft.name || draft.id}" yayınlandı`);
+        loadStats();
+      }
+    });
+  }
+
+  function discardDraft(i){
+    if(!confirm('Bu taslağı silmek istediğinizden emin misiniz?')) return;
+    const drafts = getDrafts();
+    drafts.splice(i,1);
+    localStorage.setItem('sxh-drafts', JSON.stringify(drafts));
+    loadStats();
+  }
+
+  async function pushToGitHub(draft){
+    const token = sessionStorage.getItem('sxh-token');
+    if(!token){ alert('GitHub token bulunamadı. Lütfen tekrar giriş yapın.'); return false; }
+    try{
+      // Get current file SHA
+      const file = draft.file || 'data/destinations.json';
+      const getR = await fetch(`https://api.github.com/repos/ceycan07-ai/skh-site/contents/${file}`,{
+        headers:{'Authorization':`token ${token}`,'Accept':'application/vnd.github.v3+json'}
+      });
+      const getD = await getR.json();
+      const sha = getD.sha;
+      // Push update
+      const putR = await fetch(`https://api.github.com/repos/ceycan07-ai/skh-site/contents/${file}`,{
+        method:'PUT',
+        headers:{'Authorization':`token ${token}`,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
+        body: JSON.stringify({
+          message: `cms: update ${file} — ${draft.name || draft.id}`,
+          content: btoa(unescape(encodeURIComponent(JSON.stringify(draft.content, null, 2)))),
+          sha: sha
+        })
+      });
+      return putR.ok;
+    } catch(e){ alert('Push hatası: '+e.message); return false; }
+  }
+
+  function addActivity(text){
+    const acts = JSON.parse(localStorage.getItem('sxh-activity')||'[]');
+    acts.unshift({text, time: new Date().toLocaleString('de')});
+    localStorage.setItem('sxh-activity', JSON.stringify(acts.slice(0,20)));
+  }
+
+  function renderActivity(){
+    const acts = JSON.parse(localStorage.getItem('sxh-activity')||'[]');
+    const el = document.getElementById('activity-list');
+    if(!acts.length){ el.innerHTML = '<div class="empty-state">Henüz aktivite yok</div>'; return; }
+    el.innerHTML = acts.slice(0,8).map(a=>`
+      <div class="activity-item">
+        <div class="activity-dot"></div>
+        <div><div class="activity-text">${a.text}</div><div class="activity-time">${a.time}</div></div>
+      </div>`).join('');
+  }
+
+  loadStats();
+</script>
+</body>
+</html>

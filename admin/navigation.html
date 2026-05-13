@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>SXH Admin — Navigasyon</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',system-ui,sans-serif;background:#f4f6f9;min-height:100vh;}
+    .sidebar{position:fixed;left:0;top:0;bottom:0;width:240px;background:#00458f;display:flex;flex-direction:column;z-index:100;}
+    .sidebar-logo{padding:20px 20px 16px;border-bottom:1px solid rgba(255,255,255,.1);}
+    .sidebar-logo img{height:36px;filter:brightness(0) invert(1);}
+    .sidebar-logo span{display:block;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-top:4px;}
+    .sidebar-nav{flex:1;padding:12px 0;}
+    .nav-section{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.4);padding:12px 20px 6px;}
+    .nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;color:rgba(255,255,255,.75);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;text-decoration:none;border-left:3px solid transparent;}
+    .nav-item:hover{background:rgba(255,255,255,.08);color:#fff;}
+    .nav-item.active{background:rgba(255,255,255,.12);color:#fff;border-left-color:#eb690b;}
+    .sidebar-footer{padding:16px 20px;border-top:1px solid rgba(255,255,255,.1);}
+    .user-chip{display:flex;align-items:center;gap:10px;}
+    .user-avatar{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;}
+    .user-name{font-size:13px;font-weight:600;color:#fff;}
+    .user-role{font-size:10px;color:rgba(255,255,255,.5);}
+    .logout-btn{margin-left:auto;background:none;border:none;color:rgba(255,255,255,.5);cursor:pointer;padding:4px;}
+    .logout-btn:hover{color:#fff;}
+    .main{margin-left:240px;padding:32px;}
+    .page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+    .page-header h1{font-size:24px;font-weight:700;color:#00458f;}
+    .btn{padding:10px 20px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;border:none;font-family:inherit;display:inline-flex;align-items:center;gap:6px;transition:all .15s;}
+    .btn-primary{background:#00458f;color:#fff;}
+    .btn-primary:hover{background:#003a7a;}
+    .btn-outline{background:#fff;color:#00458f;border:1px solid #dde3ea;}
+    .btn-outline:hover{border-color:#00458f;}
+    .btn-danger{background:#fef2f2;color:#dc2626;border:1px solid #fca5a5;}
+    .btn-sm{padding:6px 12px;font-size:12px;}
+    .lang-tabs{display:flex;gap:8px;margin-bottom:24px;}
+    .lang-tab{padding:8px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:1px solid #dde3ea;background:#fff;color:#666;transition:all .15s;}
+    .lang-tab.active{background:#00458f;color:#fff;border-color:#00458f;}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+    .card{background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+    .card-header{padding:16px 20px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between;}
+    .card-header h3{font-size:14px;font-weight:700;color:#00458f;}
+    .card-body{padding:16px 20px;}
+    .nav-link-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;border:1px solid #f0f0f0;margin-bottom:8px;background:#fff;cursor:grab;transition:box-shadow .15s;}
+    .nav-link-item:hover{box-shadow:0 2px 8px rgba(0,0,0,.1);}
+    .nav-link-item.dragging{opacity:.5;box-shadow:0 4px 16px rgba(0,0,0,.15);}
+    .drag-handle{color:#c0c0c0;cursor:grab;flex-shrink:0;}
+    .link-label{flex:1;font-size:13px;font-weight:600;color:#1a1a2e;}
+    .link-href{font-size:11px;color:#8c8c8c;}
+    .link-actions{display:flex;gap:4px;flex-shrink:0;}
+    .icon-btn{width:28px;height:28px;border-radius:6px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;}
+    .icon-btn-edit{background:#dbeafe;color:#1d4ed8;}
+    .icon-btn-edit:hover{background:#bfdbfe;}
+    .icon-btn-del{background:#fef2f2;color:#dc2626;}
+    .icon-btn-del:hover{background:#fee2e2;}
+    .add-link-form{background:#f8fafc;border-radius:8px;padding:12px;margin-top:12px;border:1px dashed #dde3ea;}
+    .add-link-form h4{font-size:12px;font-weight:700;color:#444;margin-bottom:10px;}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
+    input,select{width:100%;padding:9px 11px;border:1px solid #dde3ea;border-radius:7px;font-size:13px;font-family:inherit;outline:none;color:#1a1a2e;}
+    input:focus,select:focus{border-color:#00458f;}
+    .footer-col{margin-bottom:16px;padding:16px;border:1px solid #f0f0f0;border-radius:8px;}
+    .footer-col-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+    .footer-col-label{font-size:13px;font-weight:700;color:#00458f;}
+    .footer-link-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:6px;border:1px solid #f0f0f0;margin-bottom:6px;font-size:12px;}
+    .footer-link-label{flex:1;font-weight:600;color:#1a1a2e;}
+    .footer-link-href{color:#8c8c8c;font-size:11px;}
+    .action-bar{padding:16px 20px;border-top:1px solid #f0f0f0;display:flex;gap:10px;align-items:center;}
+    .save-status{font-size:12px;color:#16a34a;display:none;}
+    .save-status.show{display:block;}
+    .full-card{background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-top:20px;}
+  </style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo"><img src="../logo.svg" alt="SXH"/><span>Admin Panel</span></div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">Genel</div>
+    <a class="nav-item" href="dashboard.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</a>
+    <div class="nav-section">İçerik</div>
+    <a class="nav-item" href="destinations.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Destinasyonlar</a>
+    <a class="nav-item active" href="navigation.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>Navigasyon</a>
+    <div class="nav-section">Site</div>
+    <a class="nav-item" href="../index.html" target="_blank"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Siteyi Görüntüle</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-chip">
+      <div class="user-avatar" id="ua"></div>
+      <div><div class="user-name" id="un"></div><div class="user-role" id="ur"></div></div>
+      <button class="logout-btn" onclick="logout()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
+    </div>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="page-header">
+    <div><h1>Navigasyon</h1><p style="font-size:13px;color:#8c8c8c;margin-top:4px">Header ve footer linklerini yönet</p></div>
+    <button class="btn btn-primary" onclick="saveAll()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      <span id="save-lbl">Kaydet & Yayınla</span>
+    </button>
+  </div>
+
+  <div class="lang-tabs">
+    <button class="lang-tab active" onclick="switchLang('de',this)">🇩🇪 Deutsch</button>
+    <button class="lang-tab" onclick="switchLang('en',this)">🇬🇧 English</button>
+    <button class="lang-tab" onclick="switchLang('tr',this)">🇹🇷 Türkçe</button>
+  </div>
+
+  <div class="grid">
+    <!-- Header Nav -->
+    <div class="card">
+      <div class="card-header">
+        <h3>🔝 Header Navigasyonu</h3>
+        <button class="btn btn-outline btn-sm" onclick="showAddHeader()">+ Link Ekle</button>
+      </div>
+      <div class="card-body">
+        <div id="header-list"></div>
+        <div class="add-link-form" id="add-header-form" style="display:none">
+          <h4>Yeni Header Link</h4>
+          <div class="form-row">
+            <input id="nh-label" placeholder="Label (Startseite)"/>
+            <input id="nh-href" placeholder="href (index.html)"/>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-primary btn-sm" onclick="addHeaderLink()">Ekle</button>
+            <button class="btn btn-outline btn-sm" onclick="document.getElementById('add-header-form').style.display='none'">İptal</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer tagline -->
+    <div class="card">
+      <div class="card-header"><h3>📝 Footer Tagline</h3></div>
+      <div class="card-body">
+        <textarea id="footer-tagline" rows="3" style="width:100%;padding:10px;border:1px solid #dde3ea;border-radius:8px;font-size:13px;font-family:inherit;outline:none;resize:vertical"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer columns -->
+  <div class="full-card" style="margin-top:20px">
+    <div class="card-header"><h3>🔻 Footer Kolonları</h3><button class="btn btn-outline btn-sm" onclick="addFooterCol()">+ Kolon Ekle</button></div>
+    <div class="card-body" id="footer-cols"></div>
+  </div>
+
+  <div style="margin-top:16px;display:flex;align-items:center;gap:12px">
+    <button class="btn btn-primary" onclick="saveAll()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      <span id="save-lbl2">Kaydet & Yayınla</span>
+    </button>
+    <span class="save-status" id="save-status">✓ Kaydedildi</span>
+  </div>
+</main>
+
+<script>
+  const role = sessionStorage.getItem('sxh-role');
+  const user = sessionStorage.getItem('sxh-user')||'User';
+  if(!role) location.href='index.html';
+  document.getElementById('ua').textContent=user.charAt(0);
+  document.getElementById('un').textContent=user;
+  document.getElementById('ur').textContent=role==='admin'?'Administrator':'Editor';
+  if(role==='editor'){['save-lbl','save-lbl2'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='Taslak Kaydet';});}
+  function logout(){sessionStorage.clear();location.href='index.html';}
+
+  let navData = {};
+  let currentLang = 'de';
+
+  async function loadNav(){
+    try{
+      const r = await fetch('../data/navigation.json?_='+Date.now());
+      navData = await r.json();
+      renderAll();
+    }catch(e){ console.error(e); }
+  }
+
+  function switchLang(lang, btn){
+    currentLang=lang;
+    document.querySelectorAll('.lang-tab').forEach(t=>t.classList.remove('active'));
+    btn.classList.add('active');
+    renderAll();
+  }
+
+  function renderAll(){
+    renderHeaderList();
+    renderFooterTagline();
+    renderFooterCols();
+  }
+
+  function renderHeaderList(){
+    const links = navData.header?.[currentLang] || [];
+    const el = document.getElementById('header-list');
+    el.innerHTML = links.map((l,i)=>`
+      <div class="nav-link-item" draggable="true" data-i="${i}" ondragstart="dragStart(event)" ondragover="dragOver(event)" ondrop="dropH(event,${i})">
+        <div class="drag-handle">⠿</div>
+        <div style="flex:1">
+          <div class="link-label">${l.label}</div>
+          <div class="link-href">${l.href}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <label style="display:flex;align-items:center;gap:4px;font-size:11px;color:#666;cursor:pointer">
+            <input type="checkbox" ${l.active?'checked':''} onchange="toggleActive(${i},this.checked)" style="width:auto;padding:0"/> Aktif
+          </label>
+          <button class="icon-btn icon-btn-edit" onclick="editHeaderLink(${i})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <button class="icon-btn icon-btn-del" onclick="delHeaderLink(${i})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg></button>
+        </div>
+      </div>`).join('');
+  }
+
+  function toggleActive(i, val){
+    if(!navData.header[currentLang]) return;
+    navData.header[currentLang][i].active = val;
+  }
+
+  function editHeaderLink(i){
+    const l = navData.header[currentLang][i];
+    const label = prompt('Label:', l.label); if(label===null) return;
+    const href = prompt('Href:', l.href); if(href===null) return;
+    navData.header[currentLang][i].label = label;
+    navData.header[currentLang][i].href = href;
+    renderHeaderList();
+  }
+
+  function delHeaderLink(i){
+    if(!confirm('Bu linki silmek istediğinizden emin misiniz?')) return;
+    navData.header[currentLang].splice(i,1);
+    renderHeaderList();
+  }
+
+  function showAddHeader(){ document.getElementById('add-header-form').style.display='block'; }
+  function addHeaderLink(){
+    const label=document.getElementById('nh-label').value.trim();
+    const href=document.getElementById('nh-href').value.trim();
+    if(!label||!href) return;
+    if(!navData.header[currentLang]) navData.header[currentLang]=[];
+    navData.header[currentLang].push({id:'custom-'+Date.now(),label,href,active:true});
+    document.getElementById('nh-label').value='';
+    document.getElementById('nh-href').value='';
+    document.getElementById('add-header-form').style.display='none';
+    renderHeaderList();
+  }
+
+  // Drag & drop for header
+  let dragIdx = null;
+  function dragStart(e){ dragIdx=parseInt(e.currentTarget.dataset.i); e.currentTarget.classList.add('dragging'); }
+  function dragOver(e){ e.preventDefault(); }
+  function dropH(e,toIdx){
+    e.preventDefault();
+    document.querySelectorAll('.nav-link-item').forEach(el=>el.classList.remove('dragging'));
+    if(dragIdx===null||dragIdx===toIdx) return;
+    const arr=navData.header[currentLang];
+    const moved=arr.splice(dragIdx,1)[0];
+    arr.splice(toIdx,0,moved);
+    dragIdx=null;
+    renderHeaderList();
+  }
+
+  function renderFooterTagline(){
+    const tl = navData.footer?.[currentLang]?.tagline || '';
+    document.getElementById('footer-tagline').value = tl;
+  }
+
+  function renderFooterCols(){
+    const cols = navData.footer?.[currentLang]?.columns || [];
+    document.getElementById('footer-cols').innerHTML = cols.map((col,ci)=>`
+      <div class="footer-col">
+        <div class="footer-col-title">
+          <input value="${col.title}" onchange="navData.footer['${currentLang}'].columns[${ci}].title=this.value" style="font-size:13px;font-weight:700;color:#00458f;border:none;background:none;outline:none;border-bottom:1px solid #dde3ea;padding:2px 0;width:160px"/>
+          <div style="display:flex;gap:6px">
+            <button class="btn btn-outline btn-sm" onclick="addFooterLink(${ci})">+ Link</button>
+            <button class="btn btn-danger btn-sm" onclick="delFooterCol(${ci})">Sil</button>
+          </div>
+        </div>
+        <div>${col.links.map((l,li)=>`
+          <div class="footer-link-item">
+            <div class="footer-link-label">${l.label}</div>
+            <div class="footer-link-href">${l.href}</div>
+            <button class="icon-btn icon-btn-edit" onclick="editFooterLink(${ci},${li})" style="margin-left:auto"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+            <button class="icon-btn icon-btn-del" onclick="delFooterLink(${ci},${li})"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg></button>
+          </div>`).join('')}
+        </div>
+      </div>`).join('');
+  }
+
+  function addFooterCol(){
+    const lang=currentLang;
+    if(!navData.footer[lang]) navData.footer[lang]={tagline:'',columns:[]};
+    navData.footer[lang].columns.push({id:'col-'+Date.now(),title:'Yeni Kolon',links:[]});
+    renderFooterCols();
+  }
+  function delFooterCol(i){ if(!confirm('Silinsin mi?')) return; navData.footer[currentLang].columns.splice(i,1); renderFooterCols(); }
+  function addFooterLink(ci){
+    const label=prompt('Link adı:'); if(!label) return;
+    const href=prompt('URL (# veya sayfa.html):','#'); if(!href) return;
+    navData.footer[currentLang].columns[ci].links.push({label,href});
+    renderFooterCols();
+  }
+  function editFooterLink(ci,li){
+    const l=navData.footer[currentLang].columns[ci].links[li];
+    const label=prompt('Label:',l.label); if(label===null) return;
+    const href=prompt('Href:',l.href); if(href===null) return;
+    navData.footer[currentLang].columns[ci].links[li]={label,href};
+    renderFooterCols();
+  }
+  function delFooterLink(ci,li){ navData.footer[currentLang].columns[ci].links.splice(li,1); renderFooterCols(); }
+
+  async function saveAll(){
+    // Read tagline back
+    navData.footer[currentLang].tagline = document.getElementById('footer-tagline').value;
+    if(role==='admin'){ await pushNav(); }
+    else { saveDraftNav(); }
+    const ss=document.getElementById('save-status');
+    ss.textContent=role==='admin'?'✓ Yayınlandı':'✓ Taslak kaydedildi';
+    ss.classList.add('show');
+    setTimeout(()=>ss.classList.remove('show'),3000);
+  }
+
+  async function pushNav(){
+    const token=sessionStorage.getItem('sxh-token');
+    if(!token){alert('GitHub token bulunamadı.');return;}
+    try{
+      const getR=await fetch('https://api.github.com/repos/ceycan07-ai/skh-site/contents/data/navigation.json',{headers:{'Authorization':`token ${token}`,'Accept':'application/vnd.github.v3+json'}});
+      const getD=await getR.json();
+      await fetch('https://api.github.com/repos/ceycan07-ai/skh-site/contents/data/navigation.json',{
+        method:'PUT',
+        headers:{'Authorization':`token ${token}`,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
+        body:JSON.stringify({message:'cms: navigation update',content:btoa(unescape(encodeURIComponent(JSON.stringify(navData,null,2)))),sha:getD.sha})
+      });
+      localStorage.setItem('sxh-last-updated',new Date().toLocaleDateString('de'));
+    }catch(e){alert('Hata: '+e.message);}
+  }
+
+  function saveDraftNav(){
+    const drafts=JSON.parse(localStorage.getItem('sxh-drafts')||'[]');
+    const idx=drafts.findIndex(d=>d.id==='navigation');
+    const draft={id:'navigation',name:'Navigasyon güncellemesi',type:'Navigasyon',date:new Date().toLocaleDateString('de'),file:'data/navigation.json',content:navData};
+    if(idx>=0)drafts[idx]=draft;else drafts.push(draft);
+    localStorage.setItem('sxh-drafts',JSON.stringify(drafts));
+  }
+
+  loadNav();
+</script>
+</body>
+</html>

@@ -1,0 +1,250 @@
+{
+  "destinations": [
+    {
+      "id": "ayt",
+      "code": "AYT",
+      "regionKey": "turkey",
+      "flag": "🇹🇷",
+      "price": "449",
+      "badge": "beliebt",
+      "query": "antalya turkey beach resort",
+      "name": { "de": "Antalya", "en": "Antalya", "tr": "Antalya" },
+      "desc": {
+        "de": "Die Türkische Riviera mit traumhaften Stränden, Luxusresorts und antiken Ruinen.",
+        "en": "The Turkish Riviera with stunning beaches, luxury resorts and ancient ruins.",
+        "tr": "Türk Rivierası'nın muhteşem plajları, lüks tatil köyleri ve antik kalıntıları."
+      },
+      "highlights": ["Strand", "All-Inclusive", "Direktflug", "Wasserpark"],
+      "children": ["belek", "kemer", "side", "lara", "alanya"]
+    },
+    {
+      "id": "belek",
+      "code": "AYT",
+      "parent": "ayt",
+      "regionKey": "turkey",
+      "flag": "🇹🇷",
+      "price": "499",
+      "badge": "premium",
+      "query": "belek antalya golf resort luxury",
+      "name": { "de": "Belek", "en": "Belek", "tr": "Belek" },
+      "desc": {
+        "de": "Weltklasse Golfresorts und Luxushotels direkt am Sandstrand.",
+        "en": "World-class golf resorts and luxury hotels right on the sandy beach.",
+        "tr": "Dünya standartlarında golf tatil köyleri ve lüks oteller."
+      },
+      "highlights": ["Golf", "Luxus", "Strand", "Spa"],
+      "children": []
+    },
+    {
+      "id": "kemer",
+      "code": "AYT",
+      "parent": "ayt",
+      "regionKey": "turkey",
+      "flag": "🇹🇷",
+      "price": "479",
+      "badge": "beliebt",
+      "query": "kemer antalya resort bay turkey",
+      "name": { "de": "Kemer", "en": "Kemer", "tr": "Kemer" },
+      "desc": {
+        "de": "Malerische Bucht umgeben von Pinienwäldern und türkisblauem Meer.",
+        "en": "Picturesque bay surrounded by pine forests and turquoise sea.",
+        "tr": "Çam ormanları ve turkuaz denizle çevrili pitoresk koy."
+      },
+      "highlights": ["Natur", "Strand", "Segeln", "Familie"],
+      "children": []
+    },
+    {
+      "id": "bjv",
+      "code": "BJV",
+      "regionKey": "turkey",
+      "flag": "🇹🇷",
+      "price": "519",
+      "badge": "neu",
+      "query": "bodrum turkey castle bay harbor",
+      "name": { "de": "Bodrum", "en": "Bodrum", "tr": "Bodrum" },
+      "desc": {
+        "de": "Exklusives Ferienparadies mit weißen Häusern, Jachthäfen und kristallklarem Wasser.",
+        "en": "Exclusive holiday paradise with white houses, marinas and crystal-clear water.",
+        "tr": "Beyaz evleri, marinası ve kristal berraklığındaki sularıyla tatil cenneti."
+      },
+      "highlights": ["Jachthafen", "Kultur", "Wassersport", "Nightlife"],
+      "children": ["turgutreis", "gundogan"]
+    },
+    {
+      "id": "turgutreis",
+      "code": "BJV",
+      "parent": "bjv",
+      "regionKey": "turkey",
+      "flag": "🇹🇷",
+      "price": "489",
+      "badge": null,
+      "query": "turgutreis bodrum turkey sunset",
+      "name": { "de": "Turgutreis", "en": "Turgutreis", "tr": "Turgutreis" },
+      "desc": {
+        "de": "Bekannt für seinen spektakulären Sonnenuntergang und lebhaften Markt.",
+        "en": "Known for its spectacular sunset and lively market.",
+        "tr": "Muhteşem gün batımı ve canlı pazarıyla tanınır."
+      },
+      "highlights": ["Sunset", "Markt", "Strand"],
+      "children": []
+    },
+    {
+      "id": "gundogan",
+      "code": "BJV",
+      "parent": "bjv",
+      "regionKey": "turkey",
+      "flag": "🇹🇷",
+      "price": "509",
+      "badge": null,
+      "query": "gundogan bodrum turkey bay beach",
+      "name": { "de": "Gündoğan", "en": "Gündoğan", "tr": "Gündoğan" },
+      "desc": {
+        "de": "Ruhige Bucht mit klarem Wasser, ideal für Familien.",
+        "en": "Quiet bay with clear water, ideal for families.",
+        "tr": "Berrak suyu ve sakin atmosferiyle aileler için ideal koy."
+      },
+      "highlights": ["Familie", "Ruhig", "Strand"],
+      "children": []
+    },
+    {
+      "id": "dlm",
+      "code": "DLM",
+      "regionKey": "turkey",
+      "flag": "🇹🇷",
+      "price": "479",
+      "badge": "neu",
+      "query": "dalaman fethiye turkey oludeniz",
+      "name": { "de": "Dalaman", "en": "Dalaman", "tr": "Dalaman" },
+      "desc": {
+        "de": "Tor zur Türkischen Ägäis — mit Ölüdeniz, Fethiye und unberührter Natur.",
+        "en": "Gateway to the Turkish Aegean — with Ölüdeniz, Fethiye and unspoilt nature.",
+        "tr": "Türk Ege'sine açılan kapı — Ölüdeniz, Fethiye ve bozulmamış doğa."
+      },
+      "highlights": ["Paragliding", "Blaue Lagune", "Segeln", "Natur"],
+      "children": ["fethiye", "oludeniz", "marmaris"]
+    },
+    {
+      "id": "fethiye",
+      "code": "DLM",
+      "parent": "dlm",
+      "regionKey": "turkey",
+      "flag": "🇹🇷",
+      "price": "459",
+      "badge": "beliebt",
+      "query": "fethiye turkey bay resort",
+      "name": { "de": "Fethiye", "en": "Fethiye", "tr": "Fethiye" },
+      "desc": {
+        "de": "Charmante Hafenstadt mit Lykischen Felsengräbern und traumhaften Buchten.",
+        "en": "Charming harbour town with Lycian rock tombs and stunning bays.",
+        "tr": "Likya kaya mezarları ve muhteşem koylarıyla büyüleyici liman şehri."
+      },
+      "highlights": ["Kultur", "Segeln", "Strand", "Natur"],
+      "children": []
+    },
+    {
+      "id": "oludeniz",
+      "code": "DLM",
+      "parent": "dlm",
+      "regionKey": "turkey",
+      "flag": "🇹🇷",
+      "price": "469",
+      "badge": "beliebt",
+      "query": "oludeniz blue lagoon turkey beach",
+      "name": { "de": "Ölüdeniz", "en": "Ölüdeniz", "tr": "Ölüdeniz" },
+      "desc": {
+        "de": "Die berühmte Blaue Lagune — einer der schönsten Strände der Welt.",
+        "en": "The famous Blue Lagoon — one of the most beautiful beaches in the world.",
+        "tr": "Ünlü Mavi Lagün — dünyanın en güzel plajlarından biri."
+      },
+      "highlights": ["Blaue Lagune", "Paragliding", "Strand", "Foto"],
+      "children": []
+    },
+    {
+      "id": "adb",
+      "code": "ADB",
+      "regionKey": "turkey",
+      "flag": "🇹🇷",
+      "price": "399",
+      "badge": "angebot",
+      "query": "izmir turkey city coast aegean",
+      "name": { "de": "İzmir", "en": "İzmir", "tr": "İzmir" },
+      "desc": {
+        "de": "Moderne Metropole mit Strandpromenade, Altstadtflair und Nähe zu Ephesos.",
+        "en": "Modern metropolis with seafront promenade, old town charm and proximity to Ephesus.",
+        "tr": "Deniz kenarı, tarihi çarşısı ve Efes'e yakınlığıyla modern metropol."
+      },
+      "highlights": ["Stadt", "Kultur", "Ephesos", "Strand"],
+      "children": ["cesme", "alacati"]
+    },
+    {
+      "id": "cesme",
+      "code": "ADB",
+      "parent": "adb",
+      "regionKey": "turkey",
+      "flag": "🇹🇷",
+      "price": "549",
+      "badge": "premium",
+      "query": "cesme turkey marina beach resort",
+      "name": { "de": "Çeşme", "en": "Çeşme", "tr": "Çeşme" },
+      "desc": {
+        "de": "Trendiges Baderesort mit Windsurf, Kitesurf und exklusiven Boutique-Hotels.",
+        "en": "Trendy beach resort with windsurfing, kitesurfing and exclusive boutique hotels.",
+        "tr": "Rüzgar sörfü, uçurtma sörfü ve özel butik otellerle trend plaj beldesi."
+      },
+      "highlights": ["Windsurf", "Kitesurf", "Marina", "Boutique"],
+      "children": []
+    },
+    {
+      "id": "alacati",
+      "code": "ADB",
+      "parent": "adb",
+      "regionKey": "turkey",
+      "flag": "🇹🇷",
+      "price": "529",
+      "badge": "neu",
+      "query": "alacati turkey windmill village boutique",
+      "name": { "de": "Alaçatı", "en": "Alaçatı", "tr": "Alaçatı" },
+      "desc": {
+        "de": "Malerisches Dorf mit Windmühlen, Kopfsteinpflaster und charmanten Boutique-Hotels.",
+        "en": "Picturesque village with windmills, cobblestones and charming boutique hotels.",
+        "tr": "Yel değirmenleri, arnavut kaldırımları ve büyüleyici butik otelleriyle pitoresk köy."
+      },
+      "highlights": ["Boutique", "Windsurf", "Romantik", "Yemek"],
+      "children": []
+    },
+    {
+      "id": "hrg",
+      "code": "HRG",
+      "regionKey": "egypt",
+      "flag": "🇪🇬",
+      "price": "589",
+      "badge": "beliebt",
+      "query": "hurghada egypt red sea resort",
+      "name": { "de": "Hurghada", "en": "Hurghada", "tr": "Hurghada" },
+      "desc": {
+        "de": "Das pulsierende Badeparadies am Roten Meer mit traumhaften Korallenriffen.",
+        "en": "The vibrant beach paradise on the Red Sea with stunning coral reefs.",
+        "tr": "Kızıl Deniz'in canlı plaj cenneti ve muhteşem mercan resifleriyle."
+      },
+      "highlights": ["Schnorcheln", "Tauchen", "Korallen", "Wassersport"],
+      "children": []
+    },
+    {
+      "id": "rmf",
+      "code": "RMF",
+      "regionKey": "egypt",
+      "flag": "🇪🇬",
+      "price": "629",
+      "badge": "beliebt",
+      "query": "marsa alam egypt diving snorkeling",
+      "name": { "de": "Marsa Alam", "en": "Marsa Alam", "tr": "Marsa Alam" },
+      "desc": {
+        "de": "Das unberührte Juwel Ägyptens — ideal für Taucher und Naturliebhaber.",
+        "en": "The unspoilt jewel of Egypt — ideal for divers and nature lovers.",
+        "tr": "Mısır'ın bozulmamış mücevheri — dalgıçlar ve doğa severler için ideal."
+      },
+      "highlights": ["Tauchen", "Delfine", "Ruhig", "Natur"],
+      "children": []
+    }
+  ]
+}
