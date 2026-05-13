@@ -312,7 +312,7 @@ function initSearchMask() {
 }
 
 function doSearch() {
-  window.location.href = 'search-results.html';
+  window.location.href = 'search.html';
 }
 
 /* ── AUTO-INIT ── */
