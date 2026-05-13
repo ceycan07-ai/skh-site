@@ -2,55 +2,29 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>SXH Admin — Destinasyonlar</title>
+  <title>SXH Admin — Destinations</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0;}
     body{font-family:'Segoe UI',system-ui,sans-serif;background:#f4f6f9;min-height:100vh;}
-    .sidebar{position:fixed;left:0;top:0;bottom:0;width:240px;background:#00458f;display:flex;flex-direction:column;z-index:100;}
-    .sidebar-logo{padding:20px 20px 16px;border-bottom:1px solid rgba(255,255,255,.1);}
-    .sidebar-logo img{height:36px;filter:brightness(0) invert(1);}
-    .sidebar-logo span{display:block;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-top:4px;}
-    .sidebar-nav{flex:1;padding:12px 0;}
-    .nav-section{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.4);padding:12px 20px 6px;}
-    .nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;color:rgba(255,255,255,.75);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;text-decoration:none;border-left:3px solid transparent;}
-    .nav-item:hover{background:rgba(255,255,255,.08);color:#fff;}
-    .nav-item.active{background:rgba(255,255,255,.12);color:#fff;border-left-color:#eb690b;}
-    .sidebar-footer{padding:16px 20px;border-top:1px solid rgba(255,255,255,.1);}
-    .user-chip{display:flex;align-items:center;gap:10px;}
-    .user-avatar{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;}
-    .user-name{font-size:13px;font-weight:600;color:#fff;}
-    .user-role{font-size:10px;color:rgba(255,255,255,.5);}
-    .logout-btn{margin-left:auto;background:none;border:none;color:rgba(255,255,255,.5);cursor:pointer;padding:4px;}
-    .logout-btn:hover{color:#fff;}
-    .main{margin-left:240px;padding:32px;}
     .page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
     .page-header h1{font-size:24px;font-weight:700;color:#00458f;}
+    .page-header p{font-size:13px;color:#8c8c8c;margin-top:4px;}
     .btn{padding:10px 20px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;border:none;font-family:inherit;display:inline-flex;align-items:center;gap:6px;transition:all .15s;}
-    .btn-primary{background:#00458f;color:#fff;}
-    .btn-primary:hover{background:#003a7a;}
-    .btn-orange{background:#eb690b;color:#fff;}
-    .btn-orange:hover{background:#d45c08;}
-    .btn-outline{background:#fff;color:#00458f;border:1px solid #dde3ea;}
-    .btn-outline:hover{border-color:#00458f;}
-    .btn-danger{background:#fef2f2;color:#dc2626;border:1px solid #fca5a5;}
-    .btn-danger:hover{background:#fee2e2;}
+    .btn-primary{background:#00458f;color:#fff;}.btn-primary:hover{background:#003a7a;}
+    .btn-outline{background:#fff;color:#00458f;border:1px solid #dde3ea;}.btn-outline:hover{border-color:#00458f;}
+    .btn-danger{background:#fef2f2;color:#dc2626;border:1px solid #fca5a5;}.btn-danger:hover{background:#fee2e2;}
     .btn-sm{padding:6px 12px;font-size:12px;}
-    .layout{display:grid;grid-template-columns:320px 1fr;gap:20px;}
-    /* Tree */
+    .layout{display:grid;grid-template-columns:300px 1fr;gap:20px;}
     .tree-card{background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.06);overflow:hidden;}
     .tree-header{padding:16px 20px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between;}
     .tree-header h3{font-size:14px;font-weight:700;color:#00458f;}
     .tree-body{padding:12px;}
-    .tree-region{margin-bottom:8px;}
-    .tree-region-label{display:flex;align-items:center;gap:8px;padding:8px 10px;font-size:12px;font-weight:700;color:#8c8c8c;text-transform:uppercase;letter-spacing:.8px;cursor:pointer;user-select:none;}
+    .tree-region-label{display:flex;align-items:center;gap:8px;padding:8px 10px;font-size:11px;font-weight:700;color:#8c8c8c;text-transform:uppercase;letter-spacing:.8px;cursor:pointer;user-select:none;}
     .tree-region-label svg{transition:transform .2s;}
-    .tree-region-label.collapsed svg{transform:rotate(-90deg);}
-    .tree-children{padding-left:0;}
-    .tree-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;cursor:pointer;transition:background .15s;position:relative;}
+    .tree-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;cursor:pointer;transition:background .15s;border-left:3px solid transparent;}
     .tree-item:hover{background:#f4f6f9;}
-    .tree-item.selected{background:#dbeafe;border-left:3px solid #00458f;}
+    .tree-item.selected{background:#dbeafe;border-left-color:#00458f;}
     .tree-item.child{padding-left:28px;}
-    .tree-item.child.selected{background:#dbeafe;}
     .tree-item-flag{font-size:16px;flex-shrink:0;}
     .tree-item-name{font-size:13px;font-weight:600;color:#1a1a2e;flex:1;}
     .tree-item-code{font-size:10px;color:#8c8c8c;font-weight:600;}
@@ -58,7 +32,6 @@
     .tree-toggle.open{transform:rotate(90deg);}
     .tree-grandchildren{display:none;padding-left:16px;}
     .tree-grandchildren.open{display:block;}
-    /* Editor */
     .editor-card{background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.06);}
     .editor-header{padding:20px 24px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between;}
     .editor-header h3{font-size:15px;font-weight:700;color:#00458f;}
@@ -69,213 +42,113 @@
     .tabs{display:flex;gap:0;border-bottom:2px solid #f0f0f0;margin-bottom:24px;}
     .tab{padding:10px 20px;font-size:13px;font-weight:600;color:#8c8c8c;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s;}
     .tab.active{color:#00458f;border-bottom-color:#00458f;}
-    .tab-content{display:none;}
-    .tab-content.active{display:block;}
+    .tab-content{display:none;}.tab-content.active{display:block;}
     .form-group{margin-bottom:16px;}
-    .form-group label{display:block;font-size:12px;font-weight:600;color:#444;margin-bottom:6px;letter-spacing:.3px;}
+    .form-group label{display:block;font-size:12px;font-weight:600;color:#444;margin-bottom:6px;}
     .form-group label .req{color:#eb690b;}
     input,select,textarea{width:100%;padding:10px 12px;border:1px solid #dde3ea;border-radius:8px;font-size:13px;font-family:inherit;outline:none;color:#1a1a2e;transition:border-color .15s;}
     input:focus,select:focus,textarea:focus{border-color:#00458f;}
     textarea{resize:vertical;min-height:80px;}
     .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-    .form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
     .highlights-wrap{display:flex;flex-wrap:wrap;gap:8px;padding:10px;border:1px solid #dde3ea;border-radius:8px;min-height:44px;}
     .highlight-chip{display:inline-flex;align-items:center;gap:4px;background:#dbeafe;color:#00458f;font-size:12px;font-weight:600;padding:4px 10px;border-radius:20px;cursor:pointer;}
     .highlight-chip:hover{background:#bfdbfe;}
     .highlight-add{display:flex;gap:8px;margin-top:8px;}
     .highlight-add input{flex:1;}
     .section-title{font-size:13px;font-weight:700;color:#00458f;margin:20px 0 12px;padding-bottom:8px;border-bottom:1px solid #f0f0f0;}
-    .parent-select-wrap{margin-bottom:16px;}
     .badge-opts{display:flex;gap:8px;flex-wrap:wrap;}
     .badge-opt{padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:2px solid transparent;transition:all .15s;}
     .badge-opt.sel{border-color:#00458f;}
     .action-bar{display:flex;align-items:center;gap:10px;padding:16px 24px;border-top:1px solid #f0f0f0;background:#fafafa;border-radius:0 0 12px 12px;}
-    .save-status{font-size:12px;color:#16a34a;display:none;}
-    .save-status.show{display:block;}
-    .editor-notice{background:#fffbeb;border:1px solid #fbbf24;border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:12px;color:#92400e;display:none;}
-    .editor-notice.show{display:flex;align-items:center;gap:8px;}
+    .save-status{font-size:12px;color:#16a34a;display:none;}.save-status.show{display:block;}
+    .editor-notice{background:#fffbeb;border:1px solid #fbbf24;border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:12px;color:#92400e;display:none;align-items:center;gap:8px;}
+    .editor-notice.show{display:flex;}
   </style>
 </head>
 <body>
-
-<aside class="sidebar">
-  <div class="sidebar-logo">
-    <img src="../logo.svg" alt="SXH"/>
-    <span>Admin Panel</span>
-  </div>
-  <nav class="sidebar-nav">
-    <div class="nav-section">Genel</div>
-    <a class="nav-item" href="dashboard.html">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-      Dashboard
-    </a>
-    <div class="nav-section">İçerik</div>
-    <a class="nav-item active" href="destinations.html">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-      Destinasyonlar
-    </a>
-    <a class="nav-item" href="navigation.html">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-      Navigasyon
-    </a>
-    <div class="nav-section">Site</div>
-    <a class="nav-item" href="../index.html" target="_blank">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-      Siteyi Görüntüle
-    </a>
-  </nav>
-  <div class="sidebar-footer">
-    <div class="user-chip">
-      <div class="user-avatar" id="ua"></div>
-      <div><div class="user-name" id="un"></div><div class="user-role" id="ur"></div></div>
-      <button class="logout-btn" onclick="logout()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-      </button>
-    </div>
-  </div>
-</aside>
-
+<div id="sidebar" class="sidebar"></div>
 <main class="main">
   <div class="page-header">
-    <div>
-      <h1>Destinasyonlar</h1>
-      <p style="font-size:13px;color:#8c8c8c;margin-top:4px">Tree yapısında destinasyon yönetimi</p>
-    </div>
-    <button class="btn btn-primary" onclick="newDest()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      Yeni Destinasyon
-    </button>
+    <div><h1 id="t-title"></h1><p id="t-sub"></p></div>
+    <button class="btn btn-primary" onclick="newDest()" id="t-newdest"></button>
   </div>
-
   <div class="layout">
-    <!-- Tree -->
     <div class="tree-card">
       <div class="tree-header">
-        <h3>🗺️ Destinasyon Ağacı</h3>
+        <h3 id="t-tree"></h3>
         <span style="font-size:11px;color:#8c8c8c" id="dest-count"></span>
       </div>
-      <div class="tree-body" id="tree-body">
-        <div style="text-align:center;padding:32px;color:#8c8c8c;font-size:13px">Yükleniyor…</div>
-      </div>
+      <div class="tree-body" id="tree-body"></div>
     </div>
-
-    <!-- Editor -->
     <div class="editor-card" id="editor-card">
       <div class="empty-editor" id="empty-editor">
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        <h3>Destinasyon Seçin</h3>
-        <p style="font-size:13px">Sol ağaçtan bir destinasyon seçin veya yeni ekleyin</p>
+        <h3 id="t-select"></h3>
+        <p id="t-selectsub" style="font-size:13px"></p>
       </div>
       <div id="dest-editor" style="display:none">
         <div class="editor-header">
-          <h3 id="editor-title">Destinasyon Düzenle</h3>
-          <div style="display:flex;gap:8px">
-            <button class="btn btn-danger btn-sm" id="delete-btn" onclick="deleteDest()">Sil</button>
-          </div>
+          <h3 id="editor-title"></h3>
+          <button class="btn btn-danger btn-sm" onclick="deleteDest()" id="t-delete"></button>
         </div>
         <div class="editor-body">
-          <div class="editor-notice" id="editor-notice">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            Editor olarak kaydettiğinizde taslak olarak bekler, Admin onayı gerekir.
-          </div>
-
-          <!-- Tabs -->
-          <div class="tabs">
-            <div class="tab active" onclick="switchTab('general',this)">Genel</div>
-            <div class="tab" onclick="switchTab('content',this)">İçerik (DE/EN/TR)</div>
-            <div class="tab" onclick="switchTab('seo',this)">Görsel & SEO</div>
-          </div>
-
-          <!-- General Tab -->
+          <div class="editor-notice" id="editor-notice"></div>
+          <div class="tabs" id="tabs-row"></div>
           <div class="tab-content active" id="tab-general">
             <div class="form-row">
-              <div class="form-group">
-                <label>ID <span class="req">*</span></label>
-                <input id="f-id" placeholder="ayt, bjv, belek…"/>
-              </div>
-              <div class="form-group">
-                <label>IATA Kodu <span class="req">*</span></label>
-                <input id="f-code" placeholder="AYT, BJV…" style="text-transform:uppercase"/>
-              </div>
+              <div class="form-group"><label id="lbl-id"></label><input id="f-id" placeholder="ayt, bjv…"/></div>
+              <div class="form-group"><label id="lbl-code"></label><input id="f-code" placeholder="AYT, BJV…" style="text-transform:uppercase"/></div>
             </div>
             <div class="form-row">
-              <div class="form-group">
-                <label>Bölge</label>
+              <div class="form-group"><label id="lbl-region"></label>
                 <select id="f-region">
-                  <option value="turkey">🇹🇷 Türkiye</option>
-                  <option value="egypt">🇪🇬 Mısır</option>
+                  <option value="turkey" id="opt-turkey"></option>
+                  <option value="egypt" id="opt-egypt"></option>
                 </select>
               </div>
-              <div class="form-group">
-                <label>Emoji Bayrak</label>
-                <input id="f-flag" placeholder="🇹🇷" style="font-size:20px"/>
-              </div>
+              <div class="form-group"><label id="lbl-flag"></label><input id="f-flag" placeholder="🇹🇷" style="font-size:20px"/></div>
             </div>
             <div class="form-row">
-              <div class="form-group">
-                <label>Fiyat (ab €)</label>
-                <input id="f-price" type="number" placeholder="449"/>
-              </div>
-              <div class="form-group">
-                <label>Üst Destinasyon</label>
-                <select id="f-parent">
-                  <option value="">— Ana destinasyon —</option>
-                </select>
+              <div class="form-group"><label id="lbl-price"></label><input id="f-price" type="number" placeholder="449"/></div>
+              <div class="form-group"><label id="lbl-parent"></label>
+                <select id="f-parent"><option value="" id="opt-noparent"></option></select>
               </div>
             </div>
-            <div class="form-group">
-              <label>Badge</label>
-              <div class="badge-opts" id="badge-opts">
-                <span class="badge-opt sel" data-v="" onclick="selBadge(this)" style="background:#f4f6f9;color:#666">Yok</span>
-                <span class="badge-opt" data-v="beliebt" onclick="selBadge(this)" style="background:#ffedd5;color:#c2410c">Beliebt</span>
-                <span class="badge-opt" data-v="neu" onclick="selBadge(this)" style="background:#dbeafe;color:#1d4ed8">Neu</span>
-                <span class="badge-opt" data-v="angebot" onclick="selBadge(this)" style="background:#fef9c3;color:#854d0e">Angebot</span>
-                <span class="badge-opt" data-v="premium" onclick="selBadge(this)" style="background:#ede9fe;color:#6d28d9">Premium</span>
-                <span class="badge-opt" data-v="luxus" onclick="selBadge(this)" style="background:#fce7f3;color:#be185d">Luxus</span>
-              </div>
+            <div class="form-group"><label id="lbl-badge"></label>
+              <div class="badge-opts" id="badge-opts"></div>
             </div>
             <div class="form-group">
-              <label>Highlights (tıkla kaldır)</label>
+              <label id="lbl-highlights"></label>
               <div class="highlights-wrap" id="highlights-wrap"></div>
               <div class="highlight-add">
-                <input id="hl-input" placeholder="Strand, Pool, Kultur…" onkeydown="if(event.key==='Enter'){addHighlight();event.preventDefault()}"/>
-                <button class="btn btn-outline btn-sm" onclick="addHighlight()">Ekle</button>
+                <input id="hl-input" onkeydown="if(event.key==='Enter'){addHighlight();event.preventDefault()}"/>
+                <button class="btn btn-outline btn-sm" onclick="addHighlight()" id="t-addhl"></button>
               </div>
             </div>
           </div>
-
-          <!-- Content Tab -->
           <div class="tab-content" id="tab-content">
-            <div class="section-title">🇩🇪 Almanca</div>
-            <div class="form-group"><label>İsim (DE)</label><input id="f-name-de" placeholder="Antalya"/></div>
-            <div class="form-group"><label>Açıklama (DE)</label><textarea id="f-desc-de" rows="3"></textarea></div>
-            <div class="section-title">🇬🇧 İngilizce</div>
-            <div class="form-group"><label>İsim (EN)</label><input id="f-name-en" placeholder="Antalya"/></div>
-            <div class="form-group"><label>Açıklama (EN)</label><textarea id="f-desc-en" rows="3"></textarea></div>
-            <div class="section-title">🇹🇷 Türkçe</div>
-            <div class="form-group"><label>İsim (TR)</label><input id="f-name-tr" placeholder="Antalya"/></div>
-            <div class="form-group"><label>Açıklama (TR)</label><textarea id="f-desc-tr" rows="3"></textarea></div>
+            <div class="section-title" id="sec-de"></div>
+            <div class="form-group"><label id="lbl-name-de"></label><input id="f-name-de"/></div>
+            <div class="form-group"><label id="lbl-desc-de"></label><textarea id="f-desc-de"></textarea></div>
+            <div class="section-title" id="sec-en"></div>
+            <div class="form-group"><label id="lbl-name-en"></label><input id="f-name-en"/></div>
+            <div class="form-group"><label id="lbl-desc-en"></label><textarea id="f-desc-en"></textarea></div>
+            <div class="section-title" id="sec-tr"></div>
+            <div class="form-group"><label id="lbl-name-tr"></label><input id="f-name-tr"/></div>
+            <div class="form-group"><label id="lbl-desc-tr"></label><textarea id="f-desc-tr"></textarea></div>
           </div>
-
-          <!-- SEO Tab -->
           <div class="tab-content" id="tab-seo">
-            <div class="form-group"><label>Unsplash Arama Sorgusu</label><input id="f-query" placeholder="antalya turkey beach resort"/></div>
-            <div class="form-group" style="margin-top:8px">
-              <label>Önizleme Görseli</label>
-              <div id="img-preview" style="height:160px;background:#f4f6f9;border-radius:8px;border:1px solid #dde3ea;display:flex;align-items:center;justify-content:center;color:#8c8c8c;font-size:13px;margin-top:6px;background-size:cover;background-position:center">
-                Sorgu girildiğinde önizleme yüklenir
-              </div>
-              <button class="btn btn-outline btn-sm" style="margin-top:8px" onclick="previewImg()">Görseli Önizle</button>
+            <div class="form-group"><label id="lbl-query"></label><input id="f-query"/></div>
+            <div class="form-group">
+              <div id="img-preview" style="height:160px;background:#f4f6f9;border-radius:8px;border:1px solid #dde3ea;display:flex;align-items:center;justify-content:center;font-size:13px;margin-top:6px;background-size:cover;background-position:center" id="img-preview-box"></div>
+              <button class="btn btn-outline btn-sm" style="margin-top:8px" onclick="previewImg()" id="t-preview"></button>
             </div>
           </div>
         </div>
         <div class="action-bar">
-          <button class="btn btn-primary" onclick="saveDest()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-            <span id="save-btn-label">Kaydet</span>
-          </button>
-          <button class="btn btn-outline" onclick="cancelEdit()">İptal</button>
-          <span class="save-status" id="save-status">✓ Kaydedildi</span>
+          <button class="btn btn-primary" onclick="saveDest()" id="t-savebtn"></button>
+          <button class="btn btn-outline" onclick="cancelEdit()" id="t-cancel"></button>
+          <span class="save-status" id="save-status"></span>
           <div style="flex:1"></div>
           <span id="edit-mode-badge" style="font-size:11px;color:#8c8c8c"></span>
         </div>
@@ -284,298 +157,272 @@
   </div>
 </main>
 
+<script src="i18n.js"></script>
+<script src="sidebar.js"></script>
 <script>
-  const role = sessionStorage.getItem('sxh-role');
-  const user = sessionStorage.getItem('sxh-user') || 'User';
-  if(!role) location.href = 'index.html';
+  const role=sessionStorage.getItem('sxh-role');
+  if(!role) location.href='index.html';
 
-  document.getElementById('ua').textContent = user.charAt(0);
-  document.getElementById('un').textContent = user;
-  document.getElementById('ur').textContent = role === 'admin' ? 'Administrator' : 'Editor';
-  if(role === 'editor'){
-    document.getElementById('editor-notice').classList.add('show');
-    document.getElementById('save-btn-label').textContent = 'Taslak Kaydet';
-    document.getElementById('edit-mode-badge').textContent = '📝 Editor modu — taslak olarak kaydedilir';
+  const UNSPLASH_KEY='i2yfxF4kYEr9M2VD_gPcxVA7vW6VHQlP6cuFipkMneM';
+  let allDests=[],selectedId=null,highlights=[],selectedBadge='',isNew=false;
+
+  function applyTranslations(){
+    renderSidebar('destinations');
+    document.getElementById('t-title').textContent=a('destinationsTitle');
+    document.getElementById('t-sub').textContent=a('destinationsSub');
+    document.getElementById('t-newdest').innerHTML=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>${a('newDest')}`;
+    document.getElementById('t-tree').textContent=a('destTree');
+    document.getElementById('t-select').textContent=a('selectDest');
+    document.getElementById('t-selectsub').textContent=a('selectDestSub');
+    document.getElementById('t-delete').textContent=a('delete');
+    document.getElementById('t-cancel').textContent=a('cancel');
+    // Tabs
+    document.getElementById('tabs-row').innerHTML=[
+      {id:'general',label:a('tabGeneral')},
+      {id:'content',label:a('tabContent')},
+      {id:'seo',label:a('tabSeo')},
+    ].map((t,i)=>`<div class="tab ${i===0?'active':''}" onclick="switchTab('${t.id}',this)">${t.label}</div>`).join('');
+    // Form labels
+    document.getElementById('lbl-id').innerHTML=a('fieldId')+' <span class="req">*</span>';
+    document.getElementById('lbl-code').innerHTML=a('fieldCode')+' <span class="req">*</span>';
+    document.getElementById('lbl-region').textContent=a('fieldRegion');
+    document.getElementById('lbl-flag').textContent=a('fieldFlag');
+    document.getElementById('lbl-price').textContent=a('fieldPrice');
+    document.getElementById('lbl-parent').textContent=a('fieldParent');
+    document.getElementById('lbl-badge').textContent=a('fieldBadge');
+    document.getElementById('lbl-highlights').textContent=a('fieldHighlights');
+    document.getElementById('hl-input').placeholder=a('highlightPlaceholder');
+    document.getElementById('t-addhl').textContent=a('addHighlight');
+    document.getElementById('opt-turkey').textContent=a('regionTurkey');
+    document.getElementById('opt-egypt').textContent=a('regionEgypt');
+    document.getElementById('sec-de').textContent=a('sectionDE');
+    document.getElementById('sec-en').textContent=a('sectionEN');
+    document.getElementById('sec-tr').textContent=a('sectionTR');
+    document.getElementById('lbl-name-de').textContent=a('fieldName')+' (DE)';
+    document.getElementById('lbl-name-en').textContent=a('fieldName')+' (EN)';
+    document.getElementById('lbl-name-tr').textContent=a('fieldName')+' (TR)';
+    document.getElementById('lbl-desc-de').textContent=a('fieldDesc')+' (DE)';
+    document.getElementById('lbl-desc-en').textContent=a('fieldDesc')+' (EN)';
+    document.getElementById('lbl-desc-tr').textContent=a('fieldDesc')+' (TR)';
+    document.getElementById('lbl-query').textContent=a('fieldQuery');
+    document.getElementById('img-preview-box').textContent=a('imgPreviewHint');
+    document.getElementById('t-preview').textContent=a('previewImg');
+    // Badge opts
+    const badgeData=[
+      {v:'',label:a('badgeNone'),style:'background:#f4f6f9;color:#666'},
+      {v:'beliebt',label:'Beliebt',style:'background:#ffedd5;color:#c2410c'},
+      {v:'neu',label:'Neu',style:'background:#dbeafe;color:#1d4ed8'},
+      {v:'angebot',label:'Angebot',style:'background:#fef9c3;color:#854d0e'},
+      {v:'premium',label:'Premium',style:'background:#ede9fe;color:#6d28d9'},
+      {v:'luxus',label:'Luxus',style:'background:#fce7f3;color:#be185d'},
+    ];
+    document.getElementById('badge-opts').innerHTML=badgeData.map(b=>`<span class="badge-opt ${b.v===selectedBadge?'sel':''}" data-v="${b.v}" onclick="selBadge(this)" style="${b.style}">${b.label}</span>`).join('');
+    if(role==='editor'){
+      document.getElementById('editor-notice').innerHTML=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>${a('editorNotice')}`;
+      document.getElementById('editor-notice').classList.add('show');
+      document.getElementById('t-savebtn').textContent=a('saveDraftBtn');
+      document.getElementById('edit-mode-badge').textContent=a('editorModeNote');
+    } else {
+      document.getElementById('t-savebtn').innerHTML=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>${a('saveBtn')}`;
+    }
   }
 
-  function logout(){ sessionStorage.clear(); location.href='index.html'; }
-
-  let allDests = [];
-  let selectedId = null;
-  let highlights = [];
-  let selectedBadge = '';
-  let isNew = false;
-
-  const UNSPLASH_KEY = 'i2yfxF4kYEr9M2VD_gPcxVA7vW6VHQlP6cuFipkMneM';
-
   async function loadDests(){
+    document.getElementById('tree-body').innerHTML=`<div style="text-align:center;padding:32px;color:#8c8c8c;font-size:13px">${a('loading')}</div>`;
     try{
-      const r = await fetch('../data/destinations.json?_='+Date.now());
-      const d = await r.json();
-      allDests = d.destinations || [];
+      const r=await fetch('../data/destinations.json?_='+Date.now());
+      const d=await r.json();
+      allDests=d.destinations||[];
       renderTree();
-      document.getElementById('dest-count').textContent = allDests.length + ' destinasyon';
+      document.getElementById('dest-count').textContent=a('destCount').replace('{n}',allDests.length);
       buildParentSelect();
-    } catch(e){
-      document.getElementById('tree-body').innerHTML = '<div style="color:#dc2626;padding:16px;font-size:13px">Yükleme hatası: '+e.message+'</div>';
+    }catch(e){
+      document.getElementById('tree-body').innerHTML=`<div style="color:#dc2626;padding:16px;font-size:13px">${a('loadError')}: ${e.message}</div>`;
     }
   }
 
   function renderTree(){
-    const roots = allDests.filter(d => !d.parent);
-    const regions = {};
-    roots.forEach(d => {
-      const rk = d.regionKey || 'other';
-      if(!regions[rk]) regions[rk] = [];
-      regions[rk].push(d);
-    });
-    const regionLabels = { turkey:'🇹🇷 Türkiye', egypt:'🇪🇬 Mısır', other:'Diğer' };
-    let html = '';
-    for(const [rk, dests] of Object.entries(regions)){
-      html += `<div class="tree-region">
-        <div class="tree-region-label">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-          ${regionLabels[rk]||rk}
-        </div>
-        <div class="tree-children">${dests.map(d => renderTreeItem(d, false)).join('')}</div>
-      </div>`;
+    const roots=allDests.filter(d=>!d.parent);
+    const regions={};
+    roots.forEach(d=>{const rk=d.regionKey||'other';if(!regions[rk])regions[rk]=[];regions[rk].push(d);});
+    const rl={'turkey':a('regionTurkey'),'egypt':a('regionEgypt')};
+    let html='';
+    for(const [rk,dests] of Object.entries(regions)){
+      html+=`<div><div class="tree-region-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>${rl[rk]||rk}</div><div>${dests.map(d=>renderItem(d,false)).join('')}</div></div>`;
     }
-    document.getElementById('tree-body').innerHTML = html || '<div style="text-align:center;padding:32px;color:#8c8c8c;font-size:13px">Henüz destinasyon yok</div>';
+    document.getElementById('tree-body').innerHTML=html||`<div style="text-align:center;padding:32px;color:#8c8c8c;font-size:13px">${a('noDests')}</div>`;
   }
 
-  function renderTreeItem(d, isChild){
-    const children = allDests.filter(c => c.parent === d.id);
-    const hasChildren = children.length > 0;
-    const cls = `tree-item${isChild?' child':''}${selectedId===d.id?' selected':''}`;
-    let html = `<div class="${cls}" id="ti-${d.id}" onclick="selectDest('${d.id}')">`;
-    if(hasChildren){
-      html += `<svg class="tree-toggle" id="tog-${d.id}" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" onclick="event.stopPropagation();toggleChildren('${d.id}')"><polyline points="9 18 15 12 9 6"/></svg>`;
-    } else {
-      html += `<span style="width:14px;flex-shrink:0"></span>`;
-    }
-    html += `<span class="tree-item-flag">${d.flag||'📍'}</span>
-      <span class="tree-item-name">${d.name?.de || d.id}</span>
-      <span class="tree-item-code">${d.code||''}</span>
-    </div>`;
-    if(hasChildren){
-      html += `<div class="tree-grandchildren" id="gc-${d.id}">${children.map(c=>renderTreeItem(c,true)).join('')}</div>`;
-    }
-    return html;
+  function renderItem(d,isChild){
+    const children=allDests.filter(c=>c.parent===d.id);
+    const hasCh=children.length>0;
+    const cls=`tree-item${isChild?' child':''}${selectedId===d.id?' selected':''}`;
+    const nm=d.name?.[ADMIN_LANG]||d.name?.de||d.id;
+    let h=`<div class="${cls}" id="ti-${d.id}" onclick="selectDest('${d.id}')">`;
+    h+=hasCh?`<svg class="tree-toggle" id="tog-${d.id}" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" onclick="event.stopPropagation();toggleCh('${d.id}')"><polyline points="9 18 15 12 9 6"/></svg>`:`<span style="width:14px;flex-shrink:0"></span>`;
+    h+=`<span class="tree-item-flag">${d.flag||'📍'}</span><span class="tree-item-name">${nm}</span><span class="tree-item-code">${d.code||''}</span></div>`;
+    if(hasCh) h+=`<div class="tree-grandchildren" id="gc-${d.id}">${children.map(c=>renderItem(c,true)).join('')}</div>`;
+    return h;
   }
 
-  function toggleChildren(id){
-    const gc = document.getElementById('gc-'+id);
-    const tog = document.getElementById('tog-'+id);
-    if(gc){ gc.classList.toggle('open'); }
-    if(tog){ tog.classList.toggle('open'); }
+  function toggleCh(id){
+    document.getElementById('gc-'+id)?.classList.toggle('open');
+    document.getElementById('tog-'+id)?.classList.toggle('open');
   }
 
   function buildParentSelect(){
-    const sel = document.getElementById('f-parent');
-    const roots = allDests.filter(d => !d.parent);
-    sel.innerHTML = '<option value="">— Ana destinasyon —</option>' +
-      roots.map(d=>`<option value="${d.id}">${d.flag||''} ${d.name?.de||d.id}</option>`).join('');
+    const sel=document.getElementById('f-parent');
+    const roots=allDests.filter(d=>!d.parent);
+    sel.innerHTML=`<option value="">${a('noParent')}</option>`+roots.map(d=>`<option value="${d.id}">${d.flag||''} ${d.name?.[ADMIN_LANG]||d.name?.de||d.id}</option>`).join('');
+    if(selectedId) sel.value=allDests.find(x=>x.id===selectedId)?.parent||'';
   }
 
   function selectDest(id){
-    selectedId = id;
-    isNew = false;
-    const d = allDests.find(x => x.id === id);
-    if(!d) return;
-    // Update tree selection
+    selectedId=id;isNew=false;
     document.querySelectorAll('.tree-item').forEach(el=>el.classList.remove('selected'));
-    const ti = document.getElementById('ti-'+id);
-    if(ti){ ti.classList.add('selected'); if(d.parent){ const gc=document.getElementById('gc-'+d.parent); if(gc)gc.classList.add('open'); const tog=document.getElementById('tog-'+d.parent); if(tog)tog.classList.add('open'); } }
-    // Fill form
+    const ti=document.getElementById('ti-'+id);
+    if(ti){ti.classList.add('selected');}
+    const d=allDests.find(x=>x.id===id);if(!d)return;
+    if(d.parent){toggleCh(d.parent);}
     document.getElementById('empty-editor').style.display='none';
     document.getElementById('dest-editor').style.display='block';
-    document.getElementById('editor-title').textContent = d.name?.de || d.id;
-    document.getElementById('f-id').value = d.id || '';
-    document.getElementById('f-code').value = d.code || '';
-    document.getElementById('f-region').value = d.regionKey || 'turkey';
-    document.getElementById('f-flag').value = d.flag || '';
-    document.getElementById('f-price').value = d.price || '';
-    document.getElementById('f-parent').value = d.parent || '';
-    document.getElementById('f-name-de').value = d.name?.de || '';
-    document.getElementById('f-name-en').value = d.name?.en || '';
-    document.getElementById('f-name-tr').value = d.name?.tr || '';
-    document.getElementById('f-desc-de').value = d.desc?.de || '';
-    document.getElementById('f-desc-en').value = d.desc?.en || '';
-    document.getElementById('f-desc-tr').value = d.desc?.tr || '';
-    document.getElementById('f-query').value = d.query || '';
-    highlights = [...(d.highlights||[])];
+    document.getElementById('editor-title').textContent=d.name?.[ADMIN_LANG]||d.name?.de||d.id;
+    document.getElementById('f-id').value=d.id||'';
+    document.getElementById('f-code').value=d.code||'';
+    document.getElementById('f-region').value=d.regionKey||'turkey';
+    document.getElementById('f-flag').value=d.flag||'';
+    document.getElementById('f-price').value=d.price||'';
+    document.getElementById('f-parent').value=d.parent||'';
+    document.getElementById('f-name-de').value=d.name?.de||'';
+    document.getElementById('f-name-en').value=d.name?.en||'';
+    document.getElementById('f-name-tr').value=d.name?.tr||'';
+    document.getElementById('f-desc-de').value=d.desc?.de||'';
+    document.getElementById('f-desc-en').value=d.desc?.en||'';
+    document.getElementById('f-desc-tr').value=d.desc?.tr||'';
+    document.getElementById('f-query').value=d.query||'';
+    highlights=[...(d.highlights||[])];
     renderHighlights();
-    selectedBadge = d.badge || '';
-    document.querySelectorAll('.badge-opt').forEach(b=>b.classList.toggle('sel', b.dataset.v===selectedBadge));
-    // Auto expand parent
-    if(d.parent) toggleChildren(d.parent);
+    selectedBadge=d.badge||'';
+    document.querySelectorAll('.badge-opt').forEach(b=>b.classList.toggle('sel',b.dataset.v===selectedBadge));
   }
 
   function newDest(){
-    selectedId = null;
-    isNew = true;
+    selectedId=null;isNew=true;
     document.querySelectorAll('.tree-item').forEach(el=>el.classList.remove('selected'));
     document.getElementById('empty-editor').style.display='none';
     document.getElementById('dest-editor').style.display='block';
-    document.getElementById('editor-title').textContent = 'Yeni Destinasyon';
-    ['f-id','f-code','f-flag','f-price','f-name-de','f-name-en','f-name-tr','f-desc-de','f-desc-en','f-desc-tr','f-query'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+    document.getElementById('editor-title').textContent=a('newDestTitle');
+    ['f-id','f-code','f-flag','f-price','f-name-de','f-name-en','f-name-tr','f-desc-de','f-desc-en','f-desc-tr','f-query'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
     document.getElementById('f-region').value='turkey';
     document.getElementById('f-parent').value='';
-    highlights=[];
-    renderHighlights();
-    selectedBadge='';
+    highlights=[];renderHighlights();selectedBadge='';
     document.querySelectorAll('.badge-opt').forEach(b=>b.classList.toggle('sel',b.dataset.v===''));
     switchTabById('general');
   }
 
-  function cancelEdit(){
-    selectedId=null;
-    document.querySelectorAll('.tree-item').forEach(el=>el.classList.remove('selected'));
-    document.getElementById('empty-editor').style.display='';
-    document.getElementById('dest-editor').style.display='none';
-  }
+  function cancelEdit(){selectedId=null;document.querySelectorAll('.tree-item').forEach(el=>el.classList.remove('selected'));document.getElementById('empty-editor').style.display='';document.getElementById('dest-editor').style.display='none';}
 
-  function switchTab(name, btn){
+  function switchTab(name,btn){
     document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById('tab-'+name).classList.add('active');
+    btn.classList.add('active');document.getElementById('tab-'+name).classList.add('active');
   }
-
   function switchTabById(name){
     document.querySelectorAll('.tab').forEach((t,i)=>{t.classList.toggle('active',['general','content','seo'][i]===name);});
     document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
     document.getElementById('tab-'+name).classList.add('active');
   }
 
-  function selBadge(el){
-    document.querySelectorAll('.badge-opt').forEach(b=>b.classList.remove('sel'));
-    el.classList.add('sel');
-    selectedBadge = el.dataset.v;
-  }
+  function selBadge(el){document.querySelectorAll('.badge-opt').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');selectedBadge=el.dataset.v;}
 
   function renderHighlights(){
-    const wrap = document.getElementById('highlights-wrap');
-    wrap.innerHTML = highlights.map((h,i)=>`<span class="highlight-chip" onclick="removeHL(${i})">${h} ×</span>`).join('');
+    document.getElementById('highlights-wrap').innerHTML=highlights.map((h,i)=>`<span class="highlight-chip" onclick="removeHL(${i})">${h} ×</span>`).join('');
   }
-  function addHighlight(){
-    const inp = document.getElementById('hl-input');
-    const v = inp.value.trim();
-    if(v && !highlights.includes(v)){ highlights.push(v); renderHighlights(); }
-    inp.value='';
-  }
-  function removeHL(i){ highlights.splice(i,1); renderHighlights(); }
+  function addHighlight(){const inp=document.getElementById('hl-input');const v=inp.value.trim();if(v&&!highlights.includes(v)){highlights.push(v);renderHighlights();}inp.value='';}
+  function removeHL(i){highlights.splice(i,1);renderHighlights();}
 
   function getFormData(){
-    return {
-      id: document.getElementById('f-id').value.trim().toLowerCase(),
-      code: document.getElementById('f-code').value.trim().toUpperCase(),
-      regionKey: document.getElementById('f-region').value,
-      flag: document.getElementById('f-flag').value.trim(),
-      price: document.getElementById('f-price').value.trim(),
-      parent: document.getElementById('f-parent').value || undefined,
-      badge: selectedBadge || null,
-      query: document.getElementById('f-query').value.trim(),
-      highlights: [...highlights],
-      children: isNew ? [] : (allDests.find(d=>d.id===selectedId)?.children||[]),
-      name: { de: document.getElementById('f-name-de').value.trim(), en: document.getElementById('f-name-en').value.trim(), tr: document.getElementById('f-name-tr').value.trim() },
-      desc: { de: document.getElementById('f-desc-de').value.trim(), en: document.getElementById('f-desc-en').value.trim(), tr: document.getElementById('f-desc-tr').value.trim() },
+    return{
+      id:document.getElementById('f-id').value.trim().toLowerCase(),
+      code:document.getElementById('f-code').value.trim().toUpperCase(),
+      regionKey:document.getElementById('f-region').value,
+      flag:document.getElementById('f-flag').value.trim(),
+      price:document.getElementById('f-price').value.trim(),
+      parent:document.getElementById('f-parent').value||undefined,
+      badge:selectedBadge||null,
+      query:document.getElementById('f-query').value.trim(),
+      highlights:[...highlights],
+      children:isNew?[]:(allDests.find(d=>d.id===selectedId)?.children||[]),
+      name:{de:document.getElementById('f-name-de').value.trim(),en:document.getElementById('f-name-en').value.trim(),tr:document.getElementById('f-name-tr').value.trim()},
+      desc:{de:document.getElementById('f-desc-de').value.trim(),en:document.getElementById('f-desc-en').value.trim(),tr:document.getElementById('f-desc-tr').value.trim()},
     };
   }
 
   async function saveDest(){
-    const data = getFormData();
-    if(!data.id){ alert('ID zorunludur.'); return; }
-    if(!data.code){ alert('IATA kodu zorunludur.'); return; }
-
-    if(isNew){
-      if(allDests.find(d=>d.id===data.id)){ alert('Bu ID zaten mevcut.'); return; }
-      allDests.push(data);
-      // Update parent's children array
-      if(data.parent){
-        const par = allDests.find(d=>d.id===data.parent);
-        if(par && !par.children) par.children=[];
-        if(par && !par.children.includes(data.id)) par.children.push(data.id);
-      }
-    } else {
-      const idx = allDests.findIndex(d=>d.id===selectedId);
-      if(idx>=0) allDests[idx]={...allDests[idx],...data};
-    }
-
-    const newJson = { destinations: allDests };
-
-    if(role==='admin'){
-      await pushToGitHub(newJson, data.name?.de || data.id);
-    } else {
-      saveDraft(newJson, data);
-    }
-
-    selectedId = data.id;
-    isNew = false;
-    renderTree();
-    buildParentSelect();
-    document.getElementById('editor-title').textContent = data.name?.de || data.id;
-    const ss = document.getElementById('save-status');
-    ss.textContent = role==='admin' ? '✓ Yayınlandı' : '✓ Taslak kaydedildi';
-    ss.classList.add('show');
-    setTimeout(()=>ss.classList.remove('show'),3000);
+    const data=getFormData();
+    if(!data.id){alert(a('idRequired'));return;}
+    if(!data.code){alert(a('codeRequired'));return;}
+    if(isNew&&allDests.find(d=>d.id===data.id)){alert(a('idExists'));return;}
+    if(isNew){allDests.push(data);if(data.parent){const par=allDests.find(d=>d.id===data.parent);if(par){if(!par.children)par.children=[];if(!par.children.includes(data.id))par.children.push(data.id);}}}
+    else{const idx=allDests.findIndex(d=>d.id===selectedId);if(idx>=0)allDests[idx]={...allDests[idx],...data};}
+    const newJson={destinations:allDests};
+    if(role==='admin') await pushToGitHub(newJson,data.name?.de||data.id);
+    else saveDraft(newJson,data);
+    selectedId=data.id;isNew=false;
+    renderTree();buildParentSelect();
+    document.getElementById('editor-title').textContent=data.name?.[ADMIN_LANG]||data.name?.de||data.id;
+    document.getElementById('dest-count').textContent=a('destCount').replace('{n}',allDests.length);
+    const ss=document.getElementById('save-status');
+    ss.textContent=role==='admin'?a('publishedMsg'):a('draftSavedMsg');
+    ss.classList.add('show');setTimeout(()=>ss.classList.remove('show'),3000);
   }
 
   async function deleteDest(){
-    if(!selectedId) return;
-    const d = allDests.find(x=>x.id===selectedId);
-    const children = allDests.filter(c=>c.parent===selectedId);
-    if(children.length){ alert(`Bu destinasyonun ${children.length} alt destinasyonu var. Önce onları silin.`); return; }
-    if(!confirm(`"${d?.name?.de||selectedId}" silinsin mi?`)) return;
-    allDests = allDests.filter(x=>x.id!==selectedId);
-    // Remove from parent children
-    allDests.forEach(d=>{ if(d.children) d.children=d.children.filter(c=>c!==selectedId); });
-    const newJson = { destinations: allDests };
-    if(role==='admin') await pushToGitHub(newJson, 'Silindi: '+selectedId);
-    else saveDraft(newJson, {id:selectedId, name:{de:'Silindi: '+selectedId}});
-    cancelEdit();
-    renderTree();
-    buildParentSelect();
+    if(!selectedId)return;
+    const d=allDests.find(x=>x.id===selectedId);
+    const children=allDests.filter(c=>c.parent===selectedId);
+    if(children.length){alert(a('hasChildrenError').replace('{n}',children.length));return;}
+    if(!confirm(a('deleteConfirm').replace('{name}',d?.name?.[ADMIN_LANG]||selectedId)))return;
+    allDests=allDests.filter(x=>x.id!==selectedId);
+    allDests.forEach(d=>{if(d.children)d.children=d.children.filter(c=>c!==selectedId);});
+    const newJson={destinations:allDests};
+    if(role==='admin') await pushToGitHub(newJson,'Deleted: '+selectedId);
+    else saveDraft(newJson,{id:selectedId,name:{de:'Deleted: '+selectedId}});
+    cancelEdit();renderTree();buildParentSelect();
+    document.getElementById('dest-count').textContent=a('destCount').replace('{n}',allDests.length);
   }
 
-  function saveDraft(content, data){
-    const drafts = JSON.parse(localStorage.getItem('sxh-drafts')||'[]');
-    const idx = drafts.findIndex(d=>d.id===data.id);
-    const draft = { id:data.id, name:data.name?.de||data.id, type:'Destinasyon', date:new Date().toLocaleDateString('de'), file:'data/destinations.json', content };
-    if(idx>=0) drafts[idx]=draft; else drafts.push(draft);
-    localStorage.setItem('sxh-drafts', JSON.stringify(drafts));
+  function saveDraft(content,data){
+    const drafts=JSON.parse(localStorage.getItem('sxh-drafts')||'[]');
+    const idx=drafts.findIndex(d=>d.id===data.id);
+    const draft={id:data.id,name:data.name?.[ADMIN_LANG]||data.name?.de||data.id,type:a('destinations'),date:new Date().toLocaleDateString(),file:'data/destinations.json',content};
+    if(idx>=0)drafts[idx]=draft;else drafts.push(draft);
+    localStorage.setItem('sxh-drafts',JSON.stringify(drafts));
   }
 
-  async function pushToGitHub(content, label){
-    const token = sessionStorage.getItem('sxh-token');
-    if(!token){ alert('GitHub token bulunamadı.'); return; }
+  async function pushToGitHub(content,label){
+    const token=sessionStorage.getItem('sxh-token');
+    if(!token){alert(a('tokenMissing'));return;}
     try{
-      const getR = await fetch('https://api.github.com/repos/ceycan07-ai/skh-site/contents/data/destinations.json',{
-        headers:{'Authorization':`token ${token}`,'Accept':'application/vnd.github.v3+json'}
-      });
-      const getD = await getR.json();
-      const putR = await fetch('https://api.github.com/repos/ceycan07-ai/skh-site/contents/data/destinations.json',{
-        method:'PUT',
-        headers:{'Authorization':`token ${token}`,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
-        body:JSON.stringify({ message:`cms: ${label}`, content:btoa(unescape(encodeURIComponent(JSON.stringify(content,null,2)))), sha:getD.sha })
-      });
-      if(!putR.ok) throw new Error('Push başarısız');
-      localStorage.setItem('sxh-last-updated', new Date().toLocaleDateString('de'));
-    } catch(e){ alert('Hata: '+e.message); }
+      const gr=await fetch('https://api.github.com/repos/ceycan07-ai/skh-site/contents/data/destinations.json',{headers:{'Authorization':`token ${token}`,'Accept':'application/vnd.github.v3+json'}});
+      const gd=await gr.json();
+      const pr=await fetch('https://api.github.com/repos/ceycan07-ai/skh-site/contents/data/destinations.json',{method:'PUT',headers:{'Authorization':`token ${token}`,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify({message:`cms: ${label}`,content:btoa(unescape(encodeURIComponent(JSON.stringify(content,null,2)))),sha:gd.sha})});
+      if(!pr.ok)throw new Error('Push failed');
+      localStorage.setItem('sxh-last-updated',new Date().toLocaleDateString());
+    }catch(e){alert(a('pushError')+e.message);}
   }
 
   async function previewImg(){
-    const q = document.getElementById('f-query').value.trim();
-    if(!q) return;
-    const el = document.getElementById('img-preview');
-    el.textContent = 'Yükleniyor…';
+    const q=document.getElementById('f-query').value.trim();if(!q)return;
+    const el=document.getElementById('img-preview-box');el.textContent=a('loading');
     try{
-      const r = await fetch(`https://api.unsplash.com/photos/random?query=${encodeURIComponent(q)}&orientation=landscape&client_id=${UNSPLASH_KEY}`);
-      const d = await r.json();
-      if(d?.urls?.regular){ el.style.backgroundImage=`url(${d.urls.regular})`; el.textContent=''; }
-    } catch(e){ el.textContent='Görsel yüklenemedi'; }
+      const r=await fetch(`https://api.unsplash.com/photos/random?query=${encodeURIComponent(q)}&orientation=landscape&client_id=${UNSPLASH_KEY}`);
+      const d=await r.json();
+      if(d?.urls?.regular){el.style.backgroundImage=`url(${d.urls.regular})`;el.textContent='';}
+    }catch(e){el.textContent=a('loadError');}
   }
 
+  applyTranslations();
   loadDests();
 </script>
 </body>
