@@ -1,835 +1,409 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rezervasyon — SunExpress Holidays</title>
-  <link rel="stylesheet" href="shared.css" />
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Buchung — SunExpress Holidays</title>
+  <link rel="stylesheet" href="shared.css"/>
   <style>
-    .booking-hero {
-      background: var(--blue-dark);
-      padding: 2rem 2.5rem 4.5rem;
-      position: relative;
-      overflow: hidden;
-    }
-    .booking-hero::after {
-      content: '';
-      position: absolute;
-      bottom: -2px; left: 0;
-      width: 100%; height: 56px;
-      background: var(--cream);
-      clip-path: ellipse(55% 100% at 50% 100%);
-    }
-    .booking-hero-inner { max-width: 900px; margin: 0 auto; }
-    .booking-hero h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 30px; font-weight: 700;
-      color: white; margin-bottom: 0.25rem;
-    }
-    .booking-hero p { font-size: 13px; color: rgba(255,255,255,0.55); }
+    .booking-wrap { max-width: 1100px; margin: 0 auto; padding: var(--sp-xl); display: grid; grid-template-columns: 1fr 340px; gap: var(--sp-xl); align-items: start; }
 
-    /* ── PROGRESS BAR ── */
-    .progress-bar {
-      display: flex;
-      align-items: center;
-      gap: 0;
-      margin-top: 2rem;
-    }
-    .progress-step {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      color: rgba(255,255,255,0.45);
-      font-weight: 400;
-    }
-    .progress-step.active { color: white; font-weight: 500; }
-    .progress-step.done { color: rgba(255,255,255,0.6); }
-    .step-circle {
-      width: 28px; height: 28px;
-      border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.2);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 12px; font-weight: 700;
-      color: rgba(255,255,255,0.4);
-      flex-shrink: 0;
-    }
-    .progress-step.active .step-circle {
-      background: var(--orange);
-      border-color: var(--orange);
-      color: white;
-    }
-    .progress-step.done .step-circle {
-      background: rgba(255,255,255,0.15);
-      border-color: rgba(255,255,255,0.3);
-      color: rgba(255,255,255,0.7);
-    }
-    .step-line {
-      flex: 1;
-      height: 2px;
-      background: rgba(255,255,255,0.15);
-      margin: 0 10px;
-    }
+    /* STEPPER */
+    .stepper { display: flex; align-items: center; justify-content: center; padding: 24px var(--sp-xl); background: #fff; border-bottom: 1px solid var(--grey-1); margin-bottom: 0; }
+    .step { display: flex; align-items: center; gap: 10px; }
+    .step-num { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; border: 2px solid var(--grey-2); color: var(--grey-3); background: #fff; transition: all .2s; }
+    .step-num.done { background: var(--blue); border-color: var(--blue); color: #fff; }
+    .step-num.active { background: var(--orange); border-color: var(--orange); color: #fff; }
+    .step-label { font-size: 13px; font-weight: 600; color: var(--grey-3); white-space: nowrap; }
+    .step-label.active { color: var(--orange); }
+    .step-label.done { color: var(--blue); }
+    .step-line { flex: 1; height: 2px; background: var(--grey-2); margin: 0 12px; min-width: 40px; transition: background .2s; }
+    .step-line.done { background: var(--blue); }
 
-    /* ── LAYOUT ── */
-    .booking-layout {
-      max-width: 900px;
-      margin: -24px auto 0;
-      padding: 0 2.5rem 3rem;
-      display: grid;
-      grid-template-columns: 1fr 300px;
-      gap: 1.75rem;
-      align-items: start;
-    }
+    /* FORM */
+    .form-section { background: #fff; border-radius: var(--r-lg); box-shadow: var(--sh-md); margin-bottom: 20px; overflow: hidden; }
+    .form-section-head { padding: 16px 20px; background: var(--greyblue-2); border-bottom: 1px solid var(--greyblue-1); display: flex; align-items: center; gap: 10px; }
+    .form-section-head h3 { font-size: 15px; font-weight: 700; color: var(--blue); }
+    .form-section-head .step-badge { width: 24px; height: 24px; border-radius: 50%; background: var(--blue); color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .form-body { padding: 20px; }
 
-    /* ── FORM SECTIONS ── */
-    .form-section {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-xl);
-      padding: 1.75rem;
-      margin-bottom: 1.25rem;
-    }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .form-grid.cols-1 { grid-template-columns: 1fr; }
 
-    .form-section-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 1.5rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid var(--border);
-    }
-    .form-section-num {
-      width: 30px; height: 30px;
-      border-radius: 50%;
-      background: var(--blue-dark);
-      color: white;
-      font-size: 13px;
-      font-weight: 700;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-    .form-section-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--blue-dark);
-    }
-    .form-section-sub { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
-
-    /* ── FORM GRID ── */
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-bottom: 1rem;
-    }
-    .form-row.three { grid-template-columns: 1fr 1fr 1fr; }
-    .form-row.full  { grid-template-columns: 1fr; }
-
-    .form-group { display: flex; flex-direction: column; }
-
-    .form-label {
-      font-size: 11px;
-      letter-spacing: 1.2px;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      font-weight: 500;
-      margin-bottom: 6px;
-    }
-    .form-label span { color: var(--orange); }
-
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-label { font-size: 13px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 4px; }
+    .form-label .req { color: var(--orange); }
     .form-input {
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 0.7rem 0.9rem;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 14px;
-      color: var(--text);
-      outline: none;
-      transition: border-color 0.18s, box-shadow 0.18s;
-      background: var(--white);
-      width: 100%;
+      height: 48px; border: 1px solid var(--grey-2); border-radius: var(--r-md);
+      padding: 0 14px; font-family: var(--font); font-size: 14px; color: var(--text);
+      background: #fff; transition: border-color .15s, box-shadow .15s; width: 100%;
     }
-    .form-input:focus {
-      border-color: var(--blue-light);
-      box-shadow: 0 0 0 3px rgba(0,159,227,0.12);
-    }
-    .form-input.error { border-color: #E24B4A; }
-    .form-input::placeholder { color: var(--text-muted); font-size: 13px; }
+    .form-input:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,69,143,.1); }
+    .form-input.error { border-color: var(--orange); }
+    .form-input::placeholder { color: var(--grey-3); }
+    .form-select { height: 48px; border: 1px solid var(--grey-2); border-radius: var(--r-md); padding: 0 14px; font-family: var(--font); font-size: 14px; color: var(--text); background: #fff; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238c8c8c'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; width: 100%; }
+    .form-select:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,69,143,.1); }
+    .form-error { font-size: 11px; color: var(--orange); display: none; }
+    .form-error.show { display: block; }
 
-    select.form-input { cursor: pointer; }
+    /* Traveller card */
+    .traveller-card { border: 1px solid var(--grey-1); border-radius: var(--r-lg); padding: 16px; margin-bottom: 16px; }
+    .traveller-card:last-child { margin-bottom: 0; }
+    .traveller-card-head { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--grey-1); }
+    .traveller-card-head h4 { font-size: 14px; font-weight: 700; color: var(--blue); }
+    .traveller-type { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: var(--r-full); }
 
-    .form-hint { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+    /* Payment */
+    .payment-methods { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+    .payment-method { border: 2px solid var(--grey-2); border-radius: var(--r-lg); padding: 12px 20px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--text); transition: all .15s; }
+    .payment-method:hover { border-color: var(--blue); color: var(--blue); }
+    .payment-method.selected { border-color: var(--blue); background: var(--greyblue-2); color: var(--blue); }
+    .payment-method svg { flex-shrink: 0; }
 
-    /* ── PASSENGER TABS ── */
-    .pax-tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 1.5rem;
-    }
-    .pax-tab {
-      padding: 6px 14px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      color: var(--text-muted);
-      background: var(--white);
-      transition: all 0.18s;
-    }
-    .pax-tab.active {
-      background: var(--blue-dark);
-      border-color: var(--blue-dark);
-      color: white;
-    }
+    .card-field-group { display: grid; gap: 12px; }
+    .card-number-wrap { position: relative; }
+    .card-icons { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); display: flex; gap: 4px; }
+    .card-icon { width: 32px; height: 20px; border-radius: 3px; background: var(--grey-2); display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700; color: var(--grey-3); }
 
-    /* ── FLIGHT SELECTION ── */
-    .flight-option {
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 1.1rem 1.25rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 0.75rem;
-      cursor: pointer;
-      transition: all 0.18s;
-    }
-    .flight-option:hover { border-color: var(--blue-light); }
-    .flight-option.selected {
-      border-color: var(--orange);
-      background: var(--orange-lt);
-    }
-    .flight-radio {
-      width: 18px; height: 18px;
-      border: 2px solid var(--border);
-      border-radius: 50%;
-      flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .flight-option.selected .flight-radio {
-      border-color: var(--orange);
-      background: var(--orange);
-    }
-    .flight-option.selected .flight-radio::after {
-      content: '';
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: white;
-    }
-    .flight-times {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .flight-time {
-      font-size: 17px;
-      font-weight: 600;
-      color: var(--blue-dark);
-    }
-    .flight-arrow { font-size: 13px; color: var(--text-muted); }
-    .flight-dur { font-size: 11px; color: var(--text-muted); }
-    .flight-stops {
-      font-size: 11px;
-      padding: 2px 7px;
-      border-radius: 5px;
-      background: var(--cream);
-      color: var(--text-muted);
-    }
-    .flight-price {
-      font-family: 'Playfair Display', serif;
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--blue-dark);
-    }
+    /* Checkbox */
+    .checkbox-row { display: flex; align-items: flex-start; gap: 10px; margin-top: 8px; }
+    .checkbox-row input[type=checkbox] { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--blue); flex-shrink: 0; cursor: pointer; }
+    .checkbox-row label { font-size: 13px; color: var(--text); cursor: pointer; line-height: 1.5; }
+    .checkbox-row label a { color: var(--blue); }
 
-    /* ── EXTRAS ── */
-    .extra-item {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 1rem;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      margin-bottom: 0.75rem;
-      cursor: pointer;
-      transition: border-color 0.18s;
-    }
-    .extra-item:hover { border-color: var(--blue-light); }
-    .extra-item input[type=checkbox] { accent-color: var(--orange); width: 18px; height: 18px; cursor: pointer; }
-    .extra-info { flex: 1; }
-    .extra-name { font-size: 14px; font-weight: 500; color: var(--text); }
-    .extra-desc { font-size: 12px; color: var(--text-muted); }
-    .extra-price { font-size: 14px; font-weight: 600; color: var(--blue-dark); }
+    /* Nav buttons */
+    .form-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
 
-    /* ── TERMS ── */
-    .terms-check {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      font-size: 13px;
-      color: var(--text-mid);
-      line-height: 1.5;
-    }
-    .terms-check input[type=checkbox] { accent-color: var(--orange); width: 16px; height: 16px; margin-top: 2px; cursor: pointer; }
-    .terms-check a { color: var(--blue-light); text-decoration: none; }
+    /* BOOKING SUMMARY CARD */
+    .summary-card { background: #fff; border-radius: var(--r-xl); box-shadow: var(--sh-lg); border: 1px solid var(--grey-1); overflow: hidden; position: sticky; top: 88px; }
+    .summary-head { padding: 16px 20px; background: var(--blue); color: #fff; }
+    .summary-head h3 { font-size: 15px; font-weight: 700; }
+    .summary-hotel { display: flex; gap: 12px; padding: 16px 20px; border-bottom: 1px solid var(--grey-1); }
+    .summary-hotel-img { width: 72px; height: 56px; border-radius: var(--r-md); flex-shrink: 0; background-size: cover; background-position: center; }
+    .summary-hotel-name { font-size: 14px; font-weight: 700; color: var(--blue); margin-bottom: 4px; }
+    .summary-hotel-meta { font-size: 12px; color: var(--grey-3); }
+    .summary-rows { padding: 16px 20px; }
+    .sum-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 10px; }
+    .sum-row span:first-child { color: var(--grey-3); }
+    .sum-row span:last-child { font-weight: 600; color: var(--text); }
+    .sum-divider { border: none; border-top: 1px solid var(--grey-1); margin: 12px 0; }
+    .sum-total { display: flex; justify-content: space-between; font-size: 18px; font-weight: 700; }
+    .sum-total .amount { color: var(--orange); }
+    .sum-features { padding: 16px 20px; border-top: 1px solid var(--grey-1); display: flex; flex-direction: column; gap: 8px; }
+    .sum-feat { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text); }
+    .sum-feat svg { color: var(--blue); flex-shrink: 0; }
 
-    .submit-btn {
-      width: 100%;
-      background: var(--orange);
-      color: white;
-      border: none;
-      border-radius: var(--radius-md);
-      padding: 1.1rem;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: opacity 0.18s, transform 0.15s;
-      margin-top: 1.25rem;
-    }
-    .submit-btn:hover { opacity: 0.88; transform: translateY(-1px); }
-    .submit-trust {
-      text-align: center;
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 0.75rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    /* ── ORDER SUMMARY ── */
-    .order-summary {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-xl);
-      overflow: hidden;
-      position: sticky;
-      top: 80px;
-    }
-
-    .os-header {
-      background: var(--blue-dark);
-      padding: 1.25rem 1.5rem;
-    }
-    .os-hotel { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; color: white; }
-    .os-sub { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 3px; }
-
-    .os-body { padding: 1.25rem 1.5rem; }
-
-    .os-detail {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 13px;
-      padding: 8px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .os-detail:last-child { border-bottom: none; }
-    .os-detail-label { color: var(--text-muted); }
-    .os-detail-val { font-weight: 500; color: var(--text); }
-
-    .os-total {
-      background: var(--cream);
-      border-radius: var(--radius-md);
-      padding: 1rem;
-      margin-top: 0.75rem;
-    }
-    .os-total-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 13px;
-      color: var(--text-mid);
-      margin-bottom: 6px;
-    }
-    .os-total-row.big {
-      font-size: 17px;
-      font-weight: 700;
-      color: var(--blue-dark);
-      margin-bottom: 0;
-      margin-top: 6px;
-      padding-top: 8px;
-      border-top: 1px solid var(--border);
-    }
-    .os-saving {
-      text-align: center;
-      font-size: 12px;
-      color: #1E6B1E;
-      font-weight: 500;
-      margin-top: 8px;
-    }
-    .os-badges {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      padding: 1rem 1.5rem;
-      border-top: 1px solid var(--border);
-    }
-    .os-badge { font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 4px; }
+    /* SUCCESS */
+    .success-panel { background: #fff; border-radius: var(--r-xl); box-shadow: var(--sh-lg); padding: 48px; text-align: center; display: none; }
+    .success-icon { width: 80px; height: 80px; border-radius: 50%; background: #e8f5e9; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; }
+    .success-icon svg { color: #4caf50; }
+    .success-panel h2 { font-size: 28px; font-weight: 700; color: var(--blue); margin-bottom: 12px; }
+    .success-panel p { font-size: 15px; color: var(--grey-3); margin-bottom: 8px; }
+    .booking-ref { font-size: 24px; font-weight: 700; color: var(--orange); background: var(--greyblue-2); padding: 12px 24px; border-radius: var(--r-lg); display: inline-block; margin: 16px 0; }
   </style>
-  <script src="i18n.js" defer></script>
-  <script src="animations.js" defer></script>
 </head>
 <body>
+  <div id="site-header" data-page="search"></div>
 
-<!-- NAV -->
-<nav class="sx-nav">
-  <a href="index.html" class="nav-logo" aria-label="SunExpress Holidays">
-    <div class="logo-wrap">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52" class="logo-icon">
-  <line x1="26" y1="24" x2="14" y2="4"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="26" y1="24" x2="18" y2="3"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="26" y1="24" x2="22" y2="2"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="26" y1="24" x2="26" y2="2"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="26" y1="24" x2="30" y2="2"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="26" y1="24" x2="34" y2="3"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="26" y1="24" x2="38" y2="4"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="26" y1="24" x2="10" y2="8"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="26" y1="24" x2="42" y2="8"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <path d="M 8 26 A 18 18 0 0 0 44 26 Z" fill="#1A428A"/>
-  <path d="M 8 26 Q 17 18 26 22 Q 35 26 44 22 L 44 26 Z" fill="#EB630C"/>
-  <path d="M 8 26 Q 17 21 26 23 Q 35 25 44 23 L 44 22 Q 35 26 26 22 Q 17 18 8 26 Z" fill="white" opacity="0.25"/>
-</svg>
-      <div class="logo-text-block">
-        <span class="logo-text-main">SunExpress</span>
-        <span class="logo-text-sub">Holidays</span>
-      </div>
-    </div>
-  </a>
-  <ul class="nav-links">
-    <li><a href="index.html"><span data-i18n="nav.holidays">Tatiller</span></a></li>
-    <li><a href="search.html"><span data-i18n="nav.search">Arama</span></a></li>
-    <li><a href="dest-antalya.html"><span data-i18n="nav.destinations">Destinasyonlar</span></a></li>
-    <li><a href="booking.html" class="active"><span data-i18n="nav.booking">Rezervasyon</span></a></li>
-  </ul>
-  <div class="nav-actions">
-    <button class="btn-ghost"><span data-i18n="nav.login">Giriş Yap</span></button>
-  </div>
-</nav>
-
-<!-- HERO -->
-<div class="booking-hero">
-  <div class="booking-hero-inner">
-    <div class="breadcrumb" style="margin-bottom: 1rem;">
-      <a href="index.html">Ana Sayfa</a> ›
-      <a href="search.html">Antalya</a> ›
-      <a href="hotel.html">Rixos Premium Belek</a> ›
-      <span><span data-i18n="nav.booking">Rezervasyon</span></span>
-    </div>
-    <h1><span data-i18n="book.title">Rezervasyon bilgileri</span></h1>
-    <p>Rixos Premium Belek · 15–22 Temmuz 2025 · 2 Yetişkin · Ultra her şey dahil</p>
-
-    <!-- Progress -->
-    <div class="progress-bar" style="margin-top: 1.75rem;">
-      <div class="progress-step done">
-        <div class="step-circle">✓</div>
-        <span><span data-i18n="book.step1">Otel seçimi</span></span>
-      </div>
-      <div class="step-line"></div>
-      <div class="progress-step done">
-        <div class="step-circle">✓</div>
-        <span><span data-i18n="book.flight_title">Uçuş seçimi</span></span>
-      </div>
-      <div class="step-line"></div>
-      <div class="progress-step active">
-        <div class="step-circle">3</div>
-        <span><span data-i18n="book.pax_title">Yolcu bilgileri</span></span>
-      </div>
-      <div class="step-line"></div>
-      <div class="progress-step">
-        <div class="step-circle">4</div>
-        <span><span data-i18n="footer.payment">Ödeme</span></span>
-      </div>
-      <div class="step-line"></div>
-      <div class="progress-step">
-        <div class="step-circle">5</div>
-        <span>Onay</span>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- MAIN -->
-<div class="booking-layout">
-  <div>
-
-    <!-- SECTION 1: <span data-i18n="book.contact_title">İletişim bilgileri</span> -->
-    <div class="form-section">
-      <div class="form-section-header">
-        <div class="form-section-num">1</div>
-        <div>
-          <div class="form-section-title"><span data-i18n="book.contact_title">İletişim bilgileri</span></div>
-          <div class="form-section-sub">Rezervasyon onayı bu adrese gönderilecek</div>
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">E-posta <span>*</span></label>
-          <input class="form-input" type="email" placeholder="ornek@email.com" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Telefon <span>*</span></label>
-          <input class="form-input" type="tel" placeholder="+90 5XX XXX XX XX" />
-        </div>
-      </div>
-
-      <div class="form-row full">
-        <div class="form-group">
-          <label class="form-label">Tercih edilen iletişim dili</label>
-          <select class="form-input">
-            <option>Türkçe</option>
-            <option>English</option>
-            <option>Deutsch</option>
-          </select>
-        </div>
-      </div>
-    </div>
-
-    <!-- SECTION 2: <span data-i18n="book.pax_title">Yolcu bilgileri</span> -->
-    <div class="form-section">
-      <div class="form-section-header">
-        <div class="form-section-num">2</div>
-        <div>
-          <div class="form-section-title"><span data-i18n="book.pax_title">Yolcu bilgileri</span></div>
-          <div class="form-section-sub">Pasaportunuzdaki bilgilerle aynı olmalıdır</div>
-        </div>
-      </div>
-
-      <!-- Passenger tabs -->
-      <div class="pax-tabs">
-        <button class="pax-tab active">Yetişkin 1 (Lider)</button>
-        <button class="pax-tab">Yetişkin 2</button>
-      </div>
-
-      <div class="form-row three">
-        <div class="form-group">
-          <label class="form-label">Unvan <span>*</span></label>
-          <select class="form-input">
-            <option>Bay</option>
-            <option>Bayan</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Ad <span>*</span></label>
-          <input class="form-input" type="text" placeholder="Adınız" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Soyad <span>*</span></label>
-          <input class="form-input" type="text" placeholder="Soyadınız" />
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Doğum tarihi <span>*</span></label>
-          <input class="form-input" type="date" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Uyruk <span>*</span></label>
-          <select class="form-input">
-            <option>Türkiye</option>
-            <option>Almanya</option>
-            <option>İngiltere</option>
-            <option>Diğer</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Pasaport / TC Kimlik No <span>*</span></label>
-          <input class="form-input" type="text" placeholder="Belge numarası" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Pasaport geçerlilik tarihi</label>
-          <input class="form-input" type="date" />
-          <span class="form-hint">Dönüş tarihinden en az 6 ay sonrası olmalı</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- SECTION 3: <span data-i18n="book.flight_title">Uçuş seçimi</span> -->
-    <div class="form-section">
-      <div class="form-section-header">
-        <div class="form-section-num">3</div>
-        <div>
-          <div class="form-section-title"><span data-i18n="book.flight_title">Uçuş seçimi</span></div>
-          <div class="form-section-sub">İstanbul SAW → Antalya AYT · 15 Temmuz 2025</div>
-        </div>
-      </div>
-
-      <div class="flight-option selected">
-        <div class="flight-radio"><div></div></div>
-        <div class="flight-times">
-          <span class="flight-time">06:30</span>
-          <span class="flight-arrow">────✈────</span>
-          <span class="flight-time">07:55</span>
-          <span class="flight-dur">1s 25d</span>
-          <span class="flight-stops" style="background: #EAF5EA; color: #1E6B1E;">Direkt</span>
-        </div>
-        <div>
-          <div class="flight-price">€139 <span style="font-size: 12px; font-weight: 400; color: var(--text-muted);">/ kişi</span></div>
-          <div style="font-size: 11px; color: var(--text-muted);">XQ 101</div>
-        </div>
-      </div>
-
-      <div class="flight-option">
-        <div class="flight-radio"></div>
-        <div class="flight-times">
-          <span class="flight-time">10:15</span>
-          <span class="flight-arrow">────✈────</span>
-          <span class="flight-time">11:45</span>
-          <span class="flight-dur">1s 30d</span>
-          <span class="flight-stops" style="background: #EAF5EA; color: #1E6B1E;">Direkt</span>
-        </div>
-        <div>
-          <div class="flight-price">€159 <span style="font-size: 12px; font-weight: 400; color: var(--text-muted);">/ kişi</span></div>
-          <div style="font-size: 11px; color: var(--text-muted);">XQ 103</div>
-        </div>
-      </div>
-
-      <div class="flight-option">
-        <div class="flight-radio"></div>
-        <div class="flight-times">
-          <span class="flight-time">16:45</span>
-          <span class="flight-arrow">────✈────</span>
-          <span class="flight-time">18:10</span>
-          <span class="flight-dur">1s 25d</span>
-          <span class="flight-stops" style="background: #EAF5EA; color: #1E6B1E;">Direkt</span>
-        </div>
-        <div>
-          <div class="flight-price">€119 <span style="font-size: 12px; font-weight: 400; color: var(--text-muted);">/ kişi</span></div>
-          <div style="font-size: 11px; color: var(--text-muted);">XQ 105</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SECTION 4: Ekstralar -->
-    <div class="form-section">
-      <div class="form-section-header">
-        <div class="form-section-num">4</div>
-        <div>
-          <div class="form-section-title"><span data-i18n="book.extras_title">Ekstra hizmetler</span></div>
-          <div class="form-section-sub">İsteğe bağlı eklemeler</div>
-        </div>
-      </div>
-
-      <div class="extra-item">
-        <input type="checkbox" checked />
-        <div class="extra-info">
-          <div class="extra-name">🚐 Havalimanı transferi (2 yön)</div>
-          <div class="extra-desc">AYT havalimanı ↔ Rixos Premium Belek · Özel araç</div>
-        </div>
-        <div class="extra-price">€60</div>
-      </div>
-
-      <div class="extra-item">
-        <input type="checkbox" />
-        <div class="extra-info">
-          <div class="extra-name">🧳 Ekstra bagaj (1 adet, 23kg)</div>
-          <div class="extra-desc">Kişi başı ek bagaj hakkı, her iki yön için</div>
-        </div>
-        <div class="extra-price">€45 / kişi</div>
-      </div>
-
-      <div class="extra-item">
-        <input type="checkbox" />
-        <div class="extra-info">
-          <div class="extra-name">🛡 Seyahat sigortası</div>
-          <div class="extra-desc">İptal, sağlık ve bagaj güvencesi · Europäische Reiseversicherung</div>
-        </div>
-        <div class="extra-price">€29 / kişi</div>
-      </div>
-
-      <div class="extra-item">
-        <input type="checkbox" />
-        <div class="extra-info">
-          <div class="extra-name">🌹 Romantik paket</div>
-          <div class="extra-desc">Odada çiçek, şampanya ve özel süsleme · Odaya teslim</div>
-        </div>
-        <div class="extra-price">€89</div>
-      </div>
-    </div>
-
-    <!-- SECTION 5: <span data-i18n="book.special_title">Özel istekler</span> -->
-    <div class="form-section">
-      <div class="form-section-header">
-        <div class="form-section-num">5</div>
-        <div>
-          <div class="form-section-title"><span data-i18n="book.special_title">Özel istekler</span></div>
-          <div class="form-section-sub">Garanti edilemez, ancak iletilecektir</div>
-        </div>
-      </div>
-
-      <div class="form-row full">
-        <div class="form-group">
-          <label class="form-label">Diyet / Alerji bilgisi</label>
-          <select class="form-input">
-            <option>Yok</option>
-            <option>Vejetaryen</option>
-            <option>Vegan</option>
-            <option>Glutensiz</option>
-            <option>Helal</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="form-row full">
-        <div class="form-group">
-          <label class="form-label">Özel notlar</label>
-          <textarea class="form-input" rows="3" style="resize: vertical;" placeholder="Balayı kutlaması, engelli erişimi, yüksek kat tercihi..."></textarea>
-        </div>
-      </div>
-    </div>
-
-    <!-- TERMS + SUBMIT -->
-    <div class="form-section">
-      <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.25rem;">
-        <label class="terms-check">
-          <input type="checkbox" />
-          <span><a href="#">Rezervasyon koşullarını</a> ve <a href="#">gizlilik politikasını</a> okudum, kabul ediyorum. <span style="color: var(--orange);">*</span></span>
-        </label>
-        <label class="terms-check">
-          <input type="checkbox" />
-          <span>Kampanya ve duyurulardan haberdar olmak istiyorum (isteğe bağlı).</span>
-        </label>
-        <label class="terms-check">
-          <input type="checkbox" />
-          <span>KVKK kapsamında kişisel verilerimin işlenmesine onay veriyorum. <span style="color: var(--orange);">*</span></span>
-        </label>
-      </div>
-
-      <button class="submit-btn"><span data-i18n="book.next_payment">Ödeme adımına geç →</span></button>
-      <div class="submit-trust">
-        <span>🔒 SSL korumalı</span>
-        <span>·</span>
-        <span>💳 Datatrans güvenli ödeme</span>
-        <span>·</span>
-        <span>✅ Ücretsiz iptal (48 saate kadar)</span>
-      </div>
-    </div>
-
+  <div class="breadcrumb">
+    <a href="index.html">Startseite</a><span class="breadcrumb-sep">/</span>
+    <a href="search.html">Suchergebnisse</a><span class="breadcrumb-sep">/</span>
+    <a href="hotel.html">Rixos Premium Belek</a><span class="breadcrumb-sep">/</span>
+    <span>Buchung</span>
   </div>
 
-  <!-- ORDER SUMMARY -->
-  <aside>
-    <div class="order-summary">
-      <div class="os-header">
-        <div class="os-hotel">Rixos Premium Belek</div>
-        <div class="os-sub">★★★★★ · Ultra her şey dahil</div>
-      </div>
-      <div class="os-body">
-        <div class="os-detail">
-          <span class="os-detail-label">📅 Giriş</span>
-          <span class="os-detail-val">15 Temmuz 2025</span>
-        </div>
-        <div class="os-detail">
-          <span class="os-detail-label">📅 Çıkış</span>
-          <span class="os-detail-val">22 Temmuz 2025</span>
-        </div>
-        <div class="os-detail">
-          <span class="os-detail-label">🌙 Gece</span>
-          <span class="os-detail-val">7 gece</span>
-        </div>
-        <div class="os-detail">
-          <span class="os-detail-label">👥 Kişi</span>
-          <span class="os-detail-val">2 Yetişkin</span>
-        </div>
-        <div class="os-detail">
-          <span class="os-detail-label">🛏 Oda</span>
-          <span class="os-detail-val">Standart (Havuz)</span>
-        </div>
-        <div class="os-detail">
-          <span class="os-detail-label">✈ Uçuş</span>
-          <span class="os-detail-val">XQ 101 · 06:30</span>
-        </div>
-        <div class="os-detail">
-          <span class="os-detail-label">🚐 Transfer</span>
-          <span class="os-detail-val">Dahil</span>
+  <!-- STEPPER -->
+  <div class="stepper">
+    <div class="step"><div class="step-num active" id="snum1">1</div><span class="step-label active" id="slbl1">Reisende</span></div>
+    <div class="step-line" id="sline1"></div>
+    <div class="step"><div class="step-num" id="snum2">2</div><span class="step-label" id="slbl2">Kontakt</span></div>
+    <div class="step-line" id="sline2"></div>
+    <div class="step"><div class="step-num" id="snum3">3</div><span class="step-label" id="slbl3">Zahlung</span></div>
+    <div class="step-line" id="sline3"></div>
+    <div class="step"><div class="step-num" id="snum4">4</div><span class="step-label" id="slbl4">Bestätigung</span></div>
+  </div>
+
+  <div class="booking-wrap">
+    <!-- FORM PANELS -->
+    <div id="form-area">
+
+      <!-- STEP 1: Reisende -->
+      <div id="step1">
+        <!-- Adult 1 -->
+        <div class="form-section">
+          <div class="form-section-head"><div class="step-badge">1</div><h3>Reisender 1 — Erwachsener (Hauptbuchender)</h3></div>
+          <div class="form-body">
+            <div class="traveller-card">
+              <div class="form-grid" style="margin-bottom:14px">
+                <div class="form-group">
+                  <label class="form-label">Anrede <span class="req">*</span></label>
+                  <select class="form-select"><option>Herr</option><option>Frau</option><option>Divers</option></select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Titel</label>
+                  <select class="form-select"><option value="">—</option><option>Dr.</option><option>Prof.</option><option>Prof. Dr.</option></select>
+                </div>
+              </div>
+              <div class="form-grid">
+                <div class="form-group"><label class="form-label">Vorname <span class="req">*</span></label><input class="form-input" type="text" placeholder="z.B. Max" id="fn1"/></div>
+                <div class="form-group"><label class="form-label">Nachname <span class="req">*</span></label><input class="form-input" type="text" placeholder="z.B. Mustermann" id="ln1"/></div>
+                <div class="form-group"><label class="form-label">Geburtsdatum <span class="req">*</span></label><input class="form-input" type="date" id="dob1"/></div>
+                <div class="form-group"><label class="form-label">Nationalität <span class="req">*</span></label><select class="form-select"><option>Deutschland</option><option>Österreich</option><option>Schweiz</option><option>Türkei</option><option>Andere</option></select></div>
+                <div class="form-group full"><label class="form-label">Reisepassnummer <span class="req">*</span></label><input class="form-input" type="text" placeholder="z.B. C01X00T47"/></div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="os-total">
-          <div class="os-total-row"><span>2 kişi oda</span><span>€910</span></div>
-          <div class="os-total-row"><span>2 × uçuş</span><span>€278</span></div>
-          <div class="os-total-row"><span>Transfer</span><span>€60</span></div>
-          <div class="os-total-row" style="color: #1E6B1E;"><span>Erken rezervasyon (%15)</span><span>−€195</span></div>
-          <div class="os-total-row big"><span>Toplam</span><span>€1.298</span></div>
+        <!-- Adult 2 -->
+        <div class="form-section">
+          <div class="form-section-head"><div class="step-badge">2</div><h3>Reisender 2 — Erwachsener</h3></div>
+          <div class="form-body">
+            <div class="traveller-card">
+              <div class="form-grid" style="margin-bottom:14px">
+                <div class="form-group"><label class="form-label">Anrede <span class="req">*</span></label><select class="form-select"><option>Herr</option><option>Frau</option><option>Divers</option></select></div>
+                <div></div>
+              </div>
+              <div class="form-grid">
+                <div class="form-group"><label class="form-label">Vorname <span class="req">*</span></label><input class="form-input" type="text" placeholder="Vorname"/></div>
+                <div class="form-group"><label class="form-label">Nachname <span class="req">*</span></label><input class="form-input" type="text" placeholder="Nachname"/></div>
+                <div class="form-group"><label class="form-label">Geburtsdatum <span class="req">*</span></label><input class="form-input" type="date"/></div>
+                <div class="form-group"><label class="form-label">Reisepassnummer <span class="req">*</span></label><input class="form-input" type="text" placeholder="Passnummer"/></div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="os-saving">🎉 €195 tasarruf ettiniz!</div>
-      </div>
-      <div class="os-badges">
-        <div class="os-badge">🔒 SSL güvenli</div>
-        <div class="os-badge">✅ Ücretsiz iptal</div>
-        <div class="os-badge">💳 Datatrans</div>
-      </div>
-    </div>
-  </aside>
 
-</div>
+        <!-- Child 1 -->
+        <div class="form-section">
+          <div class="form-section-head"><div class="step-badge">3</div><h3>Reisender 3 — Kind <span class="badge badge-yellow" style="font-size:10px;margin-left:6px">8 Jahre</span></h3></div>
+          <div class="form-body">
+            <div class="traveller-card">
+              <div class="form-grid">
+                <div class="form-group"><label class="form-label">Vorname <span class="req">*</span></label><input class="form-input" type="text" placeholder="Vorname Kind"/></div>
+                <div class="form-group"><label class="form-label">Nachname <span class="req">*</span></label><input class="form-input" type="text" placeholder="Nachname Kind"/></div>
+                <div class="form-group"><label class="form-label">Geburtsdatum <span class="req">*</span></label><input class="form-input" type="date"/></div>
+                <div class="form-group"><label class="form-label">Reisepassnummer</label><input class="form-input" type="text" placeholder="Falls vorhanden"/></div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-<!-- FOOTER -->
-<footer class="sx-footer">
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <a href="index.html" class="nav-logo footer-logo" aria-label="SunExpress Holidays">
-    <div class="logo-wrap">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52" class="logo-icon">
-  <line x1="26" y1="24" x2="14" y2="4"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="26" y1="24" x2="18" y2="3"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="26" y1="24" x2="22" y2="2"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="26" y1="24" x2="26" y2="2"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="26" y1="24" x2="30" y2="2"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="26" y1="24" x2="34" y2="3"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="26" y1="24" x2="38" y2="4"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="26" y1="24" x2="10" y2="8"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="26" y1="24" x2="42" y2="8"  stroke="white" stroke-width="3.5" stroke-linecap="round"/>
-  <path d="M 8 26 A 18 18 0 0 0 44 26 Z" fill="#1A428A"/>
-  <path d="M 8 26 Q 17 18 26 22 Q 35 26 44 22 L 44 26 Z" fill="#EB630C"/>
-  <path d="M 8 26 Q 17 21 26 23 Q 35 25 44 23 L 44 22 Q 35 26 26 22 Q 17 18 8 26 Z" fill="white" opacity="0.25"/>
-</svg>
-      <div class="logo-text-block">
-        <span class="logo-text-main">SunExpress</span>
-        <span class="logo-text-sub">Holidays</span>
+        <div class="form-nav">
+          <a href="hotel.html" class="btn btn-outline">← Zurück</a>
+          <button class="btn btn-primary lg" onclick="goStep(2)">Weiter: Kontaktdaten →</button>
+        </div>
+      </div>
+
+      <!-- STEP 2: Kontakt -->
+      <div id="step2" style="display:none">
+        <div class="form-section">
+          <div class="form-section-head"><div class="step-badge">1</div><h3>Kontaktdaten</h3></div>
+          <div class="form-body">
+            <div class="form-grid">
+              <div class="form-group"><label class="form-label">E-Mail-Adresse <span class="req">*</span></label><input class="form-input" type="email" placeholder="max.mustermann@email.de" id="email"/></div>
+              <div class="form-group"><label class="form-label">Telefonnummer <span class="req">*</span></label><input class="form-input" type="tel" placeholder="+49 123 456 789"/></div>
+              <div class="form-group full"><label class="form-label">Straße und Hausnummer <span class="req">*</span></label><input class="form-input" type="text" placeholder="z.B. Musterstraße 42"/></div>
+              <div class="form-group"><label class="form-label">Postleitzahl <span class="req">*</span></label><input class="form-input" type="text" placeholder="z.B. 60313"/></div>
+              <div class="form-group"><label class="form-label">Stadt <span class="req">*</span></label><input class="form-input" type="text" placeholder="z.B. Frankfurt"/></div>
+              <div class="form-group"><label class="form-label">Land <span class="req">*</span></label><select class="form-select"><option>Deutschland</option><option>Österreich</option><option>Schweiz</option></select></div>
+            </div>
+          </div>
+        </div>
+        <div class="form-section">
+          <div class="form-section-head"><div class="step-badge">2</div><h3>Besondere Wünsche</h3></div>
+          <div class="form-body">
+            <div class="form-grid cols-1">
+              <div class="form-group"><label class="form-label">Sonderwünsche (optional)</label><textarea class="form-input" style="height:90px;padding:12px;resize:vertical" placeholder="z.B. Zimmer im höheren Stockwerk, Allergien, etc."></textarea></div>
+            </div>
+            <div class="form-grid" style="margin-top:14px">
+              <div class="form-group"><label class="form-label">Ankunftszeit im Hotel</label><select class="form-select"><option>Keine Angabe</option><option>14:00 – 16:00</option><option>16:00 – 18:00</option><option>18:00 – 20:00</option><option>Nach 20:00</option></select></div>
+              <div class="form-group"><label class="form-label">Zimmertyp-Präferenz</label><select class="form-select"><option>Keine Präferenz</option><option>Hohe Etage</option><option>Ruhige Lage</option><option>Pool-Nähe</option><option>Strand-Nähe</option></select></div>
+            </div>
+          </div>
+        </div>
+        <div class="form-nav">
+          <button class="btn btn-outline" onclick="goStep(1)">← Zurück</button>
+          <button class="btn btn-primary lg" onclick="goStep(3)">Weiter: Zahlung →</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: Zahlung -->
+      <div id="step3" style="display:none">
+        <div class="form-section">
+          <div class="form-section-head"><div class="step-badge">1</div><h3>Zahlungsmethode</h3></div>
+          <div class="form-body">
+            <div class="payment-methods">
+              <div class="payment-method selected" onclick="selectPayment(this,'card')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                Kreditkarte
+              </div>
+              <div class="payment-method" onclick="selectPayment(this,'paypal')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6.5 5H18a2 2 0 012 2v3a2 2 0 01-2 2H6.5"/><path d="M6.5 12H16a2 2 0 012 2v3a2 2 0 01-2 2H6.5"/><path d="M6.5 5l-2 14"/></svg>
+                PayPal
+              </div>
+              <div class="payment-method" onclick="selectPayment(this,'transfer')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                Überweisung
+              </div>
+            </div>
+
+            <div id="card-fields">
+              <div class="card-field-group">
+                <div class="form-group">
+                  <label class="form-label">Kartennummer <span class="req">*</span></label>
+                  <div class="card-number-wrap">
+                    <input class="form-input" type="text" placeholder="1234 5678 9012 3456" style="padding-right:90px" oninput="formatCard(this)"/>
+                    <div class="card-icons"><div class="card-icon" style="background:#1a1f71;color:#fff;font-size:7px">VISA</div><div class="card-icon" style="background:#eb001b;color:#fff;font-size:6px">MC</div></div>
+                  </div>
+                </div>
+                <div class="form-grid cols-3">
+                  <div class="form-group"><label class="form-label">Gültig bis <span class="req">*</span></label><input class="form-input" type="text" placeholder="MM/JJ" oninput="formatExpiry(this)"/></div>
+                  <div class="form-group"><label class="form-label">CVV <span class="req">*</span></label><input class="form-input" type="text" placeholder="123" maxlength="4"/></div>
+                  <div></div>
+                </div>
+                <div class="form-group"><label class="form-label">Name auf der Karte <span class="req">*</span></label><input class="form-input" type="text" placeholder="MAX MUSTERMANN"/></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-head"><div class="step-badge">2</div><h3>Buchungsbestätigung</h3></div>
+          <div class="form-body">
+            <div class="alert alert-info" style="margin-bottom:16px">
+              <strong>Sicher bezahlen mit SSL-Verschlüsselung.</strong> Ihre Zahlungsdaten werden verschlüsselt übertragen und nicht gespeichert.
+            </div>
+            <div class="checkbox-row">
+              <input type="checkbox" id="terms"/>
+              <label for="terms">Ich akzeptiere die <a href="#">AGB</a> und <a href="#">Datenschutzerklärung</a> von SunExpress Holidays. <span class="req">*</span></label>
+            </div>
+            <div class="checkbox-row">
+              <input type="checkbox" id="cancel"/>
+              <label for="cancel">Ich habe die <a href="#">Stornierungsbedingungen</a> gelesen und akzeptiere diese.</label>
+            </div>
+            <div class="checkbox-row">
+              <input type="checkbox" id="newsletter"/>
+              <label for="newsletter">Ich möchte Neuigkeiten und exklusive Angebote von SunExpress Holidays per E-Mail erhalten. (Optional)</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-nav">
+          <button class="btn btn-outline" onclick="goStep(2)">← Zurück</button>
+          <button class="btn btn-primary lg" onclick="submitBooking()" style="padding:14px 36px">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Jetzt buchen & bezahlen — € 3.747
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 4: Confirmation -->
+      <div class="success-panel" id="step4">
+        <div class="success-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <h2>Buchung erfolgreich!</h2>
+        <p>Vielen Dank für Ihre Buchung. Eine Bestätigungs-E-Mail wurde an Ihre Adresse gesendet.</p>
+        <div class="booking-ref" id="booking-ref">SXH-2026-XXXXX</div>
+        <p style="font-size:13px;color:var(--grey-3)">Bitte bewahren Sie diese Buchungsnummer sicher auf.</p>
+        <div style="margin-top:28px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+          <a href="index.html" class="btn btn-secondary">Zurück zur Startseite</a>
+          <button class="btn btn-outline" onclick="window.print()">Buchung drucken</button>
+        </div>
       </div>
     </div>
-  </a>
-      <p data-i18n="footer.tagline">Güneş Ekspres Havacılık A.Ş. bünyesinde faaliyet gösteren tatil platformu.</p>
-    </div>
-    <div class="footer-col">
-      <h4 data-i18n="footer.help">Yardım</h4>
-      <ul>
-        <li><a href="#"><span data-i18n="footer.faq">SSS</span></a></li>
-        <li><a href="#"><span data-i18n="footer.cancel">İptal Koşulları</span></a></li>
-        <li><a href="#"><span data-i18n="footer.contact">İletişim</span></a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h4>Güvenlik</h4>
-      <ul>
-        <li><a href="#"><span data-i18n="footer.kvkk">KVKK</span></a></li>
-        <li><a href="#"><span data-i18n="footer.privacy">Gizlilik</span></a></li>
-        <li><a href="#">Kullanım Şartları</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h4><span data-i18n="footer.contact">İletişim</span></h4>
-      <ul>
-        <li><a href="#">0850 XXX XX XX</a></li>
-        <li><a href="#">holidays@sunexpress.com</a></li>
-      </ul>
+
+    <!-- SUMMARY CARD -->
+    <div id="summary-col">
+      <div class="summary-card">
+        <div class="summary-head"><h3>Buchungsübersicht</h3></div>
+        <div class="summary-hotel">
+          <div class="summary-hotel-img ci1" id="sum-img"></div>
+          <div>
+            <div class="summary-hotel-name">Rixos Premium Belek</div>
+            <div class="summary-hotel-meta">Belek, Antalya · ★★★★★</div>
+            <div style="margin-top:4px"><span class="badge badge-orange" style="font-size:10px">All-Inclusive</span></div>
+          </div>
+        </div>
+        <div class="summary-rows">
+          <div class="sum-row"><span>Reisedaten</span><span>15.–22. Jul 2026</span></div>
+          <div class="sum-row"><span>Nächte</span><span>7</span></div>
+          <div class="sum-row"><span>Reisende</span><span>2 Erw. + 1 Kind</span></div>
+          <div class="sum-row"><span>Zimmer</span><span>Deluxe Meerblick</span></div>
+          <div class="sum-row"><span>Flug</span><span>FRA → AYT direkt</span></div>
+          <div class="sum-row"><span>Transfer</span><span>Inklusive</span></div>
+          <hr class="sum-divider"/>
+          <div class="sum-row"><span>2 Erw. × € 1.249</span><span>€ 2.498</span></div>
+          <div class="sum-row"><span>1 Kind × € 749</span><span>€ 749</span></div>
+          <div class="sum-row"><span>Flug & Transfer</span><span>Inklusive</span></div>
+          <hr class="sum-divider"/>
+          <div class="sum-total"><span>Gesamtpreis</span><span class="amount">€ 3.747</span></div>
+          <div style="font-size:11px;color:var(--grey-3);margin-top:4px">inkl. aller Steuern & Gebühren</div>
+        </div>
+        <div class="sum-features">
+          <div class="sum-feat"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Bestpreisgarantie</div>
+          <div class="sum-feat"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>ATOL gesichert</div>
+          <div class="sum-feat"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Kostenlose Stornierung (bis 30 Tage vor Abreise)</div>
+          <div class="sum-feat"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>24/7 Kundenservice</div>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="footer-bottom">
-    <span><span data-i18n="footer.copyright">© 2025 SunExpress Holidays · Güneş Ekspres Havacılık A.Ş.</span></span>
-    <span>🔒 SSL Güvenli · Datatrans ödeme altyapısı</span>
-  </div>
-</footer>
 
+  <div id="site-footer"></div>
+  <script src="components.js"></script>
+  <script>
+    let currentStep = 1;
+
+    function goStep(n) {
+      document.getElementById(`step${currentStep}`).style.display = 'none';
+      document.getElementById(`step${n}`).style.display = 'block';
+      // Stepper update
+      for (let i = 1; i <= 4; i++) {
+        const num = document.getElementById(`snum${i}`);
+        const lbl = document.getElementById(`slbl${i}`);
+        const line = document.getElementById(`sline${i}`);
+        num.classList.remove('active','done');
+        lbl.classList.remove('active','done');
+        if (line) line.classList.remove('done');
+        if (i < n) { num.classList.add('done'); lbl.classList.add('done'); if(line) line.classList.add('done'); }
+        if (i === n) { num.classList.add('active'); lbl.classList.add('active'); }
+      }
+      currentStep = n;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function submitBooking() {
+      const terms = document.getElementById('terms');
+      if (!terms.checked) { alert('Bitte akzeptieren Sie die AGB um fortzufahren.'); return; }
+      const ref = 'SXH-2026-' + Math.random().toString(36).substr(2,5).toUpperCase();
+      document.getElementById('booking-ref').textContent = ref;
+      document.getElementById('step3').style.display = 'none';
+      document.getElementById('step4').style.display = 'block';
+      document.getElementById('summary-col').style.display = 'none';
+      document.getElementById('step4').style.gridColumn = '1 / -1';
+      goStep(4);
+    }
+
+    function selectPayment(el, type) {
+      document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
+      el.classList.add('selected');
+      document.getElementById('card-fields').style.display = type === 'card' ? 'block' : 'none';
+    }
+
+    function formatCard(el) {
+      let v = el.value.replace(/\D/g,'').substring(0,16);
+      el.value = v.replace(/(.{4})/g,'$1 ').trim();
+    }
+    function formatExpiry(el) {
+      let v = el.value.replace(/\D/g,'').substring(0,4);
+      if (v.length >= 3) v = v.substring(0,2) + '/' + v.substring(2);
+      el.value = v;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchUnsplashImg('rixos belek resort pool', 'sum-img');
+    });
+  </script>
 </body>
 </html>
