@@ -6,16 +6,16 @@
   <link rel="stylesheet" href="shared.css"/>
   <style>
     /* ── HERO SLIDER ── */
-    .hero { position:relative; min-height:520px; display:flex; flex-direction:column; justify-content:flex-end; overflow:hidden; }
+    .hero { position:relative; min-height:420px; display:flex; flex-direction:column; justify-content:flex-end; overflow:hidden; }
     .hero-bg { position:absolute; inset:0; background-size:cover; background-position:center; transition:opacity .8s; }
     .hero-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(4,48,109,.85) 0%,rgba(0,69,143,.35) 55%,transparent 100%); }
-    .hero-content { position:relative; z-index:2; padding:0 var(--sp-xl) 0; max-width:680px; }
+    .hero-content { position:relative; z-index:2; padding:0 var(--sp-xl) 40px; max-width:680px; }
     .hero-badge { display:inline-flex; align-items:center; gap:6px; color:#fff; font-size:11px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; padding:5px 14px; border-radius:var(--r-full); margin-bottom:16px; }
     .hero h1 { font-size:46px; font-weight:700; color:#fff; line-height:1.15; margin-bottom:12px; }
     .hero h1 em { font-style:normal; }
     .hero-sub { font-size:16px; color:rgba(255,255,255,.85); line-height:1.6; margin-bottom:36px; max-width:480px; }
     .hero-feature-card { position:absolute; right:var(--sp-xl); bottom:140px; background:#fff; border-radius:var(--r-xl); box-shadow:var(--sh-xl); padding:16px 20px; min-width:240px; z-index:2; }
-    .search-area { position:relative; z-index:2; padding:0 var(--sp-xl) 0; }
+    .search-bar-wrap { background:#fff; box-shadow:0 4px 20px rgba(0,69,143,.12); padding:20px var(--sp-xl); position:relative; z-index:10; }
 
     /* Slider dots */
     .slider-dots { position:absolute; bottom:16px; right:var(--sp-xl); z-index:3; display:flex; gap:8px; }
@@ -79,8 +79,12 @@
       <h1 id="hero-title"></h1>
       <p class="hero-sub" id="hero-sub"></p>
     </div>
-    <div class="search-area" id="search-mask"></div>
   </section>
+
+  <!-- Search mask: own sticky bar outside hero -->
+  <div class="search-bar-wrap">
+    <div id="search-mask"></div>
+  </div>
 
   <div class="usp-bar" id="usp-bar"></div>
 
