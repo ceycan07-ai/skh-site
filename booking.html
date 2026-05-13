@@ -353,6 +353,7 @@
   <div id="site-footer"></div>
   <script src="components.js"></script>
   <script>
+  // booking.html inline scripts — components.js loaded above
     let currentStep = 1;
 
     function goStep(n) {
@@ -402,7 +403,11 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      fetchUnsplashImg('rixos belek resort pool', 'sum-img');
+      setTimeout(() => {
+        if (typeof fetchUnsplashImg === 'function') {
+          fetchUnsplashImg('rixos belek resort pool', 'sum-img');
+        }
+      }, 100);
     });
   </script>
 </body>

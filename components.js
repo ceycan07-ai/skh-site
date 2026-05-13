@@ -214,13 +214,29 @@ function setLang(lang){ currentLang=lang; localStorage.setItem('sxh-lang',lang);
 /* ══ UNSPLASH ══ */
 const UNSPLASH_KEY='i2yfxF4kYEr9M2VD_gPcxVA7vW6VHQlP6cuFipkMneM';
 const imgCache={};
+// Load persisted images from localStorage so they survive language reload
+try{ const s=localStorage.getItem('sxh-imgs'); if(s) Object.assign(imgCache,JSON.parse(s)); }catch(e){}
+
 async function fetchUnsplashImg(query,id){
   const el=document.getElementById(id); if(!el) return;
-  if(imgCache[query]){el.style.backgroundImage=`url(${imgCache[query]})`;el.style.backgroundSize='cover';el.style.backgroundPosition='center';return;}
+  // Use cache (memory or localStorage) — no new API call needed
+  if(imgCache[query]){
+    el.style.backgroundImage=`url(${imgCache[query]})`;
+    el.style.backgroundSize='cover';
+    el.style.backgroundPosition='center';
+    return;
+  }
   try{
     const r=await fetch(`https://api.unsplash.com/photos/random?query=${encodeURIComponent(query)}&orientation=landscape&client_id=${UNSPLASH_KEY}`);
     const d=await r.json();
-    if(d?.urls?.regular){imgCache[query]=d.urls.regular;el.style.backgroundImage=`url(${d.urls.regular})`;el.style.backgroundSize='cover';el.style.backgroundPosition='center';}
+    if(d?.urls?.regular){
+      imgCache[query]=d.urls.regular;
+      // Persist so images survive page reload (e.g. language switch)
+      try{ localStorage.setItem('sxh-imgs',JSON.stringify(imgCache)); }catch(e){}
+      el.style.backgroundImage=`url(${d.urls.regular})`;
+      el.style.backgroundSize='cover';
+      el.style.backgroundPosition='center';
+    }
   }catch(e){}
 }
 
