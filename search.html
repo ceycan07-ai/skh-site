@@ -2,230 +2,92 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Suchergebnisse — SunExpress Holidays</title>
+  <title>SunExpress Holidays — Suche</title>
   <link rel="stylesheet" href="shared.css"/>
   <style>
-    .results-searchbar { background: var(--blue); padding: 20px var(--sp-xl); }
-    .results-layout { display: grid; grid-template-columns: 272px 1fr; gap: var(--sp-xl); padding: var(--sp-xl); max-width: 1340px; margin: 0 auto; }
-
-    /* FILTER */
-    .filter-sidebar { display: flex; flex-direction: column; gap: 12px; }
-    .filter-header { display: flex; align-items: center; justify-content: space-between; }
-    .filter-title { font-size: 16px; font-weight: 700; color: var(--blue); }
-    .clear-all { font-size: 12px; font-weight: 600; color: var(--orange); cursor: pointer; border: none; background: none; font-family: var(--font); }
-    .clear-all:hover { text-decoration: underline; }
-
-    .filter-panel { background: #fff; border-radius: var(--r-lg); box-shadow: var(--sh-sm); overflow: hidden; border: 1px solid var(--grey-1); }
-    .filter-panel-head {
-      padding: 13px 16px; font-size: 13px; font-weight: 700; color: var(--blue);
-      display: flex; align-items: center; justify-content: space-between;
-      cursor: pointer; user-select: none; border-bottom: 1px solid var(--grey-1);
-    }
-    .filter-panel-head:hover { background: var(--greyblue-2); }
-    .filter-panel-head .ph-icon { color: var(--orange); margin-right: 8px; }
-    .ph-chev { transition: transform .2s; }
-    .filter-panel-head.collapsed .ph-chev { transform: rotate(-90deg); }
-    .filter-panel-body { padding: 10px 16px; }
-    .filter-panel-body.hidden { display: none; }
-
-    .filter-opt { display: flex; align-items: center; justify-content: space-between; padding: 7px 0; cursor: pointer; }
-    .filter-opt:hover .filter-opt-label { color: var(--blue); }
-    .filter-opt-left { display: flex; align-items: center; gap: 10px; }
-    .fcheck { width: 18px; height: 18px; border: 2px solid var(--grey-2); border-radius: 4px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all .15s; }
-    .fcheck.checked { background: var(--blue); border-color: var(--blue); }
-    .fcheck.checked::after { content:''; width: 9px; height: 5px; border-left: 2px solid #fff; border-bottom: 2px solid #fff; transform: rotate(-45deg) translateY(-1px); display: block; }
-    .filter-opt-label { font-size: 13px; color: var(--text); }
-    .fcount { font-size: 11px; color: var(--grey-3); background: var(--grey-1); padding: 2px 7px; border-radius: var(--r-full); }
-
-    .star-opt { display: flex; align-items: center; gap: 8px; padding: 7px 0; cursor: pointer; }
-    .mini-stars { color: var(--orange-light); font-size: 14px; }
-
-    .price-wrap { padding: 4px 0; }
-    .price-labels { display: flex; justify-content: space-between; font-size: 12px; color: var(--grey-3); margin-bottom: 8px; }
-    .price-labels strong { color: var(--text); }
-    input[type=range] { width: 100%; accent-color: var(--blue); cursor: pointer; }
-
-    /* ACTIVE CHIPS */
-    .active-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
-    .chip {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: var(--greyblue-2); color: var(--blue);
-      font-size: 12px; font-weight: 600; padding: 5px 10px;
-      border-radius: var(--r-full); border: 1px solid var(--greyblue-1);
-      cursor: pointer; transition: background .15s;
-    }
-    .chip:hover { background: var(--greyblue-1); }
-    .chip-x { font-size: 14px; line-height: 1; }
-
-    /* RESULTS */
-    .results-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-    .results-count { font-size: 15px; font-weight: 700; color: var(--blue); }
-    .results-count span { font-size: 13px; font-weight: 400; color: var(--grey-3); }
-    .sort-sel {
-      font-family: var(--font); font-size: 13px; font-weight: 600;
-      color: var(--text); border: 1px solid var(--grey-2); border-radius: var(--r-md);
-      padding: 8px 32px 8px 12px; background: #fff; cursor: pointer; appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238c8c8c'/%3E%3C/svg%3E");
-      background-repeat: no-repeat; background-position: right 10px center;
-    }
-
-    .results-list { display: flex; flex-direction: column; gap: 16px; }
-
-    .result-card {
-      background: #fff; border-radius: var(--r-lg); box-shadow: var(--sh-md);
-      display: flex; overflow: hidden;
-      transition: box-shadow .2s, transform .15s;
-      animation: fadeUp .3s ease;
-    }
-    @keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
-    .result-card:hover { box-shadow: var(--sh-lg); transform: translateY(-2px); }
-
-    .result-img {
-      width: 220px; flex-shrink: 0; position: relative;
-      background-size: cover; background-position: center;
-      min-height: 180px;
-    }
-    .result-img-overlay { position: absolute; inset: 0; background: linear-gradient(to right, transparent 60%, rgba(0,0,0,.15)); }
-    .result-img-badge { position: absolute; top: 12px; left: 12px; }
-
-    .result-body { flex: 1; padding: 20px; }
-    .result-hotel { font-size: 17px; font-weight: 700; color: var(--blue); margin-bottom: 4px; }
-    .result-dest { font-size: 12px; color: var(--grey-3); margin-bottom: 8px; display: flex; align-items: center; gap: 4px; }
-    .result-meta { display: flex; gap: 20px; margin: 10px 0; flex-wrap: wrap; }
-    .result-meta-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text); }
-    .result-meta-item svg { color: var(--blue); flex-shrink: 0; }
-
-    .result-price-col {
-      width: 180px; flex-shrink: 0; border-left: 1px solid var(--grey-1);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 20px; gap: 10px; background: #fafcff;
-    }
-    .r-price-from { font-size: 10px; color: var(--grey-3); text-transform: uppercase; letter-spacing: .5px; }
-    .r-price { font-size: 30px; font-weight: 700; color: var(--orange); line-height: 1; }
-    .r-price-pp { font-size: 11px; color: var(--grey-3); }
-    .r-avail { font-size: 11px; color: #d3550a; font-weight: 600; display: flex; align-items: center; gap: 4px; }
-
-    .no-results { text-align: center; padding: 64px 20px; background: #fff; border-radius: var(--r-lg); box-shadow: var(--sh-md); }
-    .no-results svg { color: var(--grey-2); margin-bottom: 16px; }
-    .no-results h3 { font-size: 18px; font-weight: 700; color: var(--blue); margin-bottom: 8px; }
-    .no-results p { font-size: 14px; color: var(--grey-3); }
-
-    .pagination { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 32px; }
-    .page-btn { width: 36px; height: 36px; border-radius: var(--r-md); border: 1px solid var(--grey-2); background: #fff; font-family: var(--font); font-size: 13px; font-weight: 600; color: var(--text); cursor: pointer; transition: all .15s; display: flex; align-items: center; justify-content: center; }
-    .page-btn:hover { border-color: var(--blue); color: var(--blue); }
-    .page-btn.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+    .results-searchbar{background:var(--blue);padding:20px var(--sp-xl);}
+    .results-layout{display:grid;grid-template-columns:272px 1fr;gap:var(--sp-xl);padding:var(--sp-xl);max-width:1340px;margin:0 auto;}
+    .filter-sidebar{display:flex;flex-direction:column;gap:12px;}
+    .filter-header{display:flex;align-items:center;justify-content:space-between;}
+    .filter-title{font-size:16px;font-weight:700;color:var(--blue);}
+    .clear-all{font-size:12px;font-weight:600;color:var(--orange);cursor:pointer;border:none;background:none;font-family:var(--font);}
+    .filter-panel{background:#fff;border-radius:var(--r-lg);box-shadow:var(--sh-sm);overflow:hidden;border:1px solid var(--grey-1);}
+    .filter-panel-head{padding:13px 16px;font-size:13px;font-weight:700;color:var(--blue);display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;border-bottom:1px solid var(--grey-1);}
+    .filter-panel-head:hover{background:var(--greyblue-2);}
+    .ph-chev{transition:transform .2s;}
+    .filter-panel-head.collapsed .ph-chev{transform:rotate(-90deg);}
+    .filter-panel-body{padding:10px 16px;}
+    .filter-panel-body.hidden{display:none;}
+    .filter-opt{display:flex;align-items:center;justify-content:space-between;padding:7px 0;cursor:pointer;}
+    .filter-opt-left{display:flex;align-items:center;gap:10px;}
+    .fcheck{width:18px;height:18px;border:2px solid var(--grey-2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+    .fcheck.checked{background:var(--blue);border-color:var(--blue);}
+    .fcheck.checked::after{content:'';width:9px;height:5px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translateY(-1px);display:block;}
+    .filter-opt-label{font-size:13px;color:var(--text);}
+    .fcount{font-size:11px;color:var(--grey-3);background:var(--grey-1);padding:2px 7px;border-radius:var(--r-full);}
+    .star-opt{display:flex;align-items:center;gap:8px;padding:7px 0;cursor:pointer;}
+    .price-wrap{padding:4px 0;}
+    .price-labels{display:flex;justify-content:space-between;font-size:12px;color:var(--grey-3);margin-bottom:8px;}
+    .price-labels strong{color:var(--text);}
+    input[type=range]{width:100%;accent-color:var(--blue);cursor:pointer;}
+    .active-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
+    .chip{display:inline-flex;align-items:center;gap:6px;background:var(--greyblue-2);color:var(--blue);font-size:12px;font-weight:600;padding:5px 10px;border-radius:var(--r-full);border:1px solid var(--greyblue-1);cursor:pointer;}
+    .chip:hover{background:var(--greyblue-1);}
+    .results-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+    .results-count{font-size:15px;font-weight:700;color:var(--blue);}
+    .results-count span{font-size:13px;font-weight:400;color:var(--grey-3);}
+    .sort-sel{font-family:var(--font);font-size:13px;font-weight:600;color:var(--text);border:1px solid var(--grey-2);border-radius:var(--r-md);padding:8px 32px 8px 12px;background:#fff;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238c8c8c'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;}
+    .results-list{display:flex;flex-direction:column;gap:16px;}
+    .result-card{background:#fff;border-radius:var(--r-lg);box-shadow:var(--sh-md);display:flex;overflow:hidden;transition:box-shadow .2s,transform .15s;animation:fadeUp .3s ease;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+    .result-card:hover{box-shadow:var(--sh-lg);transform:translateY(-2px);}
+    .result-img{width:220px;flex-shrink:0;position:relative;background-size:cover;background-position:center;min-height:180px;}
+    .result-img-overlay{position:absolute;inset:0;background:linear-gradient(to right,transparent 60%,rgba(0,0,0,.15));}
+    .result-img-badge{position:absolute;top:12px;left:12px;}
+    .result-body{flex:1;padding:20px;}
+    .result-hotel{font-size:17px;font-weight:700;color:var(--blue);margin-bottom:4px;}
+    .result-dest{font-size:12px;color:var(--grey-3);margin-bottom:8px;display:flex;align-items:center;gap:4px;}
+    .result-meta{display:flex;gap:20px;margin:10px 0;flex-wrap:wrap;}
+    .result-meta-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text);}
+    .result-meta-item svg{color:var(--blue);flex-shrink:0;}
+    .result-price-col{width:180px;flex-shrink:0;border-left:1px solid var(--grey-1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;gap:10px;background:#fafcff;}
+    .r-price-from{font-size:10px;color:var(--grey-3);text-transform:uppercase;letter-spacing:.5px;}
+    .r-price{font-size:30px;font-weight:700;color:var(--orange);line-height:1;}
+    .r-price-pp{font-size:11px;color:var(--grey-3);}
+    .r-avail{font-size:11px;color:#d3550a;font-weight:600;display:flex;align-items:center;gap:4px;}
+    .no-results{text-align:center;padding:64px 20px;background:#fff;border-radius:var(--r-lg);box-shadow:var(--sh-md);}
+    .no-results h3{font-size:18px;font-weight:700;color:var(--blue);margin-bottom:8px;}
+    .no-results p{font-size:14px;color:var(--grey-3);}
+    .pagination{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:32px;}
+    .page-btn{width:36px;height:36px;border-radius:var(--r-md);border:1px solid var(--grey-2);background:#fff;font-family:var(--font);font-size:13px;font-weight:600;color:var(--text);cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;}
+    .page-btn:hover{border-color:var(--blue);color:var(--blue);}
+    .page-btn.active{background:var(--blue);color:#fff;border-color:var(--blue);}
   </style>
 </head>
 <body>
   <div id="site-header" data-page="search"></div>
-
   <div class="results-searchbar"><div id="search-mask"></div></div>
 
   <div class="results-layout">
-    <!-- FILTERS -->
-    <aside class="filter-sidebar">
-      <div class="filter-header">
-        <span class="filter-title">Filter</span>
-        <button class="clear-all" id="clear-btn" style="display:none" onclick="clearAll()">Alle zurücksetzen</button>
-      </div>
-
-      <!-- Verpflegung -->
-      <div class="filter-panel">
-        <div class="filter-panel-head" onclick="togglePanel(this)">
-          <span><svg class="ph-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>Verpflegung</span>
-          <svg class="ph-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-        <div class="filter-panel-body">
-          <div class="filter-opt" onclick="toggleFilter('verpflegung','all-inclusive')"><div class="filter-opt-left"><div class="fcheck" data-f="verpflegung" data-v="all-inclusive"></div><span class="filter-opt-label">All-Inclusive</span></div><span class="fcount" data-c="verpflegung-all-inclusive">5</span></div>
-          <div class="filter-opt" onclick="toggleFilter('verpflegung','halbpension')"><div class="filter-opt-left"><div class="fcheck" data-f="verpflegung" data-v="halbpension"></div><span class="filter-opt-label">Halbpension</span></div><span class="fcount" data-c="verpflegung-halbpension">3</span></div>
-          <div class="filter-opt" onclick="toggleFilter('verpflegung','fruehstueck')"><div class="filter-opt-left"><div class="fcheck" data-f="verpflegung" data-v="fruehstueck"></div><span class="filter-opt-label">Übernachtung + Frühstück</span></div><span class="fcount" data-c="verpflegung-fruehstueck">2</span></div>
-          <div class="filter-opt" onclick="toggleFilter('verpflegung','nur-ub')"><div class="filter-opt-left"><div class="fcheck" data-f="verpflegung" data-v="nur-ub"></div><span class="filter-opt-label">Nur Übernachtung</span></div><span class="fcount" data-c="verpflegung-nur-ub">1</span></div>
-        </div>
-      </div>
-
-      <!-- Ausstattung -->
-      <div class="filter-panel">
-        <div class="filter-panel-head" onclick="togglePanel(this)">
-          <span><svg class="ph-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>Ausstattung</span>
-          <svg class="ph-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-        <div class="filter-panel-body">
-          <div class="filter-opt" onclick="toggleFilter('ausstattung','pool')"><div class="filter-opt-left"><div class="fcheck" data-f="ausstattung" data-v="pool"></div><span class="filter-opt-label">Pool</span></div><span class="fcount" data-c="ausstattung-pool">7</span></div>
-          <div class="filter-opt" onclick="toggleFilter('ausstattung','spa')"><div class="filter-opt-left"><div class="fcheck" data-f="ausstattung" data-v="spa"></div><span class="filter-opt-label">Spa & Wellness</span></div><span class="fcount" data-c="ausstattung-spa">4</span></div>
-          <div class="filter-opt" onclick="toggleFilter('ausstattung','strand')"><div class="filter-opt-left"><div class="fcheck" data-f="ausstattung" data-v="strand"></div><span class="filter-opt-label">Strand direkt</span></div><span class="fcount" data-c="ausstattung-strand">4</span></div>
-          <div class="filter-opt" onclick="toggleFilter('ausstattung','wasserpark')"><div class="filter-opt-left"><div class="fcheck" data-f="ausstattung" data-v="wasserpark"></div><span class="filter-opt-label">Wasserpark</span></div><span class="fcount" data-c="ausstattung-wasserpark">2</span></div>
-          <div class="filter-opt" onclick="toggleFilter('ausstattung','kinderclub')"><div class="filter-opt-left"><div class="fcheck" data-f="ausstattung" data-v="kinderclub"></div><span class="filter-opt-label">Kinderclub</span></div><span class="fcount" data-c="ausstattung-kinderclub">3</span></div>
-          <div class="filter-opt" onclick="toggleFilter('ausstattung','fitness')"><div class="filter-opt-left"><div class="fcheck" data-f="ausstattung" data-v="fitness"></div><span class="filter-opt-label">Fitnessraum</span></div><span class="fcount" data-c="ausstattung-fitness">5</span></div>
-        </div>
-      </div>
-
-      <!-- Sterne -->
-      <div class="filter-panel">
-        <div class="filter-panel-head" onclick="togglePanel(this)">
-          <span><svg class="ph-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Hotelkategorie</span>
-          <svg class="ph-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-        <div class="filter-panel-body">
-          <div class="star-opt" onclick="toggleFilter('sterne','5')"><div class="fcheck" data-f="sterne" data-v="5"></div><div class="mini-stars">★★★★★</div><span class="fcount" data-c="sterne-5">3</span></div>
-          <div class="star-opt" onclick="toggleFilter('sterne','4')"><div class="fcheck" data-f="sterne" data-v="4"></div><div class="mini-stars">★★★★</div><span style="color:var(--grey-2);font-size:14px">★</span><span class="fcount" data-c="sterne-4">4</span></div>
-          <div class="star-opt" onclick="toggleFilter('sterne','3')"><div class="fcheck" data-f="sterne" data-v="3"></div><div class="mini-stars">★★★</div><span style="color:var(--grey-2);font-size:14px">★★</span><span class="fcount" data-c="sterne-3">2</span></div>
-        </div>
-      </div>
-
-      <!-- Preis -->
-      <div class="filter-panel">
-        <div class="filter-panel-head" onclick="togglePanel(this)">
-          <span><svg class="ph-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Preis p.P.</span>
-          <svg class="ph-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-        <div class="filter-panel-body">
-          <div class="price-wrap">
-            <div class="price-labels"><span>€ 0</span><strong id="price-lbl">bis € 2.000</strong></div>
-            <input type="range" min="200" max="2000" step="50" value="2000" id="price-range" oninput="onPrice(this.value)"/>
-          </div>
-        </div>
-      </div>
-
-      <!-- Ziel -->
-      <div class="filter-panel">
-        <div class="filter-panel-head" onclick="togglePanel(this)">
-          <span><svg class="ph-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Reiseziel</span>
-          <svg class="ph-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-        <div class="filter-panel-body">
-          <div class="filter-opt" onclick="toggleFilter('ziel','antalya')"><div class="filter-opt-left"><div class="fcheck" data-f="ziel" data-v="antalya"></div><span class="filter-opt-label">Antalya</span></div><span class="fcount" data-c="ziel-antalya">4</span></div>
-          <div class="filter-opt" onclick="toggleFilter('ziel','bodrum')"><div class="filter-opt-left"><div class="fcheck" data-f="ziel" data-v="bodrum"></div><span class="filter-opt-label">Bodrum</span></div><span class="fcount" data-c="ziel-bodrum">2</span></div>
-          <div class="filter-opt" onclick="toggleFilter('ziel','hurghada')"><div class="filter-opt-left"><div class="fcheck" data-f="ziel" data-v="hurghada"></div><span class="filter-opt-label">Hurghada</span></div><span class="fcount" data-c="ziel-hurghada">2</span></div>
-          <div class="filter-opt" onclick="toggleFilter('ziel','dalaman')"><div class="filter-opt-left"><div class="fcheck" data-f="ziel" data-v="dalaman"></div><span class="filter-opt-label">Dalaman</span></div><span class="fcount" data-c="ziel-dalaman">1</span></div>
-        </div>
-      </div>
-    </aside>
-
-    <!-- RESULTS -->
+    <aside class="filter-sidebar" id="filter-sidebar"></aside>
     <div>
       <div class="active-chips" id="chips" style="display:none"></div>
       <div class="results-top">
-        <div class="results-count" id="rcount">9 Angebote <span>für Antalya, 15.–22. Juli</span></div>
-        <select class="sort-sel" onchange="sortResults(this.value)">
-          <option value="emp">Empfehlung</option>
-          <option value="price-asc">Preis ↑</option>
-          <option value="price-desc">Preis ↓</option>
-          <option value="rating">Bewertung</option>
-          <option value="stars">Kategorie</option>
-        </select>
+        <div class="results-count" id="rcount"></div>
+        <select class="sort-sel" id="sort-sel" onchange="sortResults(this.value)"></select>
       </div>
       <div class="results-list" id="rlist"></div>
       <div class="no-results" id="no-res" style="display:none">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <h3>Keine Treffer gefunden</h3>
-        <p>Passen Sie Ihre Filter an, um mehr Ergebnisse zu sehen.</p>
-        <button class="btn btn-outline" style="margin-top:16px" onclick="clearAll()">Alle Filter zurücksetzen</button>
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--grey-2);margin-bottom:16px"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <h3 id="no-res-title"></h3>
+        <p id="no-res-sub"></p>
+        <button class="btn btn-outline" style="margin-top:16px" onclick="clearAll()" id="reset-btn"></button>
       </div>
       <div class="pagination" id="pagi">
         <button class="page-btn active">1</button>
         <button class="page-btn">2</button>
         <button class="page-btn">3</button>
-        <button class="page-btn" style="width:auto;padding:0 12px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+        <button class="page-btn" style="width:auto;padding:0 12px">›</button>
       </div>
     </div>
   </div>
@@ -234,115 +96,213 @@
   <script src="components.js"></script>
   <script>
   const HOTELS = [
-    { id:1, ci:'ci1', name:'Rixos Premium Belek', dest:'Belek, Antalya', ziel:'antalya', stars:5, rating:4.8, rcount:2841, price:1249, nights:7, vp:['all-inclusive'], aus:['pool','spa','strand','fitness','kinderclub'], badge:{t:'Beliebt',c:'badge-orange'}, avail:'Nur noch 3 Zimmer frei', q:'rixos belek resort pool' },
-    { id:2, ci:'ci2', name:'Bodrum Bay Resort', dest:'Turgutreis, Bodrum', ziel:'bodrum', stars:4, rating:4.2, rcount:1204, price:879, nights:7, vp:['halbpension'], aus:['pool','strand','spa'], badge:{t:'Neu',c:'badge-blue'}, avail:null, q:'bodrum resort sea turkey' },
-    { id:3, ci:'ci3', name:'Steigenberger Aqua Magic', dest:'Hurghada, Ägypten', ziel:'hurghada', stars:5, rating:4.6, rcount:3120, price:749, nights:7, vp:['all-inclusive'], aus:['pool','wasserpark','strand','fitness'], badge:{t:'Angebot',c:'badge-yellow'}, avail:'Nur noch 5 Zimmer frei', q:'hurghada resort waterpark' },
-    { id:4, ci:'ci4', name:'Maxx Royal Kemer Resort', dest:'Kemer, Antalya', ziel:'antalya', stars:5, rating:4.9, rcount:987, price:1549, nights:7, vp:['all-inclusive'], aus:['pool','spa','strand','fitness','kinderclub','wasserpark'], badge:{t:'Premium',c:'badge-blue'}, avail:'Nur noch 2 Zimmer frei', q:'kemer resort antalya luxury' },
-    { id:5, ci:'ci5', name:'Club Aldiana Türkei', dest:'Side, Antalya', ziel:'antalya', stars:4, rating:4.4, rcount:2100, price:999, nights:7, vp:['all-inclusive'], aus:['pool','strand','fitness','kinderclub'], badge:null, avail:null, q:'side antalya resort beach' },
-    { id:6, ci:'ci6', name:'Kempinski Barbaros Bay', dest:'Bodrum, Türkei', ziel:'bodrum', stars:5, rating:4.7, rcount:678, price:1899, nights:7, vp:['halbpension','nur-ub'], aus:['pool','spa','strand','fitness'], badge:{t:'Luxus',c:'badge-orange'}, avail:null, q:'bodrum luxury kempinski hotel' },
-    { id:7, ci:'ci7', name:'Titanic Beach Lara', dest:'Lara, Antalya', ziel:'antalya', stars:5, rating:4.5, rcount:4201, price:1099, nights:7, vp:['all-inclusive'], aus:['pool','spa','strand','wasserpark','fitness','kinderclub'], badge:{t:'Bestseller',c:'badge-orange'}, avail:'Nur noch 4 Zimmer frei', q:'lara antalya beach resort' },
-    { id:8, ci:'ci8', name:'TUI BLUE Palm Garden', dest:'Hurghada, Ägypten', ziel:'hurghada', stars:4, rating:4.1, rcount:892, price:699, nights:7, vp:['fruehstueck'], aus:['pool','strand'], badge:{t:'Günstig',c:'badge-yellow'}, avail:null, q:'hurghada egypt hotel beach' },
-    { id:9, ci:'ci9', name:'Dalaman Beach Hotel', dest:'Dalaman, Türkei', ziel:'dalaman', stars:3, rating:3.9, rcount:445, price:549, nights:7, vp:['halbpension','fruehstueck'], aus:['pool','fitness'], badge:null, avail:null, q:'dalaman turkey hotel' },
+    {id:1,ci:'ci1',name:'Rixos Premium Belek',dest:'Belek, Antalya',ziel:'antalya',stars:5,rating:4.8,rcount:2841,price:1249,nights:7,vp:['all-inclusive'],aus:['pool','spa','strand','fitness','kinderclub'],badgeKey:'bestseller',avail:3,q:'rixos belek resort pool'},
+    {id:2,ci:'ci2',name:'Bodrum Bay Resort',dest:'Turgutreis, Bodrum',ziel:'bodrum',stars:4,rating:4.2,rcount:1204,price:879,nights:7,vp:['halbpension'],aus:['pool','strand','spa'],badgeKey:'neu',avail:0,q:'bodrum resort sea turkey'},
+    {id:3,ci:'ci3',name:'Steigenberger Aqua Magic',dest:'Hurghada, Ägypten',ziel:'hurghada',stars:5,rating:4.6,rcount:3120,price:749,nights:7,vp:['all-inclusive'],aus:['pool','wasserpark','strand','fitness'],badgeKey:'angebot',avail:5,q:'hurghada resort waterpark'},
+    {id:4,ci:'ci4',name:'Maxx Royal Kemer Resort',dest:'Kemer, Antalya',ziel:'antalya',stars:5,rating:4.9,rcount:987,price:1549,nights:7,vp:['all-inclusive'],aus:['pool','spa','strand','fitness','kinderclub','wasserpark'],badgeKey:'premium',avail:2,q:'kemer resort antalya luxury'},
+    {id:5,ci:'ci5',name:'Club Aldiana Türkei',dest:'Side, Antalya',ziel:'antalya',stars:4,rating:4.4,rcount:2100,price:999,nights:7,vp:['all-inclusive'],aus:['pool','strand','fitness','kinderclub'],badgeKey:null,avail:0,q:'side antalya resort beach'},
+    {id:6,ci:'ci6',name:'Kempinski Barbaros Bay',dest:'Bodrum, Türkei',ziel:'bodrum',stars:5,rating:4.7,rcount:678,price:1899,nights:7,vp:['halbpension','nur-ub'],aus:['pool','spa','strand','fitness'],badgeKey:'luxus',avail:0,q:'bodrum luxury kempinski hotel'},
+    {id:7,ci:'ci7',name:'Titanic Beach Lara',dest:'Lara, Antalya',ziel:'antalya',stars:5,rating:4.5,rcount:4201,price:1099,nights:7,vp:['all-inclusive'],aus:['pool','spa','strand','wasserpark','fitness','kinderclub'],badgeKey:'beliebt',avail:4,q:'lara antalya beach resort'},
+    {id:8,ci:'ci8',name:'TUI BLUE Palm Garden',dest:'Hurghada, Ägypten',ziel:'hurghada',stars:4,rating:4.1,rcount:892,price:699,nights:7,vp:['fruehstueck'],aus:['pool','strand'],badgeKey:'guenstig',avail:0,q:'hurghada egypt hotel beach'},
+    {id:9,ci:'ci9',name:'Dalaman Beach Hotel',dest:'Dalaman, Türkei',ziel:'dalaman',stars:3,rating:3.9,rcount:445,price:549,nights:7,vp:['halbpension','fruehstueck'],aus:['pool','fitness'],badgeKey:null,avail:0,q:'dalaman turkey hotel'},
   ];
 
-  const fState = { verpflegung: new Set(), ausstattung: new Set(), sterne: new Set(), ziel: new Set(), maxPrice: 2000 };
+  const fState = {verpflegung:new Set(),ausstattung:new Set(),sterne:new Set(),ziel:new Set(),maxPrice:2000};
 
-  function toggleFilter(g, v) {
-    const s = fState[g]; s.has(v) ? s.delete(v) : s.add(v);
-    document.querySelectorAll(`[data-f="${g}"][data-v="${v}"]`).forEach(el => el.classList.toggle('checked', s.has(v)));
+  function sp(key){ return tObj2('sp')[key] || key; }
+  function spVP(key){ return (tObj2('sp').vp||{})[key] || key; }
+  function spAus(key){ return (tObj2('sp').aus||{})[key] || key; }
+  function spSort(key){ return (tObj2('sp').sort||{})[key] || key; }
+  function bdg(key){ return (tObj2('badges')||{})[key] || key; }
+
+  function buildFilterSidebar(){
+    const VPS = ['all-inclusive','halbpension','fruehstueck','nur-ub'];
+    const AUSS = ['pool','spa','strand','wasserpark','kinderclub','fitness'];
+    const STERNE = ['5','4','3'];
+    const ZIELE = ['antalya','bodrum','hurghada','dalaman'];
+    const vpCounts = {}, auCounts = {}, stCounts = {}, ziCounts = {};
+    HOTELS.forEach(h=>{
+      h.vp.forEach(v=>{ vpCounts[v]=(vpCounts[v]||0)+1; });
+      h.aus.forEach(a=>{ auCounts[a]=(auCounts[a]||0)+1; });
+      stCounts[h.stars]=(stCounts[h.stars]||0)+1;
+      ziCounts[h.ziel]=(ziCounts[h.ziel]||0)+1;
+    });
+
+    const makePanelHead = (icon,label) => `<div class="filter-panel-head" onclick="togglePanel(this)">
+      <span>${icon} ${label}</span>
+      <svg class="ph-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>`;
+    const makeOpt = (group,val,label,count) => `<div class="filter-opt" onclick="toggleFilter('${group}','${val}')">
+      <div class="filter-opt-left"><div class="fcheck" data-f="${group}" data-v="${val}"></div><span class="filter-opt-label">${label}</span></div>
+      <span class="fcount">${count||0}</span>
+    </div>`;
+
+    const pinIcon = `<svg style="color:var(--orange);display:inline-block;vertical-align:middle;margin-right:4px" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>`;
+    const gridIcon = `<svg style="color:var(--orange);display:inline-block;vertical-align:middle;margin-right:4px" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>`;
+    const starIcon = `<svg style="color:var(--orange);display:inline-block;vertical-align:middle;margin-right:4px" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+    const priceIcon = `<svg style="color:var(--orange);display:inline-block;vertical-align:middle;margin-right:4px" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>`;
+
+    document.getElementById('filter-sidebar').innerHTML = `
+      <div class="filter-header">
+        <span class="filter-title">${sp('filterTitle')}</span>
+        <button class="clear-all" id="clear-btn" style="display:none" onclick="clearAll()">${sp('clearAll')}</button>
+      </div>
+      <div class="filter-panel">
+        ${makePanelHead(pinIcon, sp('verpflegung'))}
+        <div class="filter-panel-body">${VPS.map(v=>makeOpt('verpflegung',v,spVP(v),vpCounts[v])).join('')}</div>
+      </div>
+      <div class="filter-panel">
+        ${makePanelHead(gridIcon, sp('ausstattung'))}
+        <div class="filter-panel-body">${AUSS.map(a=>makeOpt('ausstattung',a,spAus(a),auCounts[a])).join('')}</div>
+      </div>
+      <div class="filter-panel">
+        ${makePanelHead(starIcon, sp('kategorie'))}
+        <div class="filter-panel-body">${STERNE.map(s=>`<div class="star-opt" onclick="toggleFilter('sterne','${s}')">
+          <div class="fcheck" data-f="sterne" data-v="${s}"></div>
+          <span style="color:var(--orange-light);font-size:14px">${'★'.repeat(+s)}<span style="color:var(--grey-2)">${'★'.repeat(5-s)}</span></span>
+          <span class="fcount">${stCounts[+s]||0}</span>
+        </div>`).join('')}</div>
+      </div>
+      <div class="filter-panel">
+        ${makePanelHead(priceIcon, sp('preis'))}
+        <div class="filter-panel-body">
+          <div class="price-wrap">
+            <div class="price-labels"><span>€ 0</span><strong id="price-lbl">${(sp('priceTo')||'bis € {{n}}').replace('{{n}}','2.000')}</strong></div>
+            <input type="range" min="200" max="2000" step="50" value="2000" id="price-range" oninput="onPrice(this.value)"/>
+          </div>
+        </div>
+      </div>
+      <div class="filter-panel">
+        ${makePanelHead(pinIcon, sp('ziel'))}
+        <div class="filter-panel-body">${ZIELE.map(z=>makeOpt('ziel',z,z.charAt(0).toUpperCase()+z.slice(1),ziCounts[z])).join('')}</div>
+      </div>`;
+  }
+
+  function buildSortSelect(){
+    const sel = document.getElementById('sort-sel');
+    const sorts = ['emp','price-asc','price-desc','rating','stars'];
+    sel.innerHTML = sorts.map(s=>`<option value="${s}">${spSort(s)}</option>`).join('');
+  }
+
+  function toggleFilter(g,v){
+    const s=fState[g]; s.has(v)?s.delete(v):s.add(v);
+    document.querySelectorAll(`[data-f="${g}"][data-v="${v}"]`).forEach(el=>el.classList.toggle('checked',s.has(v)));
     applyFilters();
   }
-  function togglePanel(h) { h.classList.toggle('collapsed'); h.nextElementSibling.classList.toggle('hidden'); }
-  function onPrice(v) { fState.maxPrice = +v; document.getElementById('price-lbl').textContent = `bis € ${(+v).toLocaleString('de')}`; applyFilters(); }
-
-  function applyFilters() {
-    const filtered = HOTELS.filter(h => {
-      if (fState.verpflegung.size && ![...fState.verpflegung].some(v => h.vp.includes(v))) return false;
-      if (fState.ausstattung.size && ![...fState.ausstattung].every(v => h.aus.includes(v))) return false;
-      if (fState.sterne.size && !fState.sterne.has(String(h.stars))) return false;
-      if (fState.ziel.size && !fState.ziel.has(h.ziel)) return false;
-      if (h.price > fState.maxPrice) return false;
-      return true;
-    });
-    renderResults(filtered);
-    renderChips();
-    const any = [...Object.entries(fState)].some(([k,v]) => k==='maxPrice' ? v<2000 : v.size>0);
-    document.getElementById('clear-btn').style.display = any ? 'inline' : 'none';
+  function togglePanel(h){h.classList.toggle('collapsed');h.nextElementSibling.classList.toggle('hidden');}
+  function onPrice(v){
+    fState.maxPrice=+v;
+    const lbl=sp('priceTo')||'bis € {{n}}';
+    document.getElementById('price-lbl').textContent=lbl.replace('{{n}}','('+v.toLocaleString('de')+')');
+    applyFilters();
   }
 
-  function renderResults(list) {
-    const el = document.getElementById('rlist');
-    const noRes = document.getElementById('no-res');
-    const pagi = document.getElementById('pagi');
-    const cnt = document.getElementById('rcount');
-    el.innerHTML = '';
-    if (!list.length) { noRes.style.display='block'; pagi.style.display='none'; cnt.innerHTML='<span>Keine Ergebnisse</span>'; return; }
+  function applyFilters(){
+    const filtered=HOTELS.filter(h=>{
+      if(fState.verpflegung.size&&![...fState.verpflegung].some(v=>h.vp.includes(v))) return false;
+      if(fState.ausstattung.size&&![...fState.ausstattung].every(v=>h.aus.includes(v))) return false;
+      if(fState.sterne.size&&!fState.sterne.has(String(h.stars))) return false;
+      if(fState.ziel.size&&!fState.ziel.has(h.ziel)) return false;
+      if(h.price>fState.maxPrice) return false;
+      return true;
+    });
+    renderResults(filtered); renderChips();
+    const any=[...Object.entries(fState)].some(([k,v])=>k==='maxPrice'?v<2000:v.size>0);
+    document.getElementById('clear-btn').style.display=any?'inline':'none';
+  }
+
+  function renderResults(list){
+    const el=document.getElementById('rlist');
+    const noRes=document.getElementById('no-res');
+    const pagi=document.getElementById('pagi');
+    const cnt=document.getElementById('rcount');
+    el.innerHTML='';
+    if(!list.length){
+      noRes.style.display='block'; pagi.style.display='none';
+      cnt.innerHTML=`<span>${sp('noResults')}</span>`;
+      document.getElementById('no-res-title').textContent=sp('noResults');
+      document.getElementById('no-res-sub').textContent=sp('noResultsSub');
+      document.getElementById('reset-btn').textContent=sp('resetFilters');
+      return;
+    }
     noRes.style.display='none'; pagi.style.display='flex';
-    cnt.innerHTML = `${list.length} Angebote <span>für Antalya, 15.–22. Juli</span>`;
-    list.forEach(h => {
-      const starsH = '★'.repeat(h.stars) + '<span style="color:var(--grey-2)">' + '★'.repeat(5-h.stars) + '</span>';
-      const tagsH = [...h.vp.map(v=>vpLabel(v)), ...h.aus.slice(0,3).map(a=>ausLabel(a))].map(t=>`<span class="tag">${t}</span>`).join('');
-      const badgeH = h.badge ? `<span class="badge ${h.badge.c} result-img-badge">${h.badge.t}</span>` : '';
-      const availH = h.avail ? `<div class="r-avail"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>${h.avail}</div>` : '';
-      const card = document.createElement('article');
-      card.className = 'result-card'; card.dataset.price = h.price; card.dataset.rating = h.rating; card.dataset.stars = h.stars;
-      card.innerHTML = `
+    const tmpl=sp('resultCount').replace('{{n}}',list.length);
+    cnt.innerHTML=`${tmpl} <span>${sp('resultFor')}</span>`;
+    list.forEach(h=>{
+      const stH='★'.repeat(h.stars)+'<span style="color:var(--grey-2)">'+'★'.repeat(5-h.stars)+'</span>';
+      const tagH=[...h.vp.map(v=>spVP(v)),...h.aus.slice(0,3).map(a=>spAus(a))].map(tg=>`<span class="tag">${tg}</span>`).join('');
+      const bKey=h.badgeKey;
+      const bLabel=bKey?bdg(bKey):null;
+      const bCls=bKey==='beliebt'||bKey==='bestseller'||bKey==='luxus'?'badge-orange':bKey==='neu'||bKey==='premium'?'badge-blue':'badge-yellow';
+      const badgeH=bLabel?`<span class="badge ${bCls} result-img-badge">${bLabel}</span>`:'';
+      const availH=h.avail>0?`<div class="r-avail"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>${sp('onlyLeft').replace('{{n}}',h.avail)}</div>`:'';
+      const card=document.createElement('article');
+      card.className='result-card'; card.dataset.price=h.price; card.dataset.rating=h.rating; card.dataset.stars=h.stars;
+      card.innerHTML=`
         <div class="result-img ${h.ci}" id="rimg-${h.id}"><div class="result-img-overlay"></div>${badgeH}</div>
         <div class="result-body">
           <div class="result-hotel">${h.name}</div>
           <div class="result-dest"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>${h.dest}</div>
-          <div class="stars" style="margin-bottom:8px"><span style="color:var(--orange-light);font-size:14px">${starsH}</span><span class="score">${h.rating} (${h.rcount.toLocaleString('de')})</span></div>
+          <div class="stars" style="margin-bottom:8px"><span style="color:var(--orange-light);font-size:14px">${stH}</span><span class="score">${h.rating} (${h.rcount.toLocaleString('de')})</span></div>
           <div class="result-meta">
-            <div class="result-meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/></svg>${h.nights} Nächte</div>
-            <div class="result-meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 002 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>Direktflug inkl.</div>
-            <div class="result-meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>Transfer inkl.</div>
+            <div class="result-meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${h.nights} ${sp('nights')}</div>
+            <div class="result-meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 002 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>${sp('direct')}</div>
+            <div class="result-meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>${sp('transfer')}</div>
           </div>
-          <div class="offer-tags">${tagsH}</div>
+          <div class="offer-tags">${tagH}</div>
         </div>
         <div class="result-price-col">
-          <div style="text-align:center"><div class="r-price-from">Ab</div><div class="r-price">€ ${h.price.toLocaleString('de')}</div><div class="r-price-pp">pro Person</div><div class="r-price-pp">${h.nights} Nächte, 2 Erw.</div></div>
+          <div style="text-align:center">
+            <div class="r-price-from">Ab</div>
+            <div class="r-price">€ ${h.price.toLocaleString('de')}</div>
+            <div class="r-price-pp">${sp('perPerson')}</div>
+            <div class="r-price-pp">${h.nights} ${sp('nights')}, 2 ${sp('perPerson')&&''}</div>
+          </div>
           ${availH}
-          <a href="hotel.html" class="btn btn-primary" style="width:100%;justify-content:center">Jetzt buchen</a>
-          <a href="hotel.html" class="link-more" style="font-size:12px">Details ansehen</a>
+          <a href="hotel.html" class="btn btn-primary" style="width:100%;justify-content:center">${sp('bookNow')}</a>
+          <a href="hotel.html" class="link-more" style="font-size:12px">${sp('details')}</a>
         </div>`;
       el.appendChild(card);
-      fetchUnsplashImg(h.q, `rimg-${h.id}`);
+      fetchUnsplashImg(h.q,`rimg-${h.id}`);
     });
   }
 
-  function renderChips() {
-    const c = document.getElementById('chips');
-    const chips = [];
-    fState.verpflegung.forEach(v => chips.push({g:'verpflegung',v,l:vpLabel(v)}));
-    fState.ausstattung.forEach(v => chips.push({g:'ausstattung',v,l:ausLabel(v)}));
-    fState.sterne.forEach(v => chips.push({g:'sterne',v,l:`${v} Sterne`}));
-    fState.ziel.forEach(v => chips.push({g:'ziel',v,l:v.charAt(0).toUpperCase()+v.slice(1)}));
-    if (fState.maxPrice < 2000) chips.push({g:'price',v:null,l:`bis € ${fState.maxPrice.toLocaleString('de')}`});
-    if (!chips.length) { c.style.display='none'; return; }
+  function renderChips(){
+    const c=document.getElementById('chips'); const chips=[];
+    fState.verpflegung.forEach(v=>chips.push({g:'verpflegung',v,l:spVP(v)}));
+    fState.ausstattung.forEach(v=>chips.push({g:'ausstattung',v,l:spAus(v)}));
+    fState.sterne.forEach(v=>chips.push({g:'sterne',v,l:`${v}★`}));
+    fState.ziel.forEach(v=>chips.push({g:'ziel',v,l:v.charAt(0).toUpperCase()+v.slice(1)}));
+    if(fState.maxPrice<2000) chips.push({g:'price',v:null,l:`€ ${fState.maxPrice.toLocaleString('de')}`});
+    if(!chips.length){c.style.display='none';return;}
     c.style.display='flex';
-    c.innerHTML = chips.map(ch => `<span class="chip" onclick="${ch.g==='price'?'clearPrice()':``toggleFilter('${ch.g}','${ch.v}')``}">${ch.l} <span class="chip-x">×</span></span>`).join('');
+    c.innerHTML=chips.map(ch=>`<span class="chip" onclick="${ch.g==='price'?'clearPrice()':'toggleFilter(\''+ch.g+'\',\''+ch.v+'\')'}">${ch.l} <span>×</span></span>`).join('');
   }
 
-  function clearPrice() { fState.maxPrice=2000; document.getElementById('price-range').value=2000; document.getElementById('price-lbl').textContent='bis € 2.000'; applyFilters(); }
-  function clearAll() { ['verpflegung','ausstattung','sterne','ziel'].forEach(g => { fState[g].clear(); document.querySelectorAll(`[data-f="${g}"]`).forEach(e=>e.classList.remove('checked')); }); clearPrice(); }
+  function clearPrice(){fState.maxPrice=2000;document.getElementById('price-range').value=2000;onPrice(2000);applyFilters();}
+  function clearAll(){
+    ['verpflegung','ausstattung','sterne','ziel'].forEach(g=>{fState[g].clear();document.querySelectorAll(`[data-f="${g}"]`).forEach(e=>e.classList.remove('checked'));});
+    clearPrice();
+  }
 
-  function sortResults(m) {
-    const grid = document.getElementById('rlist');
-    const cards = [...grid.querySelectorAll('.result-card')];
-    cards.sort((a,b) => {
-      if (m==='price-asc')  return a.dataset.price - b.dataset.price;
-      if (m==='price-desc') return b.dataset.price - a.dataset.price;
-      if (m==='rating')     return b.dataset.rating - a.dataset.rating;
-      if (m==='stars')      return b.dataset.stars - a.dataset.stars;
+  function sortResults(m){
+    const grid=document.getElementById('rlist');
+    const cards=[...grid.querySelectorAll('.result-card')];
+    cards.sort((a,b)=>{
+      if(m==='price-asc')  return a.dataset.price-b.dataset.price;
+      if(m==='price-desc') return b.dataset.price-a.dataset.price;
+      if(m==='rating')     return b.dataset.rating-a.dataset.rating;
+      if(m==='stars')      return b.dataset.stars-a.dataset.stars;
       return 0;
     });
-    cards.forEach(c => grid.appendChild(c));
+    cards.forEach(c=>grid.appendChild(c));
   }
 
-  const vpLabel  = v => ({all-inclusive:'All-Inclusive',halbpension:'Halbpension',fruehstueck:'Ü+F',`nur-ub`:'Nur Ü'}[v]||v);
-  const ausLabel = v => ({pool:'Pool',spa:'Spa',strand:'Strand',wasserpark:'Wasserpark',kinderclub:'Kinderclub',fitness:'Fitness'}[v]||v);
-
-  document.addEventListener('DOMContentLoaded', () => renderResults(HOTELS));
+  document.addEventListener('DOMContentLoaded',()=>{
+    buildFilterSidebar();
+    buildSortSelect();
+    renderResults(HOTELS);
+  });
   </script>
 </body>
 </html>

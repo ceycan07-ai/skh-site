@@ -1,228 +1,224 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>SunExpress Holidays — Ihr Urlaub unter der Sonne</title>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>SunExpress Holidays</title>
   <link rel="stylesheet" href="shared.css"/>
   <style>
-    /* HERO */
-    .hero {
-      position: relative; min-height: 520px;
-      display: flex; flex-direction: column; justify-content: flex-end;
-      overflow: hidden;
-    }
-    .hero-bg {
-      position: absolute; inset: 0;
-      background: linear-gradient(160deg, var(--blue-dark) 0%, var(--blue-mid) 100%);
-      background-size: cover; background-position: center;
-      transition: background-image .5s;
-    }
-    .hero-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(4,48,109,.85) 0%, rgba(0,69,143,.4) 50%, transparent 100%);
-    }
-    .hero-content {
-      position: relative; z-index: 2;
-      padding: 0 var(--sp-xl) 0;
-      max-width: 640px;
-    }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: var(--orange); color: #fff;
-      font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
-      text-transform: uppercase; padding: 5px 14px;
-      border-radius: var(--r-full); margin-bottom: 16px;
-    }
-    .hero h1 {
-      font-size: 48px; font-weight: 700; color: #fff;
-      line-height: 1.15; margin-bottom: 12px;
-    }
-    .hero h1 em { color: var(--orange-light); font-style: normal; }
-    .hero-sub { font-size: 16px; color: rgba(255,255,255,.85); line-height: 1.6; margin-bottom: 36px; max-width: 480px; }
-
-    /* Featured card on hero */
-    .hero-feature-card {
-      position: absolute; right: var(--sp-xl); bottom: 120px;
-      background: #fff; border-radius: var(--r-xl);
-      box-shadow: var(--sh-xl); padding: 16px 20px;
-      min-width: 240px; z-index: 2;
-    }
-    .hero-feature-card .dest-label { font-size: 11px; color: var(--grey-3); font-weight: 600; margin-bottom: 4px; }
-    .hero-feature-card .hotel-name { font-size: 15px; font-weight: 700; color: var(--blue); margin-bottom: 6px; }
-    .hero-feature-card .meta { font-size: 12px; color: var(--grey-3); margin-bottom: 10px; }
-    .hero-feature-card .price-chip {
-      background: var(--blue); color: #fff;
-      font-size: 13px; font-weight: 700; padding: 6px 14px;
-      border-radius: var(--r-full); display: inline-block;
-    }
-
-    /* Search area */
-    .search-area { position: relative; z-index: 2; padding: 0 var(--sp-xl) 0; }
-
-    /* DESTINATION CARDS */
-    .dest-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
-    .dest-card {
-      border-radius: var(--r-lg); overflow: hidden;
-      box-shadow: var(--sh-md); background: #fff;
-      cursor: pointer; transition: box-shadow .2s, transform .2s;
-    }
-    .dest-card:hover { box-shadow: var(--sh-xl); transform: translateY(-3px); text-decoration: none; }
-    .dest-img {
-      height: 160px; position: relative; overflow: hidden;
-      background-size: cover; background-position: center;
-    }
-    .dest-img-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(0,69,143,.8) 0%, transparent 55%);
-    }
-    .dest-img-content { position: absolute; bottom: 12px; left: 12px; z-index: 1; }
-    .dest-name { font-size: 17px; font-weight: 700; color: #fff; line-height: 1.2; }
-    .dest-country { font-size: 11px; color: var(--blue-light); font-weight: 600; }
-    .dest-footer { padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; }
-    .dest-price { font-size: 19px; font-weight: 700; color: var(--orange); }
-    .dest-price span { font-size: 11px; font-weight: 400; color: var(--grey-3); }
-    .dest-from { font-size: 11px; color: var(--grey-3); }
-
-    /* OFFER CARDS */
-    .offer-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
-    .offer-card {
-      background: #fff; border-radius: var(--r-lg);
-      box-shadow: var(--sh-md); overflow: hidden;
-      border-left: 4px solid var(--orange);
-      transition: box-shadow .2s, transform .15s;
-    }
-    .offer-card:hover { box-shadow: var(--sh-lg); transform: translateY(-2px); }
-    .offer-img {
-      height: 140px; position: relative; overflow: hidden;
-      background-size: cover; background-position: center;
-      display: flex; align-items: flex-end; padding: 12px;
-    }
-    .offer-img-overlay { position: absolute; inset: 0; background: linear-gradient(to top,rgba(0,0,0,.5) 0%,transparent 60%); }
-    .offer-img-name { position: relative; z-index: 1; font-size: 14px; font-weight: 700; color: #fff; }
-    .offer-body { padding: 16px; }
-    .offer-hotel { font-size: 15px; font-weight: 700; color: var(--blue); margin-bottom: 4px; }
-    .offer-dest { font-size: 12px; color: var(--grey-3); margin-bottom: 8px; display: flex; align-items: center; gap: 4px; }
-    .offer-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
-    .offer-footer { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--bg); border-top: 1px solid var(--grey-1); }
-    .offer-price-from { font-size: 10px; color: var(--grey-3); text-transform: uppercase; letter-spacing: .5px; }
-    .offer-price-val { font-size: 24px; font-weight: 700; color: var(--orange); line-height: 1; }
-    .offer-price-pp { font-size: 11px; color: var(--grey-3); }
-
-    /* WHY */
-    .why-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; margin-top: 32px; }
-    .why-card { background: #fff; border-radius: var(--r-lg); padding: 28px 20px; text-align: center; box-shadow: var(--sh-md); border-top: 3px solid var(--orange); }
-    .why-icon { width: 56px; height: 56px; border-radius: 50%; background: var(--greyblue-2); display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; color: var(--blue); }
-    .why-card h4 { font-size: 14px; font-weight: 700; color: var(--blue); margin-bottom: 6px; }
-    .why-card p { font-size: 12px; color: var(--grey-3); line-height: 1.5; }
+    .hero{position:relative;min-height:520px;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;}
+    .hero-bg{position:absolute;inset:0;background:linear-gradient(160deg,var(--blue-dark),var(--blue-mid));background-size:cover;background-position:center;}
+    .hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(4,48,109,.85) 0%,rgba(0,69,143,.4) 50%,transparent 100%);}
+    .hero-content{position:relative;z-index:2;padding:0 var(--sp-xl) 0;max-width:640px;}
+    .hero-badge{display:inline-flex;align-items:center;gap:6px;background:var(--orange);color:#fff;font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;padding:5px 14px;border-radius:var(--r-full);margin-bottom:16px;}
+    .hero h1{font-size:46px;font-weight:700;color:#fff;line-height:1.15;margin-bottom:12px;}
+    .hero h1 em{color:var(--orange-light);font-style:normal;}
+    .hero-sub{font-size:16px;color:rgba(255,255,255,.85);line-height:1.6;margin-bottom:36px;max-width:480px;}
+    .hero-feature-card{position:absolute;right:var(--sp-xl);bottom:120px;background:#fff;border-radius:var(--r-xl);box-shadow:var(--sh-xl);padding:16px 20px;min-width:240px;z-index:2;}
+    .search-area{position:relative;z-index:2;padding:0 var(--sp-xl) 0;}
+    .dest-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+    .dest-card{border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-md);background:#fff;cursor:pointer;transition:box-shadow .2s,transform .2s;}
+    .dest-card:hover{box-shadow:var(--sh-xl);transform:translateY(-3px);text-decoration:none;}
+    .dest-img{height:160px;position:relative;overflow:hidden;background-size:cover;background-position:center;}
+    .dest-img-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,69,143,.8) 0%,transparent 55%);}
+    .dest-img-content{position:absolute;bottom:12px;left:12px;z-index:1;}
+    .dest-name{font-size:17px;font-weight:700;color:#fff;line-height:1.2;}
+    .dest-country{font-size:11px;color:var(--blue-light);font-weight:600;}
+    .dest-footer{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;}
+    .dest-price{font-size:19px;font-weight:700;color:var(--orange);}
+    .dest-price span{font-size:11px;font-weight:400;color:var(--grey-3);}
+    .dest-from{font-size:11px;color:var(--grey-3);}
+    .offer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+    .offer-card{background:#fff;border-radius:var(--r-lg);box-shadow:var(--sh-md);overflow:hidden;border-left:4px solid var(--orange);transition:box-shadow .2s,transform .15s;}
+    .offer-card:hover{box-shadow:var(--sh-lg);transform:translateY(-2px);}
+    .offer-img{height:140px;position:relative;overflow:hidden;background-size:cover;background-position:center;display:flex;align-items:flex-end;padding:12px;}
+    .offer-img-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.5) 0%,transparent 60%);}
+    .offer-img-name{position:relative;z-index:1;font-size:14px;font-weight:700;color:#fff;}
+    .offer-body{padding:16px;}
+    .offer-hotel{font-size:15px;font-weight:700;color:var(--blue);margin-bottom:4px;}
+    .offer-dest{font-size:12px;color:var(--grey-3);margin-bottom:8px;display:flex;align-items:center;gap:4px;}
+    .offer-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+    .offer-footer{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--bg);border-top:1px solid var(--grey-1);}
+    .offer-price-from{font-size:10px;color:var(--grey-3);text-transform:uppercase;letter-spacing:.5px;}
+    .offer-price-val{font-size:24px;font-weight:700;color:var(--orange);line-height:1;}
+    .offer-price-pp{font-size:11px;color:var(--grey-3);}
+    .why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:32px;}
+    .why-card{background:#fff;border-radius:var(--r-lg);padding:28px 20px;text-align:center;box-shadow:var(--sh-md);border-top:3px solid var(--orange);}
+    .why-icon{width:56px;height:56px;border-radius:50%;background:var(--greyblue-2);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;color:var(--blue);}
+    .why-card h4{font-size:14px;font-weight:700;color:var(--blue);margin-bottom:6px;}
+    .why-card p{font-size:12px;color:var(--grey-3);line-height:1.5;}
   </style>
 </head>
 <body>
-
   <div id="site-header" data-page="home"></div>
 
-  <!-- HERO -->
   <section class="hero">
     <div class="hero-bg" id="hero-bg"></div>
     <div class="hero-overlay"></div>
-
-    <!-- Feature card -->
     <div class="hero-feature-card">
-      <div class="dest-label">Antalya</div>
-      <div class="hotel-name">Sealife Family Resort</div>
-      <div class="meta">★★★★ · 7 Nächte · All-Inclusive · Direktflug</div>
-      <span class="price-chip">ab 348 €</span>
+      <div style="font-size:11px;color:var(--grey-3);font-weight:600">Antalya</div>
+      <div style="font-size:15px;font-weight:700;color:var(--blue);margin:4px 0">Sealife Family Resort</div>
+      <div style="font-size:12px;color:var(--grey-3);margin-bottom:10px">★★★★ · 7 <span id="fc-nights"></span> · AI · Direktflug</div>
+      <span class="badge badge-blue" id="fc-price">ab 348 €</span>
     </div>
-
     <div class="hero-content">
-      <div class="hero-badge">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
-        Sommer 2026 — Jetzt buchen
-      </div>
-      <h1>Relaxed into your <em>holidays</em></h1>
-      <p class="hero-sub">More comfort for less! Direktflüge ab Deutschland, Österreich und der Schweiz — inklusive Hotel, Transfer und mehr.</p>
+      <div class="hero-badge" id="hero-badge"></div>
+      <h1 id="hero-title"></h1>
+      <p class="hero-sub" id="hero-sub"></p>
     </div>
-
     <div class="search-area" id="search-mask"></div>
   </section>
 
   <!-- USP -->
-  <div class="usp-bar">
-    <div class="usp-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Bestpreisgarantie</div>
-    <div class="usp-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 002 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>Direktflüge mit SunExpress</div>
-    <div class="usp-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>ATOL gesichert</div>
-    <div class="usp-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.22 1.18 2 2 0 012.22 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.09a16 16 0 006 6l.56-.56a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/></svg>24/7 Kundenservice</div>
-    <div class="usp-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Flexible Zahlung</div>
-  </div>
+  <div class="usp-bar" id="usp-bar"></div>
 
   <!-- DESTINATIONS -->
   <section class="section section-white">
     <div class="section-header">
-      <div><h2 class="section-title">Beliebte Reiseziele</h2><p class="section-sub">Direktflüge in Top-Urlaubsdestinationen</p></div>
-      <a href="search.html" class="link-more">Alle Ziele <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      <div><h2 class="section-title" id="dest-title"></h2><p class="section-sub" id="dest-sub"></p></div>
+      <a href="search.html" class="link-more" id="dest-all-link"></a>
     </div>
-    <div class="dest-grid">
-      <div class="dest-card"><div class="dest-img ci1" id="img-ayt"><div class="dest-img-overlay"></div><div class="dest-img-content"><div class="dest-name">Antalya</div><div class="dest-country">AYT · Türkei</div></div></div><div class="dest-footer"><div><div class="dest-from">ab</div><div class="dest-price">€ 449 <span>/ Person</span></div></div><span class="badge badge-orange">Beliebt</span></div></div>
-      <div class="dest-card"><div class="dest-img ci2" id="img-bjv"><div class="dest-img-overlay"></div><div class="dest-img-content"><div class="dest-name">Bodrum</div><div class="dest-country">BJV · Türkei</div></div></div><div class="dest-footer"><div><div class="dest-from">ab</div><div class="dest-price">€ 519 <span>/ Person</span></div></div><span class="badge badge-blue">Neu</span></div></div>
-      <div class="dest-card"><div class="dest-img ci4" id="img-adb"><div class="dest-img-overlay"></div><div class="dest-img-content"><div class="dest-name">İzmir</div><div class="dest-country">ADB · Türkei</div></div></div><div class="dest-footer"><div><div class="dest-from">ab</div><div class="dest-price">€ 399 <span>/ Person</span></div></div><span class="badge badge-yellow">Angebot</span></div></div>
-      <div class="dest-card"><div class="dest-img ci6" id="img-hrg"><div class="dest-img-overlay"></div><div class="dest-img-content"><div class="dest-name">Hurghada</div><div class="dest-country">HRG · Ägypten</div></div></div><div class="dest-footer"><div><div class="dest-from">ab</div><div class="dest-price">€ 589 <span>/ Person</span></div></div><span class="badge badge-orange">Beliebt</span></div></div>
-      <div class="dest-card"><div class="dest-img ci3" id="img-dlm"><div class="dest-img-overlay"></div><div class="dest-img-content"><div class="dest-name">Dalaman</div><div class="dest-country">DLM · Türkei</div></div></div><div class="dest-footer"><div><div class="dest-from">ab</div><div class="dest-price">€ 479 <span>/ Person</span></div></div><span class="badge badge-blue">Neu</span></div></div>
-      <div class="dest-card"><div class="dest-img ci5" id="img-rmf"><div class="dest-img-overlay"></div><div class="dest-img-content"><div class="dest-name">Marsa Alam</div><div class="dest-country">RMF · Ägypten</div></div></div><div class="dest-footer"><div><div class="dest-from">ab</div><div class="dest-price">€ 629 <span>/ Person</span></div></div><span class="badge badge-orange">Beliebt</span></div></div>
-      <div class="dest-card"><div class="dest-img ci7" id="img-alanya"><div class="dest-img-overlay"></div><div class="dest-img-content"><div class="dest-name">Alanya</div><div class="dest-country">AYT · Türkei</div></div></div><div class="dest-footer"><div><div class="dest-from">ab</div><div class="dest-price">€ 429 <span>/ Person</span></div></div><span class="badge badge-yellow">Angebot</span></div></div>
-      <div class="dest-card"><div class="dest-img ci8" id="img-marmaris"><div class="dest-img-overlay"></div><div class="dest-img-content"><div class="dest-name">Marmaris</div><div class="dest-country">DLM · Türkei</div></div></div><div class="dest-footer"><div><div class="dest-from">ab</div><div class="dest-price">€ 499 <span>/ Person</span></div></div><span class="badge badge-blue">Neu</span></div></div>
-    </div>
+    <div class="dest-grid" id="dest-grid"></div>
   </section>
 
-  <!-- TOP OFFERS -->
+  <!-- OFFERS -->
   <section class="section" style="background:#f8f9fa">
     <div class="section-header">
-      <div><h2 class="section-title">Top-Angebote der Woche</h2><p class="section-sub">Flug, Hotel & Transfer inklusive</p></div>
-      <a href="search.html" class="link-more">Alle Angebote <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      <div><h2 class="section-title" id="offers-title"></h2><p class="section-sub" id="offers-sub"></p></div>
+      <a href="search.html" class="link-more" id="offers-all-link"></a>
     </div>
-    <div class="offer-grid">
-      <div class="offer-card"><div class="offer-img ci1" id="img-rixos" style="position:relative"><div class="offer-img-overlay"></div><div class="offer-img-name">Rixos Premium Belek</div></div><div class="offer-body"><div class="offer-hotel">Rixos Premium Belek</div><div class="offer-dest"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Belek, Antalya</div><div class="stars"><span class="star-filled">★★★★★</span><span class="score">4.8 (2.841)</span></div><div class="offer-tags"><span class="tag">All-Inclusive</span><span class="tag">Direktflug</span><span class="tag">Spa</span></div></div><div class="offer-footer"><div><div class="offer-price-from">Ab</div><div class="offer-price-val">€ 1.249</div><div class="offer-price-pp">p.P., 7 Nächte</div></div><a href="hotel.html" class="btn btn-primary btn-sm">Buchen</a></div></div>
-      <div class="offer-card"><div class="offer-img ci2" id="img-bodrum-bay" style="position:relative"><div class="offer-img-overlay"></div><div class="offer-img-name">Bodrum Bay Resort</div></div><div class="offer-body"><div class="offer-hotel">Bodrum Bay Resort</div><div class="offer-dest"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Turgutreis, Bodrum</div><div class="stars"><span class="star-filled">★★★★</span><span class="star-empty">★</span><span class="score">4.2 (1.204)</span></div><div class="offer-tags"><span class="tag">Halbpension</span><span class="tag">Strandlage</span></div></div><div class="offer-footer"><div><div class="offer-price-from">Ab</div><div class="offer-price-val">€ 879</div><div class="offer-price-pp">p.P., 7 Nächte</div></div><a href="hotel.html" class="btn btn-primary btn-sm">Buchen</a></div></div>
-      <div class="offer-card"><div class="offer-img ci3" id="img-steigen" style="position:relative"><div class="offer-img-overlay"></div><div class="offer-img-name">Steigenberger Aqua Magic</div></div><div class="offer-body"><div class="offer-hotel">Steigenberger Aqua Magic</div><div class="offer-dest"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Hurghada, Ägypten</div><div class="stars"><span class="star-filled">★★★★★</span><span class="score">4.6 (3.120)</span></div><div class="offer-tags"><span class="tag">All-Inclusive</span><span class="tag">Wasserpark</span></div></div><div class="offer-footer"><div><div class="offer-price-from">Ab</div><div class="offer-price-val">€ 749</div><div class="offer-price-pp">p.P., 7 Nächte</div></div><a href="hotel.html" class="btn btn-primary btn-sm">Buchen</a></div></div>
-    </div>
+    <div class="offer-grid" id="offers-grid"></div>
   </section>
 
   <!-- PROMO -->
   <section class="section section-white" style="padding-top:0">
     <div class="promo-card">
-      <div><div class="promo-badge">Frühbucher 2026</div><h3>Bis zu 20% Rabatt sichern</h3><p>Buchen Sie Ihren Sommerurlaub jetzt und sparen Sie mit unseren exklusiven Frühbucherrabatten.</p></div>
-      <a href="search.html" class="btn btn-white">Jetzt entdecken <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      <div>
+        <div class="promo-badge" id="promo-label"></div>
+        <h3 id="promo-title" style="margin:8px 0"></h3>
+        <p id="promo-text"></p>
+      </div>
+      <a href="search.html" class="btn btn-white" id="promo-btn"></a>
     </div>
   </section>
 
   <!-- WHY -->
   <section class="section" style="background:#f8f9fa">
-    <div style="text-align:center"><h2 class="section-title">Warum SunExpress Holidays?</h2><p class="section-sub">Ihr vertrauensvoller Partner für Sonnenurlaub seit 1989</p></div>
-    <div class="why-grid">
-      <div class="why-card"><div class="why-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 002 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg></div><h4>Direktflüge</h4><p>Non-Stop-Verbindungen aus über 30 Abflughäfen in DACH.</p></div>
-      <div class="why-card"><div class="why-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><h4>Reiseabsicherung</h4><p>Vollständig insolvenzversichert. Ihr Geld ist bei uns sicher.</p></div>
-      <div class="why-card"><div class="why-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><h4>Kuratierte Hotels</h4><p>Handverlesene Unterkünfte mit verifizierten TrustYou-Bewertungen.</p></div>
-      <div class="why-card"><div class="why-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.22 1.18 2 2 0 012.22 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.09a16 16 0 006 6l.56-.56a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/></svg></div><h4>24/7 Support</h4><p>Unser Kundenservice ist rund um die Uhr für Sie da.</p></div>
-    </div>
+    <div style="text-align:center"><h2 class="section-title" id="why-title"></h2><p class="section-sub" id="why-sub"></p></div>
+    <div class="why-grid" id="why-grid"></div>
   </section>
 
   <div id="site-footer"></div>
   <script src="components.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Hero background via Unsplash
-      fetchUnsplashImg('antalya beach turkey resort', 'hero-bg');
-      // Destination images
-      const destImgs = [
-        ['img-ayt','antalya turkey beach'],['img-bjv','bodrum turkey'],['img-adb','izmir turkey'],
-        ['img-hrg','hurghada egypt resort'],['img-dlm','dalaman turkey'],['img-rmf','marsa alam egypt'],
-        ['img-alanya','alanya turkey beach'],['img-marmaris','marmaris turkey bay']
-      ];
-      destImgs.forEach(([id,q]) => fetchUnsplashImg(q, id));
-      // Offer images
-      fetchUnsplashImg('luxury resort pool antalya', 'img-rixos');
-      fetchUnsplashImg('bodrum resort sea view', 'img-bodrum-bay');
-      fetchUnsplashImg('hurghada resort waterpark', 'img-steigen');
-    });
+  const WHY_ICONS = [
+    `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 002 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>`,
+    `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+    `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
+    `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.22 1.18 2 2 0 012.22 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.09a16 16 0 006 6l.56-.56a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/></svg>`,
+  ];
+
+  const DESTS = [
+    {id:'img-ayt',name:'Antalya',code:'AYT',country:'Türkei',price:'449',badge:'beliebt',ci:'ci1',q:'antalya turkey beach'},
+    {id:'img-bjv',name:'Bodrum',code:'BJV',country:'Türkei',price:'519',badge:'neu',ci:'ci2',q:'bodrum turkey bay'},
+    {id:'img-adb',name:'İzmir',code:'ADB',country:'Türkei',price:'399',badge:'angebot',ci:'ci4',q:'izmir turkey coast'},
+    {id:'img-hrg',name:'Hurghada',code:'HRG',country:'Ägypten',price:'589',badge:'beliebt',ci:'ci6',q:'hurghada egypt resort'},
+    {id:'img-dlm',name:'Dalaman',code:'DLM',country:'Türkei',price:'479',badge:'neu',ci:'ci3',q:'dalaman turkey'},
+    {id:'img-rmf',name:'Marsa Alam',code:'RMF',country:'Ägypten',price:'629',badge:'beliebt',ci:'ci5',q:'marsa alam egypt'},
+    {id:'img-alanya',name:'Alanya',code:'AYT',country:'Türkei',price:'429',badge:'angebot',ci:'ci7',q:'alanya turkey beach'},
+    {id:'img-marmaris',name:'Marmaris',code:'DLM',country:'Türkei',price:'499',badge:'neu',ci:'ci8',q:'marmaris turkey harbor'},
+  ];
+
+  const OFFERS = [
+    {id:'img-rixos',ci:'ci1',hotel:'Rixos Premium Belek',dest:'Belek, Antalya',stars:'★★★★★',score:'4.8',reviews:'2.841',price:'1.249',tags:['all-inclusive','direct'],q:'rixos belek resort pool'},
+    {id:'img-bodrum',ci:'ci2',hotel:'Bodrum Bay Resort',dest:'Turgutreis, Bodrum',stars:'★★★★',score:'4.2',reviews:'1.204',price:'879',tags:['halbpension','strand'],q:'bodrum resort sea turkey'},
+    {id:'img-aqua',ci:'ci3',hotel:'Steigenberger Aqua Magic',dest:'Hurghada, Ägypten',stars:'★★★★★',score:'4.6',reviews:'3.120',price:'749',tags:['all-inclusive','wasserpark'],q:'hurghada resort waterpark'},
+  ];
+
+  function arrowSvg(){return`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`;}
+  function pinSvg(){return`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>`;}
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const ho = tObj2('home');
+    const bd = tObj2('badges');
+    const su = tArr('usp');
+    const uspIcons = [
+      `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+      `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 002 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>`,
+      `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>`,
+      `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.22 1.18 2 2 0 012.22 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.09a16 16 0 006 6l.56-.56a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/></svg>`,
+      `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>`,
+    ];
+
+    // Hero
+    document.getElementById('hero-badge').textContent = ho.heroBadge||'';
+    document.getElementById('hero-title').innerHTML = ho.heroTitle||'';
+    document.getElementById('hero-sub').textContent = ho.heroSub||'';
+    document.getElementById('fc-nights').textContent = t('search','nights');
+
+    // USP bar
+    document.getElementById('usp-bar').innerHTML = su.map((u,i)=>`<div class="usp-item">${uspIcons[i]||''}${u}</div>`).join('');
+
+    // Destinations
+    document.getElementById('dest-title').textContent = ho.destTitle||'';
+    document.getElementById('dest-sub').textContent = ho.destSub||'';
+    document.getElementById('dest-all-link').innerHTML = (ho.destAll||'') + ' ' + arrowSvg();
+    document.getElementById('dest-grid').innerHTML = DESTS.map(d => {
+      const bk = d.badge; const bLabel = bd[bk]||bk;
+      const bCls = bk==='beliebt'?'badge-orange':bk==='neu'?'badge-blue':'badge-yellow';
+      return `<a href="search.html" class="dest-card">
+        <div class="dest-img ${d.ci}" id="${d.id}">
+          <div class="dest-img-overlay"></div>
+          <div class="dest-img-content"><div class="dest-name">${d.name}</div><div class="dest-country">${d.code} · ${d.country}</div></div>
+        </div>
+        <div class="dest-footer">
+          <div><div class="dest-from">ab</div><div class="dest-price">€ ${d.price} <span>/ Person</span></div></div>
+          <span class="badge ${bCls}">${bLabel}</span>
+        </div>
+      </a>`;
+    }).join('');
+
+    // Offers
+    document.getElementById('offers-title').textContent = ho.offersTitle||'';
+    document.getElementById('offers-sub').textContent = ho.offersSub||'';
+    document.getElementById('offers-all-link').innerHTML = (ho.offersAll||'') + ' ' + arrowSvg();
+    const vpLabels = tObj2('sp').vp || {};
+    document.getElementById('offers-grid').innerHTML = OFFERS.map(o => {
+      const tagH = o.tags.map(tg=>`<span class="tag">${vpLabels[tg]||tg}</span>`).join('');
+      return `<div class="offer-card">
+        <div class="offer-img ${o.ci}" id="${o.id}" style="position:relative">
+          <div class="offer-img-overlay"></div><div class="offer-img-name">${o.hotel}</div>
+        </div>
+        <div class="offer-body">
+          <div class="offer-hotel">${o.hotel}</div>
+          <div class="offer-dest">${pinSvg()}${o.dest}</div>
+          <div class="stars"><span style="color:var(--orange-light)">${o.stars}</span><span class="score">${o.score} (${o.reviews})</span></div>
+          <div class="offer-tags">${tagH}</div>
+        </div>
+        <div class="offer-footer">
+          <div><div class="offer-price-from">Ab</div><div class="offer-price-val">€ ${o.price}</div><div class="offer-price-pp">p.P., 7 ${t('search','nights')}</div></div>
+          <a href="hotel.html" class="btn btn-primary btn-sm">${(tObj2('sp').bookNow)||'Buchen'}</a>
+        </div>
+      </div>`;
+    }).join('');
+
+    // Promo
+    document.getElementById('promo-label').textContent = ho.promoLabel||'';
+    document.getElementById('promo-title').textContent = ho.promoTitle||'';
+    document.getElementById('promo-text').textContent = ho.promoText||'';
+    document.getElementById('promo-btn').innerHTML = (ho.promoBtn||'') + ' ' + arrowSvg();
+
+    // Why
+    document.getElementById('why-title').textContent = ho.whyTitle||'';
+    document.getElementById('why-sub').textContent  = ho.whySub||'';
+    const why=(ho.why||[]); const whyD=(ho.whyDesc||[]);
+    document.getElementById('why-grid').innerHTML = why.map((w,i)=>`
+      <div class="why-card"><div class="why-icon">${WHY_ICONS[i]||''}</div><h4>${w}</h4><p>${whyD[i]||''}</p></div>`).join('');
+
+    // Images
+    fetchUnsplashImg('antalya beach turkey resort','hero-bg');
+    DESTS.forEach(d=>fetchUnsplashImg(d.q,d.id));
+    OFFERS.forEach(o=>fetchUnsplashImg(o.q,o.id));
+  });
   </script>
 </body>
 </html>
