@@ -48,7 +48,7 @@ const I18N = {
   de:{
     nav:{home:'Startseite',offers:'Angebote',dest:'Ziele',hotels:'Hotels',help:'Hilfe'},
     header:{contact:'Kontakt',favorites:'Merkliste'},
-    tabs:{sunbeach:'Güneş & Plaj',own:'Kendin Oluştur',flights:'Uçuşlar'},
+    tabs:{sunbeach:'Sonne & Strand',own:'Pauschalreise',flights:'Nur Flug'},
     regions:{turkey:'Türkei',egypt:'Ägypten'},
     search:{
       dest:'Reiseziel',airport:'Abflughafen',dates:'Reisedaten',travelers:'Reisende',btn:'Suchen',
