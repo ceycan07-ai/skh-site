@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>SunExpress Holidays — Hotels</title>
+  <link rel="stylesheet" href="shared.css"/>
+  <style>
+    .page-hero{background:linear-gradient(135deg,var(--blue-dark),var(--blue));padding:60px var(--sp-xl);text-align:center;color:#fff;}
+    .page-hero h1{font-size:40px;font-weight:700;margin-bottom:12px;}
+    .page-hero p{font-size:16px;opacity:.85;max-width:540px;margin:0 auto;}
+    .region-tabs{display:flex;gap:0;border-bottom:2px solid var(--grey-1);background:#fff;padding:0 var(--sp-xl);overflow-x:auto;}
+    .region-tab{font-family:var(--font);font-size:14px;font-weight:600;padding:14px 24px;border:none;background:none;color:var(--grey-3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:all .15s;}
+    .region-tab.active{color:var(--blue);border-bottom-color:var(--blue);}
+    .region-tab:hover{color:var(--blue);}
+    .hotels-layout{max-width:1300px;margin:0 auto;padding:var(--sp-xl);}
+    .hotels-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+    .hotel-card{background:#fff;border-radius:var(--r-xl);box-shadow:var(--sh-md);overflow:hidden;transition:transform .2s,box-shadow .2s;}
+    .hotel-card:hover{transform:translateY(-4px);box-shadow:var(--sh-xl);}
+    .hotel-img{height:200px;background-size:cover;background-position:center;position:relative;}
+    .hotel-img-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.4),transparent 60%);}
+    .hotel-img-badge{position:absolute;top:12px;left:12px;}
+    .hotel-img-recommended{position:absolute;top:12px;right:12px;background:var(--orange);color:#fff;font-size:10px;font-weight:700;padding:4px 10px;border-radius:var(--r-full);}
+    .hotel-body{padding:16px 20px;}
+    .hotel-name{font-size:16px;font-weight:700;color:var(--blue);margin-bottom:4px;}
+    .hotel-dest{font-size:12px;color:var(--grey-3);margin-bottom:8px;display:flex;align-items:center;gap:4px;}
+    .hotel-tags{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0;}
+    .hotel-footer{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:var(--bg);border-top:1px solid var(--grey-1);}
+    .hotel-price{font-size:22px;font-weight:700;color:var(--orange);}
+    .hotel-price-pp{font-size:11px;color:var(--grey-3);}
+    .recommended-banner{background:linear-gradient(135deg,var(--orange),var(--orange-dark));color:#fff;padding:16px 24px;border-radius:var(--r-lg);margin-bottom:24px;display:flex;align-items:center;gap:12px;}
+    .recommended-banner svg{flex-shrink:0;}
+    .recommended-banner h3{font-size:15px;font-weight:700;margin-bottom:2px;}
+    .recommended-banner p{font-size:13px;opacity:.9;}
+  </style>
+</head>
+<body>
+  <div id="site-header" data-page="hotels"></div>
+  <div class="page-hero">
+    <h1 id="page-title"></h1>
+    <p id="page-sub"></p>
+  </div>
+  <div class="breadcrumb"><a href="index.html" id="bc-home"></a><span class="breadcrumb-sep">/</span><span id="bc-hotels"></span></div>
+  <div class="region-tabs" id="region-tabs"></div>
+  <div class="hotels-layout">
+    <div class="recommended-banner">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <div><h3 id="rec-title"></h3><p id="rec-sub"></p></div>
+    </div>
+    <div class="hotels-grid" id="hotels-grid"></div>
+  </div>
+  <div id="site-footer"></div>
+  <script src="components.js"></script>
+  <script>
+  const HOTEL_DATA = {
+    antalya:[
+      {id:'h1',name:'Rixos Premium Belek',dest:'Belek',stars:5,rating:4.8,price:1249,tags:['all-inclusive'],recommended:true,bk:'bestseller',q:'rixos belek resort pool'},
+      {id:'h2',name:'Maxx Royal Kemer Resort',dest:'Kemer',stars:5,rating:4.9,price:1549,tags:['all-inclusive'],recommended:true,bk:'premium',q:'kemer resort antalya luxury'},
+      {id:'h3',name:'Titanic Beach Lara',dest:'Lara',stars:5,rating:4.5,price:1099,tags:['all-inclusive'],recommended:false,bk:'beliebt',q:'lara antalya beach resort'},
+      {id:'h4',name:'Club Aldiana Türkei',dest:'Side',stars:4,rating:4.4,price:999,tags:['all-inclusive'],recommended:false,bk:null,q:'side antalya resort beach'},
+      {id:'h5',name:'Sealife Family Resort',dest:'Antalya',stars:4,rating:4.3,price:799,tags:['all-inclusive'],recommended:false,bk:'beliebt',q:'antalya family resort beach'},
+      {id:'h6',name:'Akka Antedon',dest:'Kemer',stars:5,rating:4.6,price:1199,tags:['all-inclusive'],recommended:true,bk:'premium',q:'kemer antedon resort hotel'},
+    ],
+    bodrum:[
+      {id:'h7',name:'Kempinski Barbaros Bay',dest:'Bodrum',stars:5,rating:4.7,price:1899,tags:['halbpension'],recommended:true,bk:'luxus',q:'kempinski bodrum luxury hotel'},
+      {id:'h8',name:'Bodrum Bay Resort',dest:'Turgutreis',stars:4,rating:4.2,price:879,tags:['halbpension'],recommended:false,bk:'neu',q:'bodrum resort sea view'},
+      {id:'h9',name:'Voyage Bodrum',dest:'Milas',stars:5,rating:4.5,price:1299,tags:['all-inclusive'],recommended:true,bk:'beliebt',q:'voyage bodrum resort pool'},
+      {id:'h10',name:'Casa Dell\'Arte',dest:'Bodrum',stars:5,rating:4.8,price:2199,tags:['fruehstueck'],recommended:false,bk:'luxus',q:'bodrum boutique luxury hotel sea'},
+    ],
+    dalaman:[
+      {id:'h11',name:'Dalaman Beach Hotel',dest:'Dalaman',stars:3,rating:3.9,price:549,tags:['halbpension'],recommended:false,bk:null,q:'dalaman turkey hotel'},
+      {id:'h12',name:'Fethiye Resort & Spa',dest:'Fethiye',stars:5,rating:4.5,price:899,tags:['all-inclusive'],recommended:true,bk:'beliebt',q:'fethiye resort turkey pool'},
+      {id:'h13',name:'Ölüdeniz Beach Club',dest:'Ölüdeniz',stars:4,rating:4.3,price:749,tags:['fruehstueck'],recommended:false,bk:'neu',q:'oludeniz beach turkey'},
+    ],
+    hurghada:[
+      {id:'h14',name:'Steigenberger Aqua Magic',dest:'Hurghada',stars:5,rating:4.6,price:749,tags:['all-inclusive'],recommended:true,bk:'bestseller',q:'hurghada resort waterpark'},
+      {id:'h15',name:'TUI BLUE Palm Garden',dest:'Hurghada',stars:4,rating:4.1,price:699,tags:['fruehstueck'],recommended:false,bk:'guenstig',q:'hurghada hotel beach pool'},
+      {id:'h16',name:'Sunrise Arabian Beach',dest:'Hurghada',stars:5,rating:4.4,price:899,tags:['all-inclusive'],recommended:true,bk:'beliebt',q:'hurghada sunrise resort'},
+      {id:'h17',name:'Shams Alam Beach',dest:'Marsa Alam',stars:5,rating:4.7,price:799,tags:['all-inclusive'],recommended:true,bk:'premium',q:'marsa alam resort beach egypt'},
+    ],
+    izmir:[
+      {id:'h18',name:'Çeşme Marina Hotel',dest:'Çeşme',stars:5,rating:4.6,price:1099,tags:['halbpension'],recommended:true,bk:'beliebt',q:'cesme marina hotel turkey'},
+      {id:'h19',name:'Alacati Boutique Hotel',dest:'Alaçatı',stars:4,rating:4.7,price:799,tags:['fruehstueck'],recommended:false,bk:'neu',q:'alacati turkey boutique hotel'},
+      {id:'h20',name:'İzmir Marriott',dest:'İzmir',stars:5,rating:4.4,price:899,tags:['fruehstueck'],recommended:false,bk:null,q:'izmir hotel sea view city'},
+    ],
+  };
+
+  const REGIONS_DATA = [
+    {key:'antalya',label:{de:'Antalya',en:'Antalya',tr:'Antalya'},rk:'turkey'},
+    {key:'bodrum',label:{de:'Bodrum',en:'Bodrum',tr:'Bodrum'},rk:'turkey'},
+    {key:'dalaman',label:{de:'Dalaman / Fethiye',en:'Dalaman / Fethiye',tr:'Dalaman / Fethiye'},rk:'turkey'},
+    {key:'hurghada',label:{de:'Hurghada & Marsa Alam',en:'Hurghada & Marsa Alam',tr:'Hurghada & Marsa Alam'},rk:'egypt'},
+    {key:'izmir',label:{de:'İzmir',en:'İzmir',tr:'İzmir'},rk:'turkey'},
+  ];
+
+  let activeRegion='antalya';
+
+  function buildTabs(){
+    document.getElementById('region-tabs').innerHTML=REGIONS_DATA.map(r=>`
+      <button class="region-tab ${r.key===activeRegion?'active':''}" onclick="switchRegion('${r.key}')">
+        ${r.label[currentLang]||r.label.de}
+        <small style="color:var(--grey-3);font-size:11px;margin-left:4px">(${(HOTEL_DATA[r.key]||[]).length})</small>
+      </button>`).join('');
+  }
+
+  function switchRegion(key){
+    activeRegion=key;
+    buildTabs();
+    renderHotels(key);
+  }
+
+  function renderHotels(key){
+    const hotels=[...(HOTEL_DATA[key]||[])].sort((a,b)=>(b.recommended?1:0)-(a.recommended?1:0));
+    const bd=tObj('badges'); const sp=tObj('sp');
+    document.getElementById('hotels-grid').innerHTML=hotels.map(h=>{
+      const stH='★'.repeat(h.stars)+'<span style="color:var(--grey-2)">'+'★'.repeat(5-h.stars)+'</span>';
+      const vpL=sp.vp||{};
+      const tagH=h.tags.map(tg=>`<span class="tag">${vpL[tg]||tg}</span>`).join('');
+      const bLabel=h.bk?(bd[h.bk]||h.bk):null;
+      const bCls=h.bk==='beliebt'||h.bk==='bestseller'||h.bk==='luxus'?'badge-orange':h.bk==='neu'||h.bk==='premium'?'badge-blue':'badge-yellow';
+      return `<div class="hotel-card">
+        <div class="hotel-img ci${(parseInt(h.id.replace('h',''))%9)+1}" id="himg-${h.id}" style="position:relative">
+          <div class="hotel-img-overlay"></div>
+          ${bLabel?`<span class="hotel-img-badge badge ${bCls}">${bLabel}</span>`:''}
+          ${h.recommended?`<span class="hotel-img-recommended">⭐ ${sp.recommended||'Empfohlen'}</span>`:''}
+        </div>
+        <div class="hotel-body">
+          <div class="hotel-name">${h.name}</div>
+          <div class="hotel-dest"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>${h.dest}</div>
+          <div class="stars"><span style="color:var(--orange-light);font-size:13px">${stH}</span><span class="score">${h.rating}</span></div>
+          <div class="hotel-tags">${tagH}</div>
+        </div>
+        <div class="hotel-footer">
+          <div><div class="hotel-price">€ ${h.price}</div><div class="hotel-price-pp">${sp.perPerson||'pro Person'}</div></div>
+          <a href="hotel.html" class="btn btn-primary btn-sm">${sp.bookNow||'Buchen'}</a>
+        </div>
+      </div>`;
+    }).join('');
+    hotels.forEach(h=>fetchUnsplashImg(h.q,`himg-${h.id}`));
+  }
+
+  document.addEventListener('DOMContentLoaded',()=>{
+    document.getElementById('page-title').textContent=t('nav','hotels');
+    document.getElementById('page-sub').textContent=tObj('home').offersTitle||'';
+    document.getElementById('bc-home').textContent=t('nav','home');
+    document.getElementById('bc-hotels').textContent=t('nav','hotels');
+    const sp=tObj('sp');
+    document.getElementById('rec-title').textContent=sp.recommended||'Empfohlene Hotels';
+    document.getElementById('rec-sub').textContent=sp.recommendedSub||'Diese Hotels wurden von unseren Kunden am höchsten bewertet.';
+    buildTabs();
+    renderHotels(activeRegion);
+  });
+  </script>
+</body>
+</html>

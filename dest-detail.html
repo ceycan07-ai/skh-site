@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>SunExpress Holidays</title>
+  <link rel="stylesheet" href="shared.css"/>
+  <style>
+    .dest-hero{height:420px;position:relative;background-size:cover;background-position:center;}
+    .dest-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(4,48,109,.85) 0%,transparent 55%);}
+    .dest-hero-content{position:absolute;bottom:0;left:0;right:0;padding:32px var(--sp-xl);}
+    .dest-hero-content h1{font-size:42px;font-weight:700;color:#fff;margin-bottom:8px;}
+    .dest-hero-content p{font-size:15px;color:rgba(255,255,255,.85);max-width:560px;}
+    .dest-layout{max-width:1300px;margin:0 auto;padding:var(--sp-xl);}
+    .dest-info-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-bottom:var(--sp-xl);}
+    .info-card{background:#fff;border-radius:var(--r-lg);padding:20px;box-shadow:var(--sh-md);border-top:3px solid var(--orange);}
+    .info-card h4{font-size:13px;font-weight:700;color:var(--blue);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+    .info-card p{font-size:13px;color:var(--grey-3);line-height:1.6;}
+    .offers-section h2{font-size:28px;font-weight:700;color:var(--blue);margin-bottom:6px;}
+    .offers-section p{font-size:14px;color:var(--grey-3);margin-bottom:24px;}
+    .offers-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+    .offer-card2{background:#fff;border-radius:var(--r-lg);box-shadow:var(--sh-md);overflow:hidden;transition:transform .2s,box-shadow .2s;}
+    .offer-card2:hover{transform:translateY(-3px);box-shadow:var(--sh-lg);}
+    .offer-img2{height:160px;background-size:cover;background-position:center;position:relative;}
+    .offer-img2-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.5),transparent 60%);}
+    .offer-img2-name{position:absolute;bottom:12px;left:12px;font-size:14px;font-weight:700;color:#fff;}
+    .offer-body2{padding:16px;}
+    .offer-stars2{color:var(--orange-light);font-size:14px;margin-bottom:6px;}
+    .offer-tags2{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+    .offer-footer2{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--grey-1);}
+    .offer-price2{font-size:22px;font-weight:700;color:var(--orange);}
+    .offer-price2-pp{font-size:11px;color:var(--grey-3);}
+  </style>
+</head>
+<body>
+  <div id="site-header" data-page="dest"></div>
+  <div class="dest-hero ci1" id="dest-hero">
+    <div class="dest-hero-overlay"></div>
+    <div class="dest-hero-content">
+      <div id="dest-badges" style="margin-bottom:10px"></div>
+      <h1 id="dest-name"></h1>
+      <p id="dest-desc"></p>
+    </div>
+  </div>
+  <div class="breadcrumb">
+    <a href="index.html" id="bc-home"></a><span class="breadcrumb-sep">/</span>
+    <a href="destinations.html" id="bc-dest"></a><span class="breadcrumb-sep">/</span>
+    <span id="bc-current"></span>
+  </div>
+  <div class="dest-layout">
+    <div class="dest-info-grid" id="info-grid"></div>
+    <div class="offers-section">
+      <h2 id="offers-title"></h2>
+      <p id="offers-sub"></p>
+      <div class="offers-grid" id="offers-grid"></div>
+    </div>
+  </div>
+  <div id="site-footer"></div>
+  <script src="components.js"></script>
+  <script>
+  const ALL_DESTS = {
+    ayt:{name:'Antalya',rk:'turkey',flag:'🇹🇷',ci:'ci1',q:'antalya turkey beach resort',
+      desc:{de:'Die Türkische Riviera bietet traumhafte Strände, Luxusresorts und antike Ruinen. Antalya ist das Herz des türkischen Tourismus mit erstklassiger Infrastruktur und unzähligen Freizeitmöglichkeiten.',en:'The Turkish Riviera offers stunning beaches, luxury resorts and ancient ruins. Antalya is the heart of Turkish tourism with first-class infrastructure and countless leisure activities.',tr:'Türk Rivierası muhteşem plajlar, lüks tatil köyleri ve antik kalıntılar sunar. Antalya, birinci sınıf altyapısı ve sayısız eğlence olanakları ile Türk turizminin kalbidir.'},
+      info:{de:[{icon:'☀️',title:'Klima',text:'300+ Sonnentage im Jahr. Sommer heiß und trocken, ideal von Mai bis Oktober.'},{icon:'✈️',title:'Flugzeit',text:'Ca. 3,5 Std. Direktflug aus Frankfurt, München, Wien, Zürich.'},{icon:'🏖️',title:'Strände',text:'Lara Beach, Konyaaltı, Kleopatra Beach — feiner Sand und kristallklares Wasser.'}],
+           en:[{icon:'☀️',title:'Climate',text:'300+ sunny days a year. Hot and dry summers, ideal from May to October.'},{icon:'✈️',title:'Flight time',text:'Approx. 3.5 hrs direct from Frankfurt, Munich, Vienna, Zurich.'},{icon:'🏖️',title:'Beaches',text:'Lara Beach, Konyaaltı, Cleopatra Beach — fine sand and crystal-clear water.'}],
+           tr:[{icon:'☀️',title:'İklim',text:'Yılda 300+ güneşli gün. Mayıs-Ekim arası sıcak ve kuru.'},{icon:'✈️',title:'Uçuş Süresi',text:'Frankfurt, Münih, Viyana, Zürih\'ten yaklaşık 3,5 saat direkt uçuş.'},{icon:'🏖️',title:'Plajlar',text:'Lara Plajı, Konyaaltı, Kleopatra Plajı — ince kum ve kristal berrak su.'}]},
+      offers:[
+        {id:'ao1',hotel:'Rixos Premium Belek',stars:5,rating:4.8,price:1249,tags:['all-inclusive'],q:'rixos belek resort'},
+        {id:'ao2',hotel:'Maxx Royal Kemer',stars:5,rating:4.9,price:1549,tags:['all-inclusive'],q:'kemer resort antalya'},
+        {id:'ao3',hotel:'Titanic Beach Lara',stars:5,rating:4.5,price:1099,tags:['all-inclusive'],q:'lara antalya beach hotel'},
+      ]},
+    bjv:{name:'Bodrum',rk:'turkey',flag:'🇹🇷',ci:'ci2',q:'bodrum turkey castle harbor',
+      desc:{de:'Bodrum fasziniert mit seinem einzigartigen Flair aus weißen Häusern, blauen Domen und einem der schönsten Häfen der Ägäis.',en:'Bodrum captivates with its unique charm of white houses, blue domes and one of the most beautiful harbours of the Aegean.',tr:'Bodrum, beyaz evleri, mavi kubbeleri ve Ege\'nin en güzel limanlarından biriyle büyüleyici atmosferiyle büyüler.'},
+      info:{de:[{icon:'⛵',title:'Segeln',text:'Bodrum ist das Mekka der Segler und Yachtbesitzer.'},{icon:'🏰',title:'Kultur',text:'Das Bodrum Castle beherbergt das Unterwasser-Museum.'},{icon:'🌊',title:'Strände',text:'Turkbuku, Gündoğan, Bitez — traumhafte Buchten.'}],
+           en:[{icon:'⛵',title:'Sailing',text:'Bodrum is the mecca for sailors and yacht owners.'},{icon:'🏰',title:'Culture',text:'Bodrum Castle houses the Underwater Museum.'},{icon:'🌊',title:'Beaches',text:'Turkbuku, Gündoğan, Bitez — stunning bays.'}],
+           tr:[{icon:'⛵',title:'Yelkenli',text:'Bodrum yelkenciler ve yat sahipleri için mekke.'},{icon:'🏰',title:'Kültür',text:'Bodrum Kalesi Su Altı Müzesi\'ne ev sahipliği yapar.'},{icon:'🌊',title:'Plajlar',text:'Türkbükü, Gündoğan, Bitez — muhteşem koylar.'}]},
+      offers:[
+        {id:'bo1',hotel:'Kempinski Barbaros Bay',stars:5,rating:4.7,price:1899,tags:['halbpension'],q:'kempinski bodrum hotel'},
+        {id:'bo2',hotel:'Bodrum Bay Resort',stars:4,rating:4.2,price:879,tags:['halbpension'],q:'bodrum resort sea view'},
+        {id:'bo3',hotel:'Voyage Bodrum',stars:5,rating:4.5,price:1299,tags:['all-inclusive'],q:'voyage bodrum resort pool'},
+      ]},
+    hrg:{name:'Hurghada',rk:'egypt',flag:'🇪🇬',ci:'ci6',q:'hurghada egypt red sea beach',
+      desc:{de:'Hurghada am Roten Meer ist ein Paradies für Taucher und Sonnenanbeter — mit fantastischen Korallenriffen und modernen Resorts.',en:'Hurghada on the Red Sea is a paradise for divers and sun seekers — with fantastic coral reefs and modern resorts.',tr:'Kızıl Deniz\'deki Hurghada, harika mercan resifleri ve modern tatil köyleriyle dalgıçlar ve güneş arayanlar için bir cennet.'},
+      info:{de:[{icon:'🤿',title:'Tauchen',text:'Weltklasse Korallenriffe mit über 1000 Fischarten.'},{icon:'☀️',title:'Klima',text:'Ganzjährig Sonne — über 340 Sonnentage pro Jahr.'},{icon:'✈️',title:'Flugzeit',text:'Ca. 4,5 Std. Direktflug aus Deutschland.'}],
+           en:[{icon:'🤿',title:'Diving',text:'World-class coral reefs with over 1000 fish species.'},{icon:'☀️',title:'Climate',text:'Year-round sunshine — over 340 sunny days per year.'},{icon:'✈️',title:'Flight time',text:'Approx. 4.5 hrs direct from Germany.'}],
+           tr:[{icon:'🤿',title:'Dalış',text:'1000\'den fazla balık türüyle dünya standartlarında mercan resifleri.'},{icon:'☀️',title:'İklim',text:'Yıl boyu güneş — yılda 340\'tan fazla güneşli gün.'},{icon:'✈️',title:'Uçuş Süresi',text:'Almanya\'dan yaklaşık 4,5 saat direkt uçuş.'}]},
+      offers:[
+        {id:'ho1',hotel:'Steigenberger Aqua Magic',stars:5,rating:4.6,price:749,tags:['all-inclusive'],q:'hurghada resort waterpark'},
+        {id:'ho2',hotel:'TUI BLUE Palm Garden',stars:4,rating:4.1,price:699,tags:['fruehstueck'],q:'hurghada hotel beach pool'},
+        {id:'ho3',hotel:'Sunrise Arabian Beach',stars:5,rating:4.4,price:899,tags:['all-inclusive'],q:'hurghada sunrise resort'},
+      ]},
+    dlm:{name:'Dalaman',rk:'turkey',flag:'🇹🇷',ci:'ci3',q:'dalaman fethiye turkey oludeniz',
+      desc:{de:'Dalaman ist das Tor zur türkischen Ägäis — Heimat der berühmten Blauen Lagune, wilder Berglandschaften und entspannter Buchten.',en:'Dalaman is the gateway to the Turkish Aegean — home of the famous Blue Lagoon, wild mountain landscapes and relaxed bays.',tr:'Dalaman, Türk Ege\'sinin kapısı — ünlü Mavi Lagün\'ün, vahşi dağ manzaralarının ve sakin koyların evi.'},
+      info:{de:[{icon:'🌊',title:'Blaue Lagune',text:'Ölüdeniz gehört zu den schönsten Stränden der Welt.'},{icon:'🪂',title:'Paragliding',text:'Babadağ bietet einen der besten Gleitschirmflüge weltweit.'},{icon:'⛵',title:'Bootstouren',text:'12-Insel-Touren und Blaue Fahrten sind ein Muss.'}],
+           en:[{icon:'🌊',title:'Blue Lagoon',text:'Ölüdeniz is one of the most beautiful beaches in the world.'},{icon:'🪂',title:'Paragliding',text:'Babadağ offers one of the best paragliding experiences worldwide.'},{icon:'⛵',title:'Boat tours',text:'12-island tours and Blue Cruises are a must.'}],
+           tr:[{icon:'🌊',title:'Mavi Lagün',text:'Ölüdeniz, dünyanın en güzel plajlarından biri.'},{icon:'🪂',title:'Yamaç Paraşütü',text:'Babadağ, dünyada en iyi yamaç paraşütü deneyimlerinden birini sunar.'},{icon:'⛵',title:'Tekne Turları',text:'12 Ada turları ve Mavi Yolculuklar mutlaka yapılmalı.'}]},
+      offers:[
+        {id:'do1',hotel:'Dalaman Beach Hotel',stars:4,rating:4.0,price:649,tags:['halbpension'],q:'dalaman turkey hotel beach'},
+        {id:'do2',hotel:'Fethiye Resort & Spa',stars:5,rating:4.5,price:899,tags:['all-inclusive'],q:'fethiye resort turkey'},
+        {id:'do3',hotel:'Ölüdeniz Beach Club',stars:4,rating:4.3,price:749,tags:['fruehstueck'],q:'oludeniz beach turkey lagoon'},
+      ]},
+    adb:{name:'İzmir',rk:'turkey',flag:'🇹🇷',ci:'ci4',q:'izmir turkey city sea promenade',
+      desc:{de:'İzmir verbindet modernen Stadtflair mit antiker Geschichte. Die lebhafte Hafenstadt ist Ausgangspunkt für Ephesos, Çeşme und die ägäische Küste.',en:'İzmir combines modern urban flair with ancient history. The vibrant port city is the starting point for Ephesus, Çeşme and the Aegean coast.',tr:'İzmir, modern şehir atmosferini antik tarihle birleştirir. Canlı liman şehri, Efes, Çeşme ve Ege kıyısı için başlangıç noktasıdır.'},
+      info:{de:[{icon:'🏛️',title:'Ephesos',text:'Eines der besterhaltenen antiken Städte der Welt — nur 80 km entfernt.'},{icon:'🏖️',title:'Çeşme',text:'Berühmtes Baderesort mit Wellensurfen und Kitesurf.'},{icon:'🍽️',title:'Küche',text:'İzmir ist bekannt für seine hervorragende Küstenküche.'}],
+           en:[{icon:'🏛️',title:'Ephesus',text:'One of the best-preserved ancient cities in the world — just 80 km away.'},{icon:'🏖️',title:'Çeşme',text:'Famous beach resort with windsurfing and kitesurfing.'},{icon:'🍽️',title:'Cuisine',text:'İzmir is known for its excellent coastal cuisine.'}],
+           tr:[{icon:'🏛️',title:'Efes',text:'Dünyanın en iyi korunmuş antik şehirlerinden biri — sadece 80 km uzakta.'},{icon:'🏖️',title:'Çeşme',text:'Rüzgar sörfü ve uçurtma sörfüyle ünlü plaj tatil beldesi.'},{icon:'🍽️',title:'Mutfak',text:'İzmir, mükemmel sahil mutfağıyla tanınır.'}]},
+      offers:[
+        {id:'io1',hotel:'Çeşme Marina Hotel',stars:5,rating:4.6,price:1099,tags:['halbpension'],q:'cesme marina hotel turkey'},
+        {id:'io2',hotel:'İzmir Marriott',stars:5,rating:4.4,price:899,tags:['fruehstueck'],q:'izmir hotel sea view'},
+        {id:'io3',hotel:'Alacati Boutique Hotel',stars:4,rating:4.7,price:799,tags:['fruehstueck'],q:'alacati turkey boutique hotel'},
+      ]},
+    rmf:{name:'Marsa Alam',rk:'egypt',flag:'🇪🇬',ci:'ci5',q:'marsa alam egypt diving coral reef',
+      desc:{de:'Marsa Alam ist das unberührte Juwel Ägyptens — ideal für Naturliebhaber und Taucher, die abseits der Touristenmassen das ursprüngliche Rote Meer erleben möchten.',en:'Marsa Alam is the unspoilt jewel of Egypt — ideal for nature lovers and divers who want to experience the original Red Sea away from the tourist crowds.',tr:'Marsa Alam, Mısır\'ın bozulmamış mücevheri — turist kalabalığından uzakta özgün Kızıl Deniz deneyimi yaşamak isteyen doğa severler ve dalgıçlar için ideal.'},
+      info:{de:[{icon:'🐬',title:'Delfine',text:'Delfin-Riff ist eines der schönsten Schnorchelziele weltweit.'},{icon:'🌿',title:'Natur',text:'Schutzgebiete mit seltenen Meeresschildkröten und Dugongs.'},{icon:'🏖️',title:'Einsame Strände',text:'Unberührte Strände fernab des Massentourismus.'}],
+           en:[{icon:'🐬',title:'Dolphins',text:'Dolphin Reef is one of the most beautiful snorkelling sites worldwide.'},{icon:'🌿',title:'Nature',text:'Nature reserves with rare sea turtles and dugongs.'},{icon:'🏖️',title:'Secluded beaches',text:'Pristine beaches far from mass tourism.'}],
+           tr:[{icon:'🐬',title:'Yunuslar',text:'Yunus Resifi, dünyada en güzel şnorkelli noktalardan biri.'},{icon:'🌿',title:'Doğa',text:'Nadir deniz kaplumbağaları ve dugonglarla doğa koruma alanları.'},{icon:'🏖️',title:'Ücra Plajlar',text:'Kitle turizminden uzak bozulmamış plajlar.'}]},
+      offers:[
+        {id:'mo1',hotel:'Shams Alam Beach Resort',stars:5,rating:4.7,price:799,tags:['all-inclusive'],q:'marsa alam resort beach'},
+        {id:'mo2',hotel:'Port Ghalib Resort',stars:5,rating:4.5,price:899,tags:['all-inclusive'],q:'port ghalib egypt resort'},
+        {id:'mo3',hotel:'Oasis Marsa Alam',stars:4,rating:4.2,price:699,tags:['halbpension'],q:'marsa alam hotel beach egypt'},
+      ]},
+  };
+
+  document.addEventListener('DOMContentLoaded',()=>{
+    const params=new URLSearchParams(location.search);
+    const code=params.get('dest')||'ayt';
+    const d=ALL_DESTS[code]||ALL_DESTS.ayt;
+    const reg=region(d.rk);
+    const desc=(d.desc[currentLang]||d.desc.de);
+    const info=(d.info[currentLang]||d.info.de);
+    const vpL=tObj('sp').vp||{};
+    const sp=tObj('sp');
+
+    document.title=`${d.name} — SunExpress Holidays`;
+    document.getElementById('bc-home').textContent=t('nav','home');
+    document.getElementById('bc-dest').textContent=t('nav','dest');
+    document.getElementById('bc-current').textContent=d.name;
+    document.getElementById('dest-badges').innerHTML=`<span class="badge badge-orange">${d.flag} ${reg}</span>`;
+    document.getElementById('dest-name').textContent=d.name;
+    document.getElementById('dest-desc').textContent=desc;
+    fetchUnsplashImg(d.q,'dest-hero');
+
+    document.getElementById('info-grid').innerHTML=info.map(i=>`<div class="info-card"><h4>${i.icon} ${i.title}</h4><p>${i.text}</p></div>`).join('');
+
+    document.getElementById('offers-title').textContent=sp.offersTitle||tObj('home').offersTitle||'';
+    document.getElementById('offers-sub').textContent=`${d.name} — ${sp.perPerson||''} ${t('search','nights')}`;
+    document.getElementById('offers-grid').innerHTML=d.offers.map(o=>`<div class="offer-card2">
+      <div class="offer-img2 ${d.ci}" id="${o.id}"><div class="offer-img2-overlay"></div><div class="offer-img2-name">${o.hotel}</div></div>
+      <div class="offer-body2">
+        <div class="offer-stars2">${'★'.repeat(o.stars)}</div>
+        <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:6px">${o.hotel}</div>
+        <div class="offer-tags2">${o.tags.map(tg=>`<span class="tag">${vpL[tg]||tg}</span>`).join('')}</div>
+        <div class="offer-footer2">
+          <div><div class="offer-price2">€ ${o.price}</div><div class="offer-price2-pp">${sp.perPerson||''}</div></div>
+          <a href="hotel.html" class="btn btn-primary btn-sm">${sp.bookNow||'Buchen'}</a>
+        </div>
+      </div>
+    </div>`).join('');
+    d.offers.forEach(o=>fetchUnsplashImg(o.q,o.id));
+  });
+  </script>
+</body>
+</html>

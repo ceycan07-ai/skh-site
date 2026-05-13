@@ -2,413 +2,354 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Buchung — SunExpress Holidays</title>
+  <title>SunExpress Holidays — Buchung</title>
   <link rel="stylesheet" href="shared.css"/>
   <style>
-    .booking-wrap { max-width: 1100px; margin: 0 auto; padding: var(--sp-xl); display: grid; grid-template-columns: 1fr 340px; gap: var(--sp-xl); align-items: start; }
-
-    /* STEPPER */
-    .stepper { display: flex; align-items: center; justify-content: center; padding: 24px var(--sp-xl); background: #fff; border-bottom: 1px solid var(--grey-1); margin-bottom: 0; }
-    .step { display: flex; align-items: center; gap: 10px; }
-    .step-num { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; border: 2px solid var(--grey-2); color: var(--grey-3); background: #fff; transition: all .2s; }
-    .step-num.done { background: var(--blue); border-color: var(--blue); color: #fff; }
-    .step-num.active { background: var(--orange); border-color: var(--orange); color: #fff; }
-    .step-label { font-size: 13px; font-weight: 600; color: var(--grey-3); white-space: nowrap; }
-    .step-label.active { color: var(--orange); }
-    .step-label.done { color: var(--blue); }
-    .step-line { flex: 1; height: 2px; background: var(--grey-2); margin: 0 12px; min-width: 40px; transition: background .2s; }
-    .step-line.done { background: var(--blue); }
-
-    /* FORM */
-    .form-section { background: #fff; border-radius: var(--r-lg); box-shadow: var(--sh-md); margin-bottom: 20px; overflow: hidden; }
-    .form-section-head { padding: 16px 20px; background: var(--greyblue-2); border-bottom: 1px solid var(--greyblue-1); display: flex; align-items: center; gap: 10px; }
-    .form-section-head h3 { font-size: 15px; font-weight: 700; color: var(--blue); }
-    .form-section-head .step-badge { width: 24px; height: 24px; border-radius: 50%; background: var(--blue); color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .form-body { padding: 20px; }
-
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .form-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
-    .form-grid.cols-1 { grid-template-columns: 1fr; }
-
-    .form-group { display: flex; flex-direction: column; gap: 6px; }
-    .form-group.full { grid-column: 1 / -1; }
-    .form-label { font-size: 13px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 4px; }
-    .form-label .req { color: var(--orange); }
-    .form-input {
-      height: 48px; border: 1px solid var(--grey-2); border-radius: var(--r-md);
-      padding: 0 14px; font-family: var(--font); font-size: 14px; color: var(--text);
-      background: #fff; transition: border-color .15s, box-shadow .15s; width: 100%;
-    }
-    .form-input:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,69,143,.1); }
-    .form-input.error { border-color: var(--orange); }
-    .form-input::placeholder { color: var(--grey-3); }
-    .form-select { height: 48px; border: 1px solid var(--grey-2); border-radius: var(--r-md); padding: 0 14px; font-family: var(--font); font-size: 14px; color: var(--text); background: #fff; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238c8c8c'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; width: 100%; }
-    .form-select:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,69,143,.1); }
-    .form-error { font-size: 11px; color: var(--orange); display: none; }
-    .form-error.show { display: block; }
-
-    /* Traveller card */
-    .traveller-card { border: 1px solid var(--grey-1); border-radius: var(--r-lg); padding: 16px; margin-bottom: 16px; }
-    .traveller-card:last-child { margin-bottom: 0; }
-    .traveller-card-head { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--grey-1); }
-    .traveller-card-head h4 { font-size: 14px; font-weight: 700; color: var(--blue); }
-    .traveller-type { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: var(--r-full); }
-
-    /* Payment */
-    .payment-methods { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
-    .payment-method { border: 2px solid var(--grey-2); border-radius: var(--r-lg); padding: 12px 20px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--text); transition: all .15s; }
-    .payment-method:hover { border-color: var(--blue); color: var(--blue); }
-    .payment-method.selected { border-color: var(--blue); background: var(--greyblue-2); color: var(--blue); }
-    .payment-method svg { flex-shrink: 0; }
-
-    .card-field-group { display: grid; gap: 12px; }
-    .card-number-wrap { position: relative; }
-    .card-icons { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); display: flex; gap: 4px; }
-    .card-icon { width: 32px; height: 20px; border-radius: 3px; background: var(--grey-2); display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700; color: var(--grey-3); }
-
-    /* Checkbox */
-    .checkbox-row { display: flex; align-items: flex-start; gap: 10px; margin-top: 8px; }
-    .checkbox-row input[type=checkbox] { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--blue); flex-shrink: 0; cursor: pointer; }
-    .checkbox-row label { font-size: 13px; color: var(--text); cursor: pointer; line-height: 1.5; }
-    .checkbox-row label a { color: var(--blue); }
-
-    /* Nav buttons */
-    .form-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
-
-    /* BOOKING SUMMARY CARD */
-    .summary-card { background: #fff; border-radius: var(--r-xl); box-shadow: var(--sh-lg); border: 1px solid var(--grey-1); overflow: hidden; position: sticky; top: 88px; }
-    .summary-head { padding: 16px 20px; background: var(--blue); color: #fff; }
-    .summary-head h3 { font-size: 15px; font-weight: 700; }
-    .summary-hotel { display: flex; gap: 12px; padding: 16px 20px; border-bottom: 1px solid var(--grey-1); }
-    .summary-hotel-img { width: 72px; height: 56px; border-radius: var(--r-md); flex-shrink: 0; background-size: cover; background-position: center; }
-    .summary-hotel-name { font-size: 14px; font-weight: 700; color: var(--blue); margin-bottom: 4px; }
-    .summary-hotel-meta { font-size: 12px; color: var(--grey-3); }
-    .summary-rows { padding: 16px 20px; }
-    .sum-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 10px; }
-    .sum-row span:first-child { color: var(--grey-3); }
-    .sum-row span:last-child { font-weight: 600; color: var(--text); }
-    .sum-divider { border: none; border-top: 1px solid var(--grey-1); margin: 12px 0; }
-    .sum-total { display: flex; justify-content: space-between; font-size: 18px; font-weight: 700; }
-    .sum-total .amount { color: var(--orange); }
-    .sum-features { padding: 16px 20px; border-top: 1px solid var(--grey-1); display: flex; flex-direction: column; gap: 8px; }
-    .sum-feat { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text); }
-    .sum-feat svg { color: var(--blue); flex-shrink: 0; }
-
-    /* SUCCESS */
-    .success-panel { background: #fff; border-radius: var(--r-xl); box-shadow: var(--sh-lg); padding: 48px; text-align: center; display: none; }
-    .success-icon { width: 80px; height: 80px; border-radius: 50%; background: #e8f5e9; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; }
-    .success-icon svg { color: #4caf50; }
-    .success-panel h2 { font-size: 28px; font-weight: 700; color: var(--blue); margin-bottom: 12px; }
-    .success-panel p { font-size: 15px; color: var(--grey-3); margin-bottom: 8px; }
-    .booking-ref { font-size: 24px; font-weight: 700; color: var(--orange); background: var(--greyblue-2); padding: 12px 24px; border-radius: var(--r-lg); display: inline-block; margin: 16px 0; }
+    .booking-layout{display:grid;grid-template-columns:1fr 340px;gap:var(--sp-xl);padding:var(--sp-xl);max-width:1260px;margin:0 auto;}
+    .stepper{display:flex;align-items:center;gap:0;margin-bottom:var(--sp-xl);}
+    .step{display:flex;align-items:center;gap:10px;flex:1;}
+    .step-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;background:var(--grey-2);color:var(--grey-3);flex-shrink:0;transition:all .2s;}
+    .step.active .step-num{background:var(--blue);color:#fff;}
+    .step.done .step-num{background:var(--blue-mid);color:#fff;}
+    .step-label{font-size:13px;font-weight:600;color:var(--grey-3);}
+    .step.active .step-label{color:var(--blue);}
+    .step.done .step-label{color:var(--blue-mid);}
+    .step-line{flex:1;height:2px;background:var(--grey-2);transition:background .3s;}
+    .step-line.done{background:var(--blue-mid);}
+    .form-card{background:#fff;border-radius:var(--r-xl);box-shadow:var(--sh-md);padding:28px;margin-bottom:20px;}
+    .form-card-title{font-size:17px;font-weight:700;color:var(--blue);margin-bottom:20px;display:flex;align-items:center;gap:8px;}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    .form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+    .form-full{grid-column:1/-1;}
+    .form-group{display:flex;flex-direction:column;gap:6px;}
+    .form-group label{font-size:12px;font-weight:600;color:var(--text);letter-spacing:.3px;}
+    .form-input{font-family:var(--font);font-size:14px;padding:10px 14px;border:1px solid var(--grey-2);border-radius:var(--r-md);outline:none;color:var(--text);transition:border-color .15s;width:100%;box-sizing:border-box;}
+    .form-input:focus{border-color:var(--blue);}
+    .form-select{font-family:var(--font);font-size:14px;padding:10px 14px;border:1px solid var(--grey-2);border-radius:var(--r-md);outline:none;color:var(--text);background:#fff;width:100%;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238c8c8c'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;}
+    .form-select:focus{border-color:var(--blue);}
+    .traveler-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--grey-1);}
+    .traveler-avatar{width:36px;height:36px;border-radius:50%;background:var(--greyblue-2);display:flex;align-items:center;justify-content:center;color:var(--blue);}
+    .traveler-name{font-size:14px;font-weight:700;color:var(--blue);}
+    .traveler-type{font-size:11px;color:var(--grey-3);}
+    .radio-group{display:flex;gap:12px;flex-wrap:wrap;}
+    .radio-btn{display:flex;align-items:center;gap:8px;padding:10px 16px;border:1px solid var(--grey-2);border-radius:var(--r-md);cursor:pointer;font-size:13px;font-weight:600;color:var(--text);transition:all .15s;background:#fff;}
+    .radio-btn.sel{border-color:var(--blue);color:var(--blue);background:var(--greyblue-2);}
+    .radio-btn input{display:none;}
+    .pay-card{display:flex;flex-direction:column;gap:10px;margin-top:16px;}
+    .pay-opt{display:flex;align-items:center;gap:12px;padding:14px 16px;border:2px solid var(--grey-1);border-radius:var(--r-lg);cursor:pointer;transition:all .15s;}
+    .pay-opt.sel{border-color:var(--blue);background:var(--greyblue-2);}
+    .pay-opt-icon{width:40px;height:28px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:18px;}
+    .pay-opt-label{font-size:13px;font-weight:600;color:var(--text);}
+    .pay-opt.sel .pay-opt-label{color:var(--blue);}
+    .cc-fields{background:var(--greyblue-2);border-radius:var(--r-lg);padding:16px;margin-top:12px;display:none;}
+    .cc-fields.show{display:block;}
+    .checkbox-row{display:flex;align-items:flex-start;gap:10px;padding:12px 0;}
+    .custom-cb{width:18px;height:18px;border:2px solid var(--grey-2);border-radius:4px;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;margin-top:1px;}
+    .custom-cb.checked{background:var(--blue);border-color:var(--blue);}
+    .custom-cb.checked::after{content:'';width:9px;height:5px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translateY(-1px);display:block;}
+    .checkbox-row label{font-size:12px;color:var(--text);line-height:1.5;cursor:pointer;}
+    .nav-btns{display:flex;align-items:center;justify-content:space-between;margin-top:8px;}
+    .summary-card{background:#fff;border-radius:var(--r-xl);box-shadow:var(--sh-xl);border:1px solid var(--grey-1);overflow:hidden;position:sticky;top:88px;}
+    .summary-card-head{padding:16px 20px;background:var(--blue);}
+    .summary-card-head h3{font-size:15px;font-weight:700;color:#fff;}
+    .summary-hotel{padding:16px 20px;border-bottom:1px solid var(--grey-1);}
+    .sh-name{font-size:15px;font-weight:700;color:var(--blue);margin-bottom:4px;}
+    .sh-dest{font-size:12px;color:var(--grey-3);}
+    .summary-rows{padding:16px 20px;}
+    .sum-row{display:flex;justify-content:space-between;font-size:13px;margin-bottom:10px;}
+    .sum-row span:first-child{color:var(--grey-3);}
+    .sum-row span:last-child{font-weight:600;}
+    .sum-total{display:flex;justify-content:space-between;font-size:16px;font-weight:700;padding:12px 20px;border-top:1px solid var(--grey-1);}
+    .sum-total .amount{color:var(--orange);}
+    .sum-features{padding:16px 20px;border-top:1px solid var(--grey-1);display:flex;flex-direction:column;gap:8px;}
+    .sum-feat{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text);}
+    .sum-feat svg{color:var(--blue);flex-shrink:0;}
+    .section-step{display:none;} .section-step.active{display:block;}
+    .success-card{background:#fff;border-radius:var(--r-xl);box-shadow:var(--sh-xl);padding:48px;text-align:center;max-width:640px;margin:40px auto;}
+    .success-icon{width:80px;height:80px;border-radius:50%;background:#dcfce7;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;}
+    .secure-badge{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--grey-3);justify-content:center;margin-top:8px;}
   </style>
 </head>
 <body>
   <div id="site-header" data-page="search"></div>
-
   <div class="breadcrumb">
-    <a href="index.html">Startseite</a><span class="breadcrumb-sep">/</span>
-    <a href="search.html">Suchergebnisse</a><span class="breadcrumb-sep">/</span>
-    <a href="hotel.html">Rixos Premium Belek</a><span class="breadcrumb-sep">/</span>
-    <span>Buchung</span>
+    <a href="index.html" id="bc-home"></a><span class="breadcrumb-sep">/</span>
+    <a href="search.html" id="bc-offers"></a><span class="breadcrumb-sep">/</span>
+    <a href="hotel.html" id="bc-hotel-name">Rixos Premium Belek</a><span class="breadcrumb-sep">/</span>
+    <span id="bc-booking"></span>
   </div>
 
-  <!-- STEPPER -->
-  <div class="stepper">
-    <div class="step"><div class="step-num active" id="snum1">1</div><span class="step-label active" id="slbl1">Reisende</span></div>
-    <div class="step-line" id="sline1"></div>
-    <div class="step"><div class="step-num" id="snum2">2</div><span class="step-label" id="slbl2">Kontakt</span></div>
-    <div class="step-line" id="sline2"></div>
-    <div class="step"><div class="step-num" id="snum3">3</div><span class="step-label" id="slbl3">Zahlung</span></div>
-    <div class="step-line" id="sline3"></div>
-    <div class="step"><div class="step-num" id="snum4">4</div><span class="step-label" id="slbl4">Bestätigung</span></div>
+  <div style="max-width:1260px;margin:0 auto;padding:24px var(--sp-xl) 0">
+    <div class="stepper" id="stepper"></div>
   </div>
 
-  <div class="booking-wrap">
-    <!-- FORM PANELS -->
-    <div id="form-area">
-
-      <!-- STEP 1: Reisende -->
-      <div id="step1">
-        <!-- Adult 1 -->
-        <div class="form-section">
-          <div class="form-section-head"><div class="step-badge">1</div><h3>Reisender 1 — Erwachsener (Hauptbuchender)</h3></div>
-          <div class="form-body">
-            <div class="traveller-card">
-              <div class="form-grid" style="margin-bottom:14px">
-                <div class="form-group">
-                  <label class="form-label">Anrede <span class="req">*</span></label>
-                  <select class="form-select"><option>Herr</option><option>Frau</option><option>Divers</option></select>
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Titel</label>
-                  <select class="form-select"><option value="">—</option><option>Dr.</option><option>Prof.</option><option>Prof. Dr.</option></select>
-                </div>
-              </div>
-              <div class="form-grid">
-                <div class="form-group"><label class="form-label">Vorname <span class="req">*</span></label><input class="form-input" type="text" placeholder="z.B. Max" id="fn1"/></div>
-                <div class="form-group"><label class="form-label">Nachname <span class="req">*</span></label><input class="form-input" type="text" placeholder="z.B. Mustermann" id="ln1"/></div>
-                <div class="form-group"><label class="form-label">Geburtsdatum <span class="req">*</span></label><input class="form-input" type="date" id="dob1"/></div>
-                <div class="form-group"><label class="form-label">Nationalität <span class="req">*</span></label><select class="form-select"><option>Deutschland</option><option>Österreich</option><option>Schweiz</option><option>Türkei</option><option>Andere</option></select></div>
-                <div class="form-group full"><label class="form-label">Reisepassnummer <span class="req">*</span></label><input class="form-input" type="text" placeholder="z.B. C01X00T47"/></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Adult 2 -->
-        <div class="form-section">
-          <div class="form-section-head"><div class="step-badge">2</div><h3>Reisender 2 — Erwachsener</h3></div>
-          <div class="form-body">
-            <div class="traveller-card">
-              <div class="form-grid" style="margin-bottom:14px">
-                <div class="form-group"><label class="form-label">Anrede <span class="req">*</span></label><select class="form-select"><option>Herr</option><option>Frau</option><option>Divers</option></select></div>
-                <div></div>
-              </div>
-              <div class="form-grid">
-                <div class="form-group"><label class="form-label">Vorname <span class="req">*</span></label><input class="form-input" type="text" placeholder="Vorname"/></div>
-                <div class="form-group"><label class="form-label">Nachname <span class="req">*</span></label><input class="form-input" type="text" placeholder="Nachname"/></div>
-                <div class="form-group"><label class="form-label">Geburtsdatum <span class="req">*</span></label><input class="form-input" type="date"/></div>
-                <div class="form-group"><label class="form-label">Reisepassnummer <span class="req">*</span></label><input class="form-input" type="text" placeholder="Passnummer"/></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Child 1 -->
-        <div class="form-section">
-          <div class="form-section-head"><div class="step-badge">3</div><h3>Reisender 3 — Kind <span class="badge badge-yellow" style="font-size:10px;margin-left:6px">8 Jahre</span></h3></div>
-          <div class="form-body">
-            <div class="traveller-card">
-              <div class="form-grid">
-                <div class="form-group"><label class="form-label">Vorname <span class="req">*</span></label><input class="form-input" type="text" placeholder="Vorname Kind"/></div>
-                <div class="form-group"><label class="form-label">Nachname <span class="req">*</span></label><input class="form-input" type="text" placeholder="Nachname Kind"/></div>
-                <div class="form-group"><label class="form-label">Geburtsdatum <span class="req">*</span></label><input class="form-input" type="date"/></div>
-                <div class="form-group"><label class="form-label">Reisepassnummer</label><input class="form-input" type="text" placeholder="Falls vorhanden"/></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-nav">
-          <a href="hotel.html" class="btn btn-outline">← Zurück</a>
-          <button class="btn btn-primary lg" onclick="goStep(2)">Weiter: Kontaktdaten →</button>
+  <div class="booking-layout">
+    <div>
+      <!-- STEP 1: Travelers -->
+      <div class="section-step active" id="step1-content">
+        <div class="form-card" id="traveler-1-card"></div>
+        <div class="form-card" id="traveler-2-card"></div>
+        <div class="nav-btns">
+          <span></span>
+          <button class="btn btn-primary" onclick="goStep(2)" id="next1-btn"></button>
         </div>
       </div>
 
-      <!-- STEP 2: Kontakt -->
-      <div id="step2" style="display:none">
-        <div class="form-section">
-          <div class="form-section-head"><div class="step-badge">1</div><h3>Kontaktdaten</h3></div>
-          <div class="form-body">
+      <!-- STEP 2: Contact -->
+      <div class="section-step" id="step2-content">
+        <div class="form-card">
+          <div class="form-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.22 1.18 2 2 0 012.22 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.09a16 16 0 006 6l.56-.56a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/></svg>
+            <span id="contact-title"></span>
+          </div>
+          <div class="form-grid">
+            <div class="form-group"><label id="lbl-email"></label><input type="email" class="form-input" id="inp-email"/></div>
+            <div class="form-group"><label id="lbl-phone"></label><input type="tel" class="form-input" id="inp-phone" placeholder="+49 …"/></div>
+            <div class="form-group"><label id="lbl-street"></label><input class="form-input" id="inp-street"/></div>
+            <div class="form-group"><label id="lbl-zip"></label><input class="form-input" id="inp-zip"/></div>
+            <div class="form-group"><label id="lbl-city"></label><input class="form-input" id="inp-city"/></div>
+            <div class="form-group"><label id="lbl-country"></label>
+              <select class="form-select" id="sel-country"></select>
+            </div>
+          </div>
+        </div>
+        <div class="form-card">
+          <div class="form-card-title"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span id="wishes-title"></span></div>
+          <div class="form-group" style="margin-bottom:16px">
+            <label id="lbl-wishes"></label>
+            <textarea class="form-input" id="inp-wishes" rows="3" id="inp-wishes"></textarea>
+          </div>
+          <div class="form-grid">
+            <div class="form-group"><label id="lbl-arrival"></label>
+              <select class="form-select" id="sel-arrival">
+                <option>12:00–14:00</option><option>14:00–16:00</option><option>16:00–18:00</option><option>18:00–20:00</option><option>20:00–22:00</option>
+              </select>
+            </div>
+            <div class="form-group"><label id="lbl-roompref"></label>
+              <select class="form-select" id="sel-roompref"></select>
+            </div>
+          </div>
+        </div>
+        <div class="nav-btns">
+          <button class="btn btn-outline" onclick="goStep(1)" id="back2-btn"></button>
+          <button class="btn btn-primary" onclick="goStep(3)" id="next2-btn"></button>
+        </div>
+      </div>
+
+      <!-- STEP 3: Payment -->
+      <div class="section-step" id="step3-content">
+        <div class="form-card">
+          <div class="form-card-title"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg><span id="pay-title"></span></div>
+          <div class="pay-card" id="pay-opts"></div>
+          <div class="cc-fields" id="cc-fields">
             <div class="form-grid">
-              <div class="form-group"><label class="form-label">E-Mail-Adresse <span class="req">*</span></label><input class="form-input" type="email" placeholder="max.mustermann@email.de" id="email"/></div>
-              <div class="form-group"><label class="form-label">Telefonnummer <span class="req">*</span></label><input class="form-input" type="tel" placeholder="+49 123 456 789"/></div>
-              <div class="form-group full"><label class="form-label">Straße und Hausnummer <span class="req">*</span></label><input class="form-input" type="text" placeholder="z.B. Musterstraße 42"/></div>
-              <div class="form-group"><label class="form-label">Postleitzahl <span class="req">*</span></label><input class="form-input" type="text" placeholder="z.B. 60313"/></div>
-              <div class="form-group"><label class="form-label">Stadt <span class="req">*</span></label><input class="form-input" type="text" placeholder="z.B. Frankfurt"/></div>
-              <div class="form-group"><label class="form-label">Land <span class="req">*</span></label><select class="form-select"><option>Deutschland</option><option>Österreich</option><option>Schweiz</option></select></div>
+              <div class="form-group form-full"><label id="lbl-cardnum"></label><input class="form-input" id="inp-card" placeholder="•••• •••• •••• ••••"/></div>
+              <div class="form-group"><label id="lbl-expiry"></label><input class="form-input" id="inp-expiry" placeholder="MM / YY"/></div>
+              <div class="form-group"><label id="lbl-cvv"></label><input class="form-input" id="inp-cvv" placeholder="•••"/></div>
+              <div class="form-group form-full"><label id="lbl-cardname"></label><input class="form-input" id="inp-cname"/></div>
             </div>
           </div>
+          <div class="secure-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span id="secure-text"></span></div>
         </div>
-        <div class="form-section">
-          <div class="form-section-head"><div class="step-badge">2</div><h3>Besondere Wünsche</h3></div>
-          <div class="form-body">
-            <div class="form-grid cols-1">
-              <div class="form-group"><label class="form-label">Sonderwünsche (optional)</label><textarea class="form-input" style="height:90px;padding:12px;resize:vertical" placeholder="z.B. Zimmer im höheren Stockwerk, Allergien, etc."></textarea></div>
-            </div>
-            <div class="form-grid" style="margin-top:14px">
-              <div class="form-group"><label class="form-label">Ankunftszeit im Hotel</label><select class="form-select"><option>Keine Angabe</option><option>14:00 – 16:00</option><option>16:00 – 18:00</option><option>18:00 – 20:00</option><option>Nach 20:00</option></select></div>
-              <div class="form-group"><label class="form-label">Zimmertyp-Präferenz</label><select class="form-select"><option>Keine Präferenz</option><option>Hohe Etage</option><option>Ruhige Lage</option><option>Pool-Nähe</option><option>Strand-Nähe</option></select></div>
-            </div>
-          </div>
+        <div class="form-card">
+          <div id="terms-block"></div>
         </div>
-        <div class="form-nav">
-          <button class="btn btn-outline" onclick="goStep(1)">← Zurück</button>
-          <button class="btn btn-primary lg" onclick="goStep(3)">Weiter: Zahlung →</button>
+        <div class="nav-btns">
+          <button class="btn btn-outline" onclick="goStep(2)" id="back3-btn"></button>
+          <button class="btn btn-primary" style="padding:14px 32px;font-size:15px" onclick="goStep(4)" id="submit-btn"></button>
         </div>
       </div>
 
-      <!-- STEP 3: Zahlung -->
-      <div id="step3" style="display:none">
-        <div class="form-section">
-          <div class="form-section-head"><div class="step-badge">1</div><h3>Zahlungsmethode</h3></div>
-          <div class="form-body">
-            <div class="payment-methods">
-              <div class="payment-method selected" onclick="selectPayment(this,'card')">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-                Kreditkarte
-              </div>
-              <div class="payment-method" onclick="selectPayment(this,'paypal')">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6.5 5H18a2 2 0 012 2v3a2 2 0 01-2 2H6.5"/><path d="M6.5 12H16a2 2 0 012 2v3a2 2 0 01-2 2H6.5"/><path d="M6.5 5l-2 14"/></svg>
-                PayPal
-              </div>
-              <div class="payment-method" onclick="selectPayment(this,'transfer')">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
-                Überweisung
-              </div>
-            </div>
-
-            <div id="card-fields">
-              <div class="card-field-group">
-                <div class="form-group">
-                  <label class="form-label">Kartennummer <span class="req">*</span></label>
-                  <div class="card-number-wrap">
-                    <input class="form-input" type="text" placeholder="1234 5678 9012 3456" style="padding-right:90px" oninput="formatCard(this)"/>
-                    <div class="card-icons"><div class="card-icon" style="background:#1a1f71;color:#fff;font-size:7px">VISA</div><div class="card-icon" style="background:#eb001b;color:#fff;font-size:6px">MC</div></div>
-                  </div>
-                </div>
-                <div class="form-grid cols-3">
-                  <div class="form-group"><label class="form-label">Gültig bis <span class="req">*</span></label><input class="form-input" type="text" placeholder="MM/JJ" oninput="formatExpiry(this)"/></div>
-                  <div class="form-group"><label class="form-label">CVV <span class="req">*</span></label><input class="form-input" type="text" placeholder="123" maxlength="4"/></div>
-                  <div></div>
-                </div>
-                <div class="form-group"><label class="form-label">Name auf der Karte <span class="req">*</span></label><input class="form-input" type="text" placeholder="MAX MUSTERMANN"/></div>
-              </div>
-            </div>
+      <!-- STEP 4: Success -->
+      <div class="section-step" id="step4-content">
+        <div class="success-card">
+          <div class="success-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <h2 id="success-title" style="font-size:28px;font-weight:700;color:var(--blue);margin-bottom:12px"></h2>
+          <p id="success-text" style="font-size:15px;color:var(--grey-3);line-height:1.6;margin-bottom:24px"></p>
+          <div style="background:var(--greyblue-2);border-radius:var(--r-lg);padding:16px 24px;margin-bottom:24px;display:inline-block">
+            <div id="ref-label" style="font-size:12px;font-weight:600;color:var(--grey-3);margin-bottom:4px"></div>
+            <div style="font-size:24px;font-weight:700;color:var(--blue);letter-spacing:2px">SXH-2026-88471</div>
           </div>
-        </div>
-
-        <div class="form-section">
-          <div class="form-section-head"><div class="step-badge">2</div><h3>Buchungsbestätigung</h3></div>
-          <div class="form-body">
-            <div class="alert alert-info" style="margin-bottom:16px">
-              <strong>Sicher bezahlen mit SSL-Verschlüsselung.</strong> Ihre Zahlungsdaten werden verschlüsselt übertragen und nicht gespeichert.
-            </div>
-            <div class="checkbox-row">
-              <input type="checkbox" id="terms"/>
-              <label for="terms">Ich akzeptiere die <a href="#">AGB</a> und <a href="#">Datenschutzerklärung</a> von SunExpress Holidays. <span class="req">*</span></label>
-            </div>
-            <div class="checkbox-row">
-              <input type="checkbox" id="cancel"/>
-              <label for="cancel">Ich habe die <a href="#">Stornierungsbedingungen</a> gelesen und akzeptiere diese.</label>
-            </div>
-            <div class="checkbox-row">
-              <input type="checkbox" id="newsletter"/>
-              <label for="newsletter">Ich möchte Neuigkeiten und exklusive Angebote von SunExpress Holidays per E-Mail erhalten. (Optional)</label>
-            </div>
+          <div style="display:flex;gap:12px;justify-content:center">
+            <a href="index.html" class="btn btn-outline" id="back-home-btn"></a>
+            <button class="btn btn-primary" onclick="window.print()" id="print-btn"></button>
           </div>
-        </div>
-
-        <div class="form-nav">
-          <button class="btn btn-outline" onclick="goStep(2)">← Zurück</button>
-          <button class="btn btn-primary lg" onclick="submitBooking()" style="padding:14px 36px">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            Jetzt buchen & bezahlen — € 3.747
-          </button>
-        </div>
-      </div>
-
-      <!-- STEP 4: Confirmation -->
-      <div class="success-panel" id="step4">
-        <div class="success-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
-        <h2>Buchung erfolgreich!</h2>
-        <p>Vielen Dank für Ihre Buchung. Eine Bestätigungs-E-Mail wurde an Ihre Adresse gesendet.</p>
-        <div class="booking-ref" id="booking-ref">SXH-2026-XXXXX</div>
-        <p style="font-size:13px;color:var(--grey-3)">Bitte bewahren Sie diese Buchungsnummer sicher auf.</p>
-        <div style="margin-top:28px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-          <a href="index.html" class="btn btn-secondary">Zurück zur Startseite</a>
-          <button class="btn btn-outline" onclick="window.print()">Buchung drucken</button>
         </div>
       </div>
     </div>
 
-    <!-- SUMMARY CARD -->
-    <div id="summary-col">
-      <div class="summary-card">
-        <div class="summary-head"><h3>Buchungsübersicht</h3></div>
-        <div class="summary-hotel">
-          <div class="summary-hotel-img ci1" id="sum-img"></div>
-          <div>
-            <div class="summary-hotel-name">Rixos Premium Belek</div>
-            <div class="summary-hotel-meta">Belek, Antalya · ★★★★★</div>
-            <div style="margin-top:4px"><span class="badge badge-orange" style="font-size:10px">All-Inclusive</span></div>
-          </div>
-        </div>
-        <div class="summary-rows">
-          <div class="sum-row"><span>Reisedaten</span><span>15.–22. Jul 2026</span></div>
-          <div class="sum-row"><span>Nächte</span><span>7</span></div>
-          <div class="sum-row"><span>Reisende</span><span>2 Erw. + 1 Kind</span></div>
-          <div class="sum-row"><span>Zimmer</span><span>Deluxe Meerblick</span></div>
-          <div class="sum-row"><span>Flug</span><span>FRA → AYT direkt</span></div>
-          <div class="sum-row"><span>Transfer</span><span>Inklusive</span></div>
-          <hr class="sum-divider"/>
-          <div class="sum-row"><span>2 Erw. × € 1.249</span><span>€ 2.498</span></div>
-          <div class="sum-row"><span>1 Kind × € 749</span><span>€ 749</span></div>
-          <div class="sum-row"><span>Flug & Transfer</span><span>Inklusive</span></div>
-          <hr class="sum-divider"/>
-          <div class="sum-total"><span>Gesamtpreis</span><span class="amount">€ 3.747</span></div>
-          <div style="font-size:11px;color:var(--grey-3);margin-top:4px">inkl. aller Steuern & Gebühren</div>
-        </div>
-        <div class="sum-features">
-          <div class="sum-feat"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Bestpreisgarantie</div>
-          <div class="sum-feat"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>ATOL gesichert</div>
-          <div class="sum-feat"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Kostenlose Stornierung (bis 30 Tage vor Abreise)</div>
-          <div class="sum-feat"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>24/7 Kundenservice</div>
-        </div>
-      </div>
+    <!-- Summary sidebar -->
+    <div>
+      <div class="summary-card" id="summary-card"></div>
     </div>
   </div>
 
   <div id="site-footer"></div>
   <script src="components.js"></script>
   <script>
-  // booking.html inline scripts — components.js loaded above
-    let currentStep = 1;
+  let currentStep = 1;
+  let payMethod = 'creditcard';
 
-    function goStep(n) {
-      document.getElementById(`step${currentStep}`).style.display = 'none';
-      document.getElementById(`step${n}`).style.display = 'block';
-      // Stepper update
-      for (let i = 1; i <= 4; i++) {
-        const num = document.getElementById(`snum${i}`);
-        const lbl = document.getElementById(`slbl${i}`);
-        const line = document.getElementById(`sline${i}`);
-        num.classList.remove('active','done');
-        lbl.classList.remove('active','done');
-        if (line) line.classList.remove('done');
-        if (i < n) { num.classList.add('done'); lbl.classList.add('done'); if(line) line.classList.add('done'); }
-        if (i === n) { num.classList.add('active'); lbl.classList.add('active'); }
-      }
-      currentStep = n;
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+  function ck(){ return `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>`; }
+  function personSvg(){ return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`; }
 
-    function submitBooking() {
-      const terms = document.getElementById('terms');
-      if (!terms.checked) { alert('Bitte akzeptieren Sie die AGB um fortzufahren.'); return; }
-      const ref = 'SXH-2026-' + Math.random().toString(36).substr(2,5).toUpperCase();
-      document.getElementById('booking-ref').textContent = ref;
-      document.getElementById('step3').style.display = 'none';
-      document.getElementById('step4').style.display = 'block';
-      document.getElementById('summary-col').style.display = 'none';
-      document.getElementById('step4').style.gridColumn = '1 / -1';
-      goStep(4);
-    }
+  function goStep(n){
+    currentStep=n;
+    document.querySelectorAll('.section-step').forEach(s=>s.classList.remove('active'));
+    document.getElementById(`step${n}-content`).classList.add('active');
+    buildStepper();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
 
-    function selectPayment(el, type) {
-      document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
-      el.classList.add('selected');
-      document.getElementById('card-fields').style.display = type === 'card' ? 'block' : 'none';
-    }
-
-    function formatCard(el) {
-      let v = el.value.replace(/\D/g,'').substring(0,16);
-      el.value = v.replace(/(.{4})/g,'$1 ').trim();
-    }
-    function formatExpiry(el) {
-      let v = el.value.replace(/\D/g,'').substring(0,4);
-      if (v.length >= 3) v = v.substring(0,2) + '/' + v.substring(2);
-      el.value = v;
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      setTimeout(() => {
-        if (typeof fetchUnsplashImg === 'function') {
-          fetchUnsplashImg('rixos belek resort pool', 'sum-img');
-        }
-      }, 100);
+  function buildStepper(){
+    const bk=tObj('booking');
+    const steps=[bk.step1,bk.step2,bk.step3,bk.step4];
+    let html='';
+    steps.forEach((s,i)=>{
+      const n=i+1;
+      const cls=n<currentStep?'done':n===currentStep?'active':'';
+      const numTxt=n<currentStep?`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>`:n;
+      html+=`<div class="step ${cls}"><div class="step-num">${numTxt}</div><div class="step-label">${s}</div></div>`;
+      if(i<steps.length-1) html+=`<div class="step-line ${n<currentStep?'done':''}"></div>`;
     });
+    document.getElementById('stepper').innerHTML=html;
+  }
+
+  function buildTravelerCard(cardId,travelerNum,isMain){
+    const bk=tObj('booking');
+    const typeLabel=isMain?bk.mainBooker:bk.adult;
+    document.getElementById(cardId).innerHTML=`
+      <div class="traveler-header">
+        <div class="traveler-avatar">${personSvg()}</div>
+        <div><div class="traveler-name">${bk.traveler} ${travelerNum}</div><div class="traveler-type">${typeLabel}</div></div>
+      </div>
+      <div class="form-group" style="margin-bottom:16px">
+        <label>${bk.salutation}</label>
+        <div class="radio-group" id="sal-${travelerNum}">
+          <label class="radio-btn sel" onclick="selSal(this,'${travelerNum}')"><input type="radio" name="sal${travelerNum}" value="mr" checked/>${bk.mr}</label>
+          <label class="radio-btn" onclick="selSal(this,'${travelerNum}')"><input type="radio" name="sal${travelerNum}" value="ms"/>${bk.ms}</label>
+          <label class="radio-btn" onclick="selSal(this,'${travelerNum}')"><input type="radio" name="sal${travelerNum}" value="div"/>${bk.diverse}</label>
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label>${bk.firstName} ${bk.req}</label><input class="form-input" placeholder="Max"/></div>
+        <div class="form-group"><label>${bk.lastName} ${bk.req}</label><input class="form-input" placeholder="Mustermann"/></div>
+        <div class="form-group"><label>${bk.dob} ${bk.req}</label><input class="form-input" type="date"/></div>
+        <div class="form-group"><label>${bk.nationality}</label><input class="form-input" placeholder="DE"/></div>
+        <div class="form-group form-full"><label>${bk.passport}</label><input class="form-input" placeholder="C01X00T47"/></div>
+      </div>`;
+  }
+
+  function selSal(el,n){
+    document.querySelectorAll(`#sal-${n} .radio-btn`).forEach(b=>b.classList.remove('sel'));
+    el.classList.add('sel');
+  }
+
+  function selPay(method){
+    payMethod=method;
+    document.querySelectorAll('.pay-opt').forEach(o=>o.classList.toggle('sel',o.dataset.m===method));
+    const cc=document.getElementById('cc-fields');
+    if(cc) cc.classList.toggle('show',method==='creditcard');
+  }
+
+  function toggleCb(el){ el.classList.toggle('checked'); }
+
+  function buildSummary(){
+    const bk=tObj('booking'); const h=tObj('hotel'); const sp=tObj('sp');
+    const vpL=(sp.vp||{})['all-inclusive']||'All-Inclusive';
+    document.getElementById('summary-card').innerHTML=`
+      <div class="summary-card-head"><h3>${bk.summary}</h3></div>
+      <div class="summary-hotel">
+        <div class="sh-name">Rixos Premium Belek</div>
+        <div class="sh-dest"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> Belek, Antalya</div>
+        <div style="color:var(--orange-light);font-size:14px;margin-top:6px">★★★★★</div>
+      </div>
+      <div class="summary-rows">
+        <div class="sum-row"><span>${bk.travelDates}</span><span>15.–22. ${currentLang==='tr'?'Tem':currentLang==='en'?'Jul':'Jul'} 2026</span></div>
+        <div class="sum-row"><span>${bk.nights}</span><span>7</span></div>
+        <div class="sum-row"><span>${bk.travelers}</span><span>2 ${h.adults}, 1 ${h.child}</span></div>
+        <div class="sum-row"><span>${bk.room}</span><span>Deluxe</span></div>
+        <div class="sum-row"><span>${h.board}</span><span>${vpL}</span></div>
+        <div class="sum-row"><span>${bk.flight}</span><span>FRA → AYT</span></div>
+        <div class="sum-row"><span>${bk.transfer}</span><span>${bk.included}</span></div>
+      </div>
+      <div class="sum-total"><span>${bk.totalPrice}</span><span class="amount">€ 3.747</span></div>
+      <div style="font-size:11px;color:var(--grey-3);padding:4px 20px 12px">${bk.allTaxes}</div>
+      <div class="sum-features">
+        <div class="sum-feat">${ck()} ${bk.bestPrice}</div>
+        <div class="sum-feat">${ck()} ${bk.atol}</div>
+        <div class="sum-feat">${ck()} ${bk.freeCancel}</div>
+        <div class="sum-feat">${ck()} ${bk.support}</div>
+      </div>`;
+  }
+
+  document.addEventListener('DOMContentLoaded',()=>{
+    const bk=tObj('booking');
+    document.title=`${bk.title||'Buchung'} — SunExpress Holidays`;
+    document.getElementById('bc-home').textContent=t('nav','home');
+    document.getElementById('bc-offers').textContent=t('nav','offers');
+    document.getElementById('bc-booking').textContent=bk.title||'';
+    buildStepper();
+    buildSummary();
+
+    // Step 1
+    buildTravelerCard('traveler-1-card',1,true);
+    buildTravelerCard('traveler-2-card',2,false);
+    document.getElementById('next1-btn').textContent=bk.next;
+
+    // Step 2
+    document.getElementById('contact-title').textContent=bk.contactData||bk.step2;
+    document.getElementById('wishes-title').textContent=bk.specialWishes||bk.wishes;
+    document.getElementById('lbl-email').textContent=bk.email;
+    document.getElementById('lbl-phone').textContent=bk.phone;
+    document.getElementById('lbl-street').textContent=bk.street;
+    document.getElementById('lbl-zip').textContent=bk.zip;
+    document.getElementById('lbl-city').textContent=bk.city;
+    document.getElementById('lbl-country').textContent=bk.country;
+    document.getElementById('lbl-wishes').textContent=bk.wishes;
+    document.getElementById('inp-wishes').placeholder=bk.wishesPlaceholder||'';
+    document.getElementById('lbl-arrival').textContent=bk.arrivalTime;
+    document.getElementById('lbl-roompref').textContent=bk.roomPref;
+    document.getElementById('sel-country').innerHTML=[
+      {v:'de',l:bk.de||'Deutschland'},{v:'at',l:bk.at||'Österreich'},
+      {v:'ch',l:bk.ch||'Schweiz'},{v:'tr',l:bk.tr||'Türkiye'},{v:'ot',l:bk.other||'Andere'},
+    ].map(o=>`<option value="${o.v}">${o.l}</option>`).join('');
+    document.getElementById('sel-roompref').innerHTML=[
+      bk.noPreference,bk.highFloor,bk.quiet,bk.nearPool,bk.nearBeach
+    ].map(o=>`<option>${o}</option>`).join('');
+    document.getElementById('back2-btn').textContent=bk.back;
+    document.getElementById('next2-btn').textContent=bk.next;
+
+    // Step 3
+    document.getElementById('pay-title').textContent=bk.paymentMethod;
+    document.getElementById('pay-opts').innerHTML=[
+      {m:'creditcard',icon:'💳',l:bk.creditcard},
+      {m:'paypal',icon:'🅿️',l:bk.paypal},
+      {m:'bankTransfer',icon:'🏦',l:bk.bankTransfer},
+    ].map(p=>`<div class="pay-opt ${p.m==='creditcard'?'sel':''}" data-m="${p.m}" onclick="selPay('${p.m}')">
+      <div class="pay-opt-icon">${p.icon}</div>
+      <div class="pay-opt-label">${p.l}</div>
+    </div>`).join('');
+    document.getElementById('cc-fields').classList.add('show');
+    document.getElementById('lbl-cardnum').textContent=bk.cardNumber;
+    document.getElementById('lbl-expiry').textContent=bk.expiry;
+    document.getElementById('lbl-cvv').textContent=bk.cvv;
+    document.getElementById('lbl-cardname').textContent=bk.cardName;
+    document.getElementById('secure-text').textContent=bk.securePayment;
+    document.getElementById('terms-block').innerHTML=`
+      <div class="checkbox-row"><div class="custom-cb" onclick="toggleCb(this)"></div><label>${bk.terms}</label></div>
+      <div class="checkbox-row"><div class="custom-cb" onclick="toggleCb(this)"></div><label>${bk.cancelTerms}</label></div>
+      <div class="checkbox-row"><div class="custom-cb" onclick="toggleCb(this)"></div><label>${bk.newsletter}</label></div>`;
+    document.getElementById('back3-btn').textContent=bk.back;
+    document.getElementById('submit-btn').textContent=bk.submit;
+
+    // Step 4
+    document.getElementById('success-title').textContent=bk.successTitle;
+    document.getElementById('success-text').textContent=bk.successText;
+    document.getElementById('ref-label').textContent=bk.bookingRef;
+    document.getElementById('back-home-btn').textContent=bk.backHome;
+    document.getElementById('print-btn').textContent=bk.print;
+  });
   </script>
 </body>
 </html>

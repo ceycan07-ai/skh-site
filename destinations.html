@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>SunExpress Holidays — Destinationen</title>
+  <link rel="stylesheet" href="shared.css"/>
+  <style>
+    .page-hero{background:linear-gradient(135deg,var(--blue-dark),var(--blue-mid));padding:60px var(--sp-xl);text-align:center;color:#fff;}
+    .page-hero h1{font-size:40px;font-weight:700;margin-bottom:12px;}
+    .page-hero p{font-size:16px;opacity:.85;max-width:540px;margin:0 auto;}
+    .dest-big-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;padding:var(--sp-2xl) var(--sp-xl);max-width:1300px;margin:0 auto;}
+    .dest-big-card{border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--sh-lg);background:#fff;transition:transform .2s,box-shadow .2s;display:block;text-decoration:none;}
+    .dest-big-card:hover{transform:translateY(-4px);box-shadow:var(--sh-xl);}
+    .dest-big-img{height:220px;background-size:cover;background-position:center;position:relative;}
+    .dest-big-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(4,48,109,.75) 0%,transparent 55%);}
+    .dest-big-content{position:absolute;bottom:16px;left:16px;right:16px;}
+    .dest-big-name{font-size:22px;font-weight:700;color:#fff;margin-bottom:4px;}
+    .dest-big-country{font-size:12px;color:var(--blue-light);font-weight:600;}
+    .dest-big-body{padding:16px 20px;}
+    .dest-big-desc{font-size:13px;color:var(--grey-3);line-height:1.6;margin-bottom:12px;}
+    .dest-big-footer{display:flex;align-items:center;justify-content:space-between;}
+    .dest-big-price{font-size:22px;font-weight:700;color:var(--orange);}
+    .dest-big-price span{font-size:11px;font-weight:400;color:var(--grey-3);}
+    .dest-highlights{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+    .dest-highlight{font-size:11px;font-weight:600;color:var(--blue);background:var(--greyblue-2);padding:3px 10px;border-radius:var(--r-full);}
+  </style>
+</head>
+<body>
+  <div id="site-header" data-page="dest"></div>
+  <div class="page-hero">
+    <h1 id="page-title"></h1>
+    <p id="page-sub"></p>
+  </div>
+  <div class="breadcrumb"><a href="index.html" id="bc-home"></a><span class="breadcrumb-sep">/</span><span id="bc-dest"></span></div>
+  <div class="dest-big-grid" id="dest-grid"></div>
+  <div id="site-footer"></div>
+  <script src="components.js"></script>
+  <script>
+  const DEST_DATA = [
+    {code:'ayt',name:'Antalya',rk:'turkey',flag:'🇹🇷',price:'449',ci:'ci1',q:'antalya turkey beach resort',
+     desc:{de:'Die Türkische Riviera mit traumhaften Stränden, Luxusresorts und antiken Ruinen.',en:'The Turkish Riviera with stunning beaches, luxury resorts and ancient ruins.',tr:'Türk Rivierası\'nın muhteşem plajları, lüks tatil köyleri ve antik kalıntıları.'},
+     highlights:['Strand','All-Inclusive','Direktflug','Wasserpark']},
+    {code:'bjv',name:'Bodrum',rk:'turkey',flag:'🇹🇷',price:'519',ci:'ci2',q:'bodrum turkey castle bay',
+     desc:{de:'Exklusives Ferienparadies mit weißen Häusern, Jachthäfen und kristallklarem Wasser.',en:'Exclusive holiday paradise with white houses, marinas and crystal-clear water.',tr:'Beyaz evleri, marinası ve kristal berraklığındaki sularıyla tatil cenneti.'},
+     highlights:['Jachthafen','Kultur','Wassersport','Nightlife']},
+    {code:'dlm',name:'Dalaman',rk:'turkey',flag:'🇹🇷',price:'479',ci:'ci3',q:'dalaman fethiye turkey bay',
+     desc:{de:'Tor zur Türkischen Ägäis — mit Ölüdeniz, Fethiye und unberührter Natur.',en:'Gateway to the Turkish Aegean — with Ölüdeniz, Fethiye and unspoilt nature.',tr:'Türk Ege\'sine açılan kapı — Ölüdeniz, Fethiye ve bozulmamış doğa.'},
+     highlights:['Paragliding','Blaue Lagune','Segeln','Natur']},
+    {code:'adb',name:'İzmir',rk:'turkey',flag:'🇹🇷',price:'399',ci:'ci4',q:'izmir turkey city coast aegean',
+     desc:{de:'Moderne Metropole mit Strandpromenade, Altstadtflair und Nähe zu Ephesos.',en:'Modern metropolis with seafront promenade, old town charm and proximity to Ephesus.',tr:'Deniz kenarı, tarihi çarşısı ve Efes\'e yakınlığıyla modern metropol.'},
+     highlights:['Stadt','Kultur','Ephesos','Strand']},
+    {code:'hrg',name:'Hurghada',rk:'egypt',flag:'🇪🇬',price:'589',ci:'ci6',q:'hurghada egypt red sea resort',
+     desc:{de:'Das pulsierende Badeparadies am Roten Meer mit traumhaften Korallenriffen.',en:'The vibrant beach paradise on the Red Sea with stunning coral reefs.',tr:'Kızıl Deniz\'in canlı plaj cenneti ve muhteşem mercan resifleriyle.'},
+     highlights:['Schnorcheln','Tauchen','Korallen','Wassersport']},
+    {code:'rmf',name:'Marsa Alam',rk:'egypt',flag:'🇪🇬',price:'629',ci:'ci5',q:'marsa alam egypt diving snorkeling',
+     desc:{de:'Das unberührte Juwel Ägyptens — ideal für Taucher und Naturliebhaber.',en:'The unspoilt jewel of Egypt — ideal for divers and nature lovers.',tr:'Mısır\'ın bozulmamış mücevheri — dalgıçlar ve doğa severler için ideal.'},
+     highlights:['Tauchen','Delfine','Ruhig','Natur']},
+  ];
+
+  document.addEventListener('DOMContentLoaded',()=>{
+    document.getElementById('page-title').textContent = t('nav','dest');
+    document.getElementById('page-sub').textContent = tObj('home').destSub||'';
+    document.getElementById('bc-home').textContent = t('nav','home');
+    document.getElementById('bc-dest').textContent = t('nav','dest');
+    const bd=tObj('badges');
+    document.getElementById('dest-grid').innerHTML = DEST_DATA.map(d=>{
+      const reg=region(d.rk);
+      const desc=(d.desc[currentLang]||d.desc.de);
+      return `<a href="dest-detail.html?dest=${d.code}" class="dest-big-card">
+        <div class="dest-big-img ${d.ci}" id="dimg-${d.code}">
+          <div class="dest-big-overlay"></div>
+          <div class="dest-big-content">
+            <div class="dest-big-name">${d.flag} ${d.name}</div>
+            <div class="dest-big-country">${d.code.toUpperCase()} · ${reg}</div>
+          </div>
+        </div>
+        <div class="dest-big-body">
+          <p class="dest-big-desc">${desc}</p>
+          <div class="dest-highlights">${d.highlights.map(h=>`<span class="dest-highlight">${h}</span>`).join('')}</div>
+          <div class="dest-big-footer">
+            <div><div style="font-size:11px;color:var(--grey-3)">ab</div><div class="dest-big-price">€ ${d.price} <span>/ Person</span></div></div>
+            <span class="btn btn-primary btn-sm">${tObj('sp').bookNow||'Buchen'} →</span>
+          </div>
+        </div>
+      </a>`;
+    }).join('');
+    DEST_DATA.forEach(d=>fetchUnsplashImg(d.q,`dimg-${d.code}`));
+  });
+  </script>
+</body>
+</html>

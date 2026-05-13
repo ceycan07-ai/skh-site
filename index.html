@@ -5,60 +5,74 @@
   <title>SunExpress Holidays</title>
   <link rel="stylesheet" href="shared.css"/>
   <style>
-    .hero{position:relative;min-height:520px;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;}
-    .hero-bg{position:absolute;inset:0;background:linear-gradient(160deg,var(--blue-dark),var(--blue-mid));background-size:cover;background-position:center;}
-    .hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(4,48,109,.85) 0%,rgba(0,69,143,.4) 50%,transparent 100%);}
-    .hero-content{position:relative;z-index:2;padding:0 var(--sp-xl) 0;max-width:640px;}
-    .hero-badge{display:inline-flex;align-items:center;gap:6px;background:var(--orange);color:#fff;font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;padding:5px 14px;border-radius:var(--r-full);margin-bottom:16px;}
-    .hero h1{font-size:46px;font-weight:700;color:#fff;line-height:1.15;margin-bottom:12px;}
-    .hero h1 em{color:var(--orange-light);font-style:normal;}
-    .hero-sub{font-size:16px;color:rgba(255,255,255,.85);line-height:1.6;margin-bottom:36px;max-width:480px;}
-    .hero-feature-card{position:absolute;right:var(--sp-xl);bottom:120px;background:#fff;border-radius:var(--r-xl);box-shadow:var(--sh-xl);padding:16px 20px;min-width:240px;z-index:2;}
-    .search-area{position:relative;z-index:2;padding:0 var(--sp-xl) 0;}
-    .dest-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
-    .dest-card{border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-md);background:#fff;cursor:pointer;transition:box-shadow .2s,transform .2s;}
-    .dest-card:hover{box-shadow:var(--sh-xl);transform:translateY(-3px);text-decoration:none;}
-    .dest-img{height:160px;position:relative;overflow:hidden;background-size:cover;background-position:center;}
-    .dest-img-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,69,143,.8) 0%,transparent 55%);}
-    .dest-img-content{position:absolute;bottom:12px;left:12px;z-index:1;}
-    .dest-name{font-size:17px;font-weight:700;color:#fff;line-height:1.2;}
-    .dest-country{font-size:11px;color:var(--blue-light);font-weight:600;}
-    .dest-footer{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;}
-    .dest-price{font-size:19px;font-weight:700;color:var(--orange);}
-    .dest-price span{font-size:11px;font-weight:400;color:var(--grey-3);}
-    .dest-from{font-size:11px;color:var(--grey-3);}
-    .offer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
-    .offer-card{background:#fff;border-radius:var(--r-lg);box-shadow:var(--sh-md);overflow:hidden;border-left:4px solid var(--orange);transition:box-shadow .2s,transform .15s;}
-    .offer-card:hover{box-shadow:var(--sh-lg);transform:translateY(-2px);}
-    .offer-img{height:140px;position:relative;overflow:hidden;background-size:cover;background-position:center;display:flex;align-items:flex-end;padding:12px;}
-    .offer-img-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.5) 0%,transparent 60%);}
-    .offer-img-name{position:relative;z-index:1;font-size:14px;font-weight:700;color:#fff;}
-    .offer-body{padding:16px;}
-    .offer-hotel{font-size:15px;font-weight:700;color:var(--blue);margin-bottom:4px;}
-    .offer-dest{font-size:12px;color:var(--grey-3);margin-bottom:8px;display:flex;align-items:center;gap:4px;}
-    .offer-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
-    .offer-footer{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--bg);border-top:1px solid var(--grey-1);}
-    .offer-price-from{font-size:10px;color:var(--grey-3);text-transform:uppercase;letter-spacing:.5px;}
-    .offer-price-val{font-size:24px;font-weight:700;color:var(--orange);line-height:1;}
-    .offer-price-pp{font-size:11px;color:var(--grey-3);}
-    .why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:32px;}
-    .why-card{background:#fff;border-radius:var(--r-lg);padding:28px 20px;text-align:center;box-shadow:var(--sh-md);border-top:3px solid var(--orange);}
-    .why-icon{width:56px;height:56px;border-radius:50%;background:var(--greyblue-2);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;color:var(--blue);}
-    .why-card h4{font-size:14px;font-weight:700;color:var(--blue);margin-bottom:6px;}
-    .why-card p{font-size:12px;color:var(--grey-3);line-height:1.5;}
+    /* ── HERO SLIDER ── */
+    .hero { position:relative; min-height:520px; display:flex; flex-direction:column; justify-content:flex-end; overflow:hidden; }
+    .hero-bg { position:absolute; inset:0; background-size:cover; background-position:center; transition:opacity .8s; }
+    .hero-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(4,48,109,.85) 0%,rgba(0,69,143,.35) 55%,transparent 100%); }
+    .hero-content { position:relative; z-index:2; padding:0 var(--sp-xl) 0; max-width:680px; }
+    .hero-badge { display:inline-flex; align-items:center; gap:6px; color:#fff; font-size:11px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; padding:5px 14px; border-radius:var(--r-full); margin-bottom:16px; }
+    .hero h1 { font-size:46px; font-weight:700; color:#fff; line-height:1.15; margin-bottom:12px; }
+    .hero h1 em { font-style:normal; }
+    .hero-sub { font-size:16px; color:rgba(255,255,255,.85); line-height:1.6; margin-bottom:36px; max-width:480px; }
+    .hero-feature-card { position:absolute; right:var(--sp-xl); bottom:140px; background:#fff; border-radius:var(--r-xl); box-shadow:var(--sh-xl); padding:16px 20px; min-width:240px; z-index:2; }
+    .search-area { position:relative; z-index:2; padding:0 var(--sp-xl) 0; }
+
+    /* Slider dots */
+    .slider-dots { position:absolute; bottom:16px; right:var(--sp-xl); z-index:3; display:flex; gap:8px; }
+    .slider-dot { width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,.4); cursor:pointer; transition:all .2s; border:none; }
+    .slider-dot.active { background:#fff; width:24px; border-radius:4px; }
+
+    /* Slider nav arrows */
+    .slider-prev, .slider-next { position:absolute; top:50%; transform:translateY(-50%); z-index:3; width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,.2); border:2px solid rgba(255,255,255,.4); color:#fff; font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .2s; backdrop-filter:blur(4px); }
+    .slider-prev { left:16px; } .slider-next { right:16px; }
+    .slider-prev:hover, .slider-next:hover { background:rgba(255,255,255,.35); }
+
+    /* Sections */
+    .dest-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+    .dest-card { border-radius:var(--r-lg); overflow:hidden; box-shadow:var(--sh-md); background:#fff; cursor:pointer; transition:box-shadow .2s,transform .2s; display:block; text-decoration:none; }
+    .dest-card:hover { box-shadow:var(--sh-xl); transform:translateY(-3px); }
+    .dest-img { height:160px; position:relative; background-size:cover; background-position:center; }
+    .dest-img-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(0,69,143,.8) 0%,transparent 55%); }
+    .dest-img-content { position:absolute; bottom:12px; left:12px; z-index:1; }
+    .dest-name { font-size:17px; font-weight:700; color:#fff; }
+    .dest-country { font-size:11px; color:var(--blue-light); font-weight:600; }
+    .dest-footer { padding:12px 16px; display:flex; align-items:center; justify-content:space-between; }
+    .dest-price { font-size:19px; font-weight:700; color:var(--orange); }
+    .dest-price span { font-size:11px; font-weight:400; color:var(--grey-3); }
+    .offer-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+    .offer-card { background:#fff; border-radius:var(--r-lg); box-shadow:var(--sh-md); overflow:hidden; border-left:4px solid var(--orange); transition:box-shadow .2s,transform .15s; }
+    .offer-card:hover { box-shadow:var(--sh-lg); transform:translateY(-2px); }
+    .offer-img { height:140px; position:relative; background-size:cover; background-position:center; display:flex; align-items:flex-end; padding:12px; }
+    .offer-img-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(0,0,0,.5) 0%,transparent 60%); }
+    .offer-img-name { position:relative; z-index:1; font-size:14px; font-weight:700; color:#fff; }
+    .offer-body { padding:16px; }
+    .offer-hotel { font-size:15px; font-weight:700; color:var(--blue); margin-bottom:4px; }
+    .offer-dest { font-size:12px; color:var(--grey-3); margin-bottom:8px; display:flex; align-items:center; gap:4px; }
+    .offer-tags { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+    .offer-footer { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:var(--bg); border-top:1px solid var(--grey-1); }
+    .offer-price-val { font-size:24px; font-weight:700; color:var(--orange); line-height:1; }
+    .offer-price-pp { font-size:11px; color:var(--grey-3); }
+    .why-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; margin-top:32px; }
+    .why-card { background:#fff; border-radius:var(--r-lg); padding:28px 20px; text-align:center; box-shadow:var(--sh-md); border-top:3px solid var(--orange); }
+    .why-icon { width:56px; height:56px; border-radius:50%; background:var(--greyblue-2); display:flex; align-items:center; justify-content:center; margin:0 auto 14px; color:var(--blue); }
+    .why-card h4 { font-size:14px; font-weight:700; color:var(--blue); margin-bottom:6px; }
+    .why-card p { font-size:12px; color:var(--grey-3); line-height:1.5; }
   </style>
 </head>
 <body>
   <div id="site-header" data-page="home"></div>
 
-  <section class="hero">
+  <section class="hero" id="hero">
     <div class="hero-bg" id="hero-bg"></div>
     <div class="hero-overlay"></div>
+    <button class="slider-prev" onclick="slidePrev()">‹</button>
+    <button class="slider-next" onclick="slideNext()">›</button>
+    <div class="slider-dots" id="slider-dots"></div>
     <div class="hero-feature-card">
       <div style="font-size:11px;color:var(--grey-3);font-weight:600">Antalya</div>
       <div style="font-size:15px;font-weight:700;color:var(--blue);margin:4px 0">Sealife Family Resort</div>
-      <div style="font-size:12px;color:var(--grey-3);margin-bottom:10px">★★★★ · 7 <span id="fc-nights"></span> · AI · Direktflug</div>
-      <span class="badge badge-blue" id="fc-price">ab 348 €</span>
+      <div style="font-size:12px;color:var(--grey-3);margin-bottom:10px">★★★★ · 7 <span id="fc-nights"></span> · AI</div>
+      <span class="badge badge-blue">ab 348 €</span>
     </div>
     <div class="hero-content">
       <div class="hero-badge" id="hero-badge"></div>
@@ -68,19 +82,30 @@
     <div class="search-area" id="search-mask"></div>
   </section>
 
-  <!-- USP -->
   <div class="usp-bar" id="usp-bar"></div>
 
-  <!-- DESTINATIONS -->
+  <!-- ══ TEASER SLIDER ══ -->
+  <section class="section section-white" style="padding-bottom:12px">
+    <div style="max-width:1300px;margin:0 auto;padding:0 var(--sp-xl)">
+      <div style="position:relative">
+        <div class="teaser-slider" id="tsSlider">
+          <div class="teaser-track" id="tsTrack"></div>
+        </div>
+        <button class="tsr-arrow tsr-arrow-prev" onclick="tsMove(-1)">‹</button>
+        <button class="tsr-arrow tsr-arrow-next" onclick="tsMove(1)">›</button>
+      </div>
+      <div class="tsr-dots" id="tsDots"></div>
+    </div>
+  </section>
+
   <section class="section section-white">
     <div class="section-header">
       <div><h2 class="section-title" id="dest-title"></h2><p class="section-sub" id="dest-sub"></p></div>
-      <a href="search.html" class="link-more" id="dest-all-link"></a>
+      <a href="destinations.html" class="link-more" id="dest-all-link"></a>
     </div>
     <div class="dest-grid" id="dest-grid"></div>
   </section>
 
-  <!-- OFFERS -->
   <section class="section" style="background:#f8f9fa">
     <div class="section-header">
       <div><h2 class="section-title" id="offers-title"></h2><p class="section-sub" id="offers-sub"></p></div>
@@ -89,7 +114,6 @@
     <div class="offer-grid" id="offers-grid"></div>
   </section>
 
-  <!-- PROMO -->
   <section class="section section-white" style="padding-top:0">
     <div class="promo-card">
       <div>
@@ -101,7 +125,6 @@
     </div>
   </section>
 
-  <!-- WHY -->
   <section class="section" style="background:#f8f9fa">
     <div style="text-align:center"><h2 class="section-title" id="why-title"></h2><p class="section-sub" id="why-sub"></p></div>
     <div class="why-grid" id="why-grid"></div>
@@ -110,112 +133,242 @@
   <div id="site-footer"></div>
   <script src="components.js"></script>
   <script>
-  const WHY_ICONS = [
+  /* ══ TEASER SLIDER ══ */
+  let tsIdx=0, tsTimer;
+
+  function buildTeaserSlides(){
+    const bk=tObj('booking'); const ho=tObj('home');
+    const slides=[
+      {
+        skin:'tsr-orange',
+        eyebrow: ho.slides?.[0]?.badge || 'Frühbucher 2026',
+        title: ho.slides?.[0]?.title || 'Bis zu 20% Rabatt',
+        sub: ho.slides?.[0]?.sub || 'Sichern Sie jetzt die besten Preise für Ihren Sommerurlaub 2026.',
+        cta: ho.slides?.[0]?.btn || 'Jetzt buchen',
+        secondaryKey: null,
+        stampTop: currentLang==='tr'?'%20':'20%',
+        stampBot: currentLang==='tr'?'İNDİRİM':currentLang==='en'?'DISCOUNT':'RABATT',
+        art: `<svg viewBox="0 0 160 140" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="80" cy="130" rx="70" ry="12" fill="rgba(0,0,0,.12)"/>
+          <rect x="30" y="40" width="100" height="72" rx="14" fill="rgba(255,255,255,.18)" stroke="rgba(255,255,255,.4)" stroke-width="2"/>
+          <rect x="40" y="52" width="80" height="10" rx="4" fill="rgba(255,255,255,.5)"/>
+          <rect x="40" y="68" width="55" height="8" rx="4" fill="rgba(255,255,255,.3)"/>
+          <rect x="40" y="82" width="40" height="8" rx="4" fill="rgba(255,255,255,.25)"/>
+          <circle cx="110" cy="90" r="18" fill="rgba(255,255,255,.25)" stroke="rgba(255,255,255,.5)" stroke-width="2"/>
+          <text x="110" y="95" text-anchor="middle" font-size="14" font-weight="800" fill="#fff">€</text>
+          <path d="M80 20 L90 35 L78 32 Z" fill="rgba(255,255,255,.6)"/>
+          <path d="M75 18 Q80 5 88 16" stroke="rgba(255,255,255,.5)" stroke-width="2" fill="none"/>
+        </svg>`,
+      },
+      {
+        skin:'tsr-blue',
+        eyebrow: currentLang==='tr'?'YENİ: HURGHADA':currentLang==='en'?'NEW: HURGHADA':'NEU: HURGHADA',
+        title: currentLang==='tr'?'Mısır\'ı <em>Keşfet</em>':currentLang==='en'?'<em>Discover</em> Egypt':'Ägypten <em>entdecken</em>',
+        sub: currentLang==='tr'?'Kızıl Deniz\'de Kişi başı €589\'dan. Direkt uçuş dahil.':currentLang==='en'?'From €589 p.p. at the Red Sea. Direct flight included.':'Ab €589 p.P. am Roten Meer. Direktflug inklusive.',
+        cta: currentLang==='tr'?'Tekliflere bak':currentLang==='en'?'View offers':'Angebote ansehen',
+        stampTop: 'ab',
+        stampBot: '€ 589',
+        art: `<svg viewBox="0 0 160 140" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="80" cy="128" rx="68" ry="10" fill="rgba(0,0,0,.15)"/>
+          <path d="M20 95 Q80 45 140 80" stroke="rgba(255,255,255,.3)" stroke-width="2" stroke-dasharray="5 4" fill="none"/>
+          <path d="M75 62 L95 55 L88 72 Z" fill="rgba(255,255,255,.8)"/>
+          <path d="M88 62 L100 58 L96 68 Z" fill="rgba(255,255,255,.5)"/>
+          <circle cx="30" cy="92" r="6" fill="rgba(255,255,255,.5)"/>
+          <circle cx="130" cy="78" r="8" fill="rgba(255,255,255,.5)"/>
+          <text x="130" y="82" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.9)">HRG</text>
+          <text x="30" y="96" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.9)">FRA</text>
+          <rect x="50" y="98" width="60" height="28" rx="8" fill="rgba(255,255,255,.15)" stroke="rgba(255,255,255,.35)" stroke-width="1.5"/>
+          <path d="M64 110 Q72 103 80 110 Q88 117 96 110" stroke="rgba(255,255,255,.6)" stroke-width="2" fill="none"/>
+        </svg>`,
+      },
+      {
+        skin:'tsr-teal',
+        eyebrow: currentLang==='tr'?'SUNFLEX 3 — ESNEK SEYAHAT':currentLang==='en'?'SUNFLEX 3 — STAY FLEXIBLE':'SUNFLEX 3 — FLEXIBEL REISEN',
+        title: currentLang==='tr'?'<em>Ücretsiz</em> yeniden rezervasyon':currentLang==='en'?'<em>Free</em> rebooking option':'<em>Kostenloses</em> Umbuchungsrecht',
+        sub: currentLang==='tr'?'Planlarınız değişirse — SunFlex ile sorun değil. £0,99\'dan (normalde £9,99).':currentLang==='en'?'If your plans change — no problem with SunFlex. From £0.99 (usually £9.99).':'Wenn sich Ihre Pläne ändern — kein Problem mit SunFlex. Ab £0,99 (statt £9,99).',
+        cta: currentLang==='tr'?'Şimdi ekle':currentLang==='en'?'Add now':'Jetzt hinzufügen',
+        countdown: true,
+        stampTop: currentLang==='tr'?'26 MAY\'A KADAR':currentLang==='en'?'BOOK BEFORE':'BUCHEN BIS',
+        stampBot: '26. Mai',
+        art: `<svg viewBox="0 0 160 140" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="80" cy="128" rx="50" ry="8" fill="rgba(0,0,0,.12)"/>
+          <rect x="52" y="20" width="56" height="96" rx="12" fill="rgba(255,255,255,.15)" stroke="rgba(255,255,255,.4)" stroke-width="2"/>
+          <rect x="58" y="30" width="44" height="6" rx="3" fill="rgba(255,255,255,.35)"/>
+          <rect x="58" y="42" width="44" height="34" rx="5" fill="rgba(255,255,255,.18)" stroke="rgba(255,255,255,.3)" stroke-width="1"/>
+          <circle cx="80" cy="59" r="12" fill="rgba(255,255,255,.3)" stroke="rgba(255,255,255,.5)" stroke-width="1.5"/>
+          <text x="80" y="63" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">✓</text>
+          <rect x="62" y="84" width="36" height="6" rx="3" fill="rgba(255,255,255,.4)"/>
+          <rect x="66" y="96" width="28" height="5" rx="2.5" fill="rgba(255,255,255,.25)"/>
+          <circle cx="80" cy="108" r="4" fill="rgba(255,255,255,.5)"/>
+        </svg>`,
+      },
+    ];
+
+    const track=document.getElementById('tsTrack');
+    const dots=document.getElementById('tsDots');
+    track.innerHTML=slides.map((s,i)=>`
+      <div class="teaser-slide ${s.skin}">
+        <div class="tsr-art">${s.art}</div>
+        <div class="tsr-body">
+          <div class="tsr-eyebrow">${s.eyebrow}</div>
+          <div class="tsr-title">${s.title}</div>
+          <div class="tsr-sub">${s.sub}</div>
+          <div class="tsr-actions">
+            <a href="search.html" class="tsr-cta">${s.cta}</a>
+          </div>
+        </div>
+        <div class="tsr-right">
+          ${s.countdown?`<div class="tsr-countdown" id="ts-cd"></div>`:''}
+          <div class="tsr-stamp">
+            <div class="tsr-stamp-num">${s.stampTop}</div>
+            <div class="tsr-stamp-lbl">${s.stampBot}</div>
+          </div>
+        </div>
+      </div>`).join('');
+    dots.innerHTML=slides.map((_,i)=>`<button class="tsr-dot ${i===0?'active':''}" onclick="tsGo(${i})"></button>`).join('');
+    tsStartCountdown();
+    tsTimer=setInterval(()=>tsGo((tsIdx+1)%slides.length),6000);
+  }
+
+  function tsStartCountdown(){
+    const el=document.getElementById('ts-cd'); if(!el) return;
+    const deadline=new Date('2026-05-26T23:59:59');
+    const tick=()=>{
+      const diff=deadline-new Date();
+      if(diff<=0){el.innerHTML='';return;}
+      const d=Math.floor(diff/86400000);
+      const h=Math.floor((diff%86400000)/3600000);
+      const m=Math.floor((diff%3600000)/60000);
+      const s=Math.floor((diff%60000)/1000);
+      const lbl=currentLang==='tr'?['Gün','Sa','Dk','Sn']:currentLang==='en'?['Days','Hrs','Min','Sec']:['Tage','Std','Min','Sek'];
+      el.innerHTML=[d,h,m,s].map((v,i)=>`<div class="tsr-unit"><div class="tsr-unit-num">${String(v).padStart(2,'0')}</div><div class="tsr-unit-lbl">${lbl[i]}</div></div>`).join('');
+    };
+    tick(); setInterval(tick,1000);
+  }
+
+  function tsGo(i){
+    tsIdx=i;
+    document.getElementById('tsTrack').style.transform=`translateX(-${i*100}%)`;
+    document.querySelectorAll('.tsr-dot').forEach((d,j)=>d.classList.toggle('active',j===i));
+  }
+  function tsMove(dir){
+    const n=(document.getElementById('tsTrack').children.length);
+    tsGo((tsIdx+dir+n)%n);
+    clearInterval(tsTimer);
+    tsTimer=setInterval(()=>tsGo((tsIdx+1)%n),6000);
+  }
+
+  const WHY_ICONS=[
     `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 002 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>`,
     `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
     `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
     `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.22 1.18 2 2 0 012.22 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.09a16 16 0 006 6l.56-.56a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/></svg>`,
   ];
-
-  const DESTS = [
-    {id:'img-ayt',name:'Antalya',code:'AYT',country:'Türkei',price:'449',badge:'beliebt',ci:'ci1',q:'antalya turkey beach'},
-    {id:'img-bjv',name:'Bodrum',code:'BJV',country:'Türkei',price:'519',badge:'neu',ci:'ci2',q:'bodrum turkey bay'},
-    {id:'img-adb',name:'İzmir',code:'ADB',country:'Türkei',price:'399',badge:'angebot',ci:'ci4',q:'izmir turkey coast'},
-    {id:'img-hrg',name:'Hurghada',code:'HRG',country:'Ägypten',price:'589',badge:'beliebt',ci:'ci6',q:'hurghada egypt resort'},
-    {id:'img-dlm',name:'Dalaman',code:'DLM',country:'Türkei',price:'479',badge:'neu',ci:'ci3',q:'dalaman turkey'},
-    {id:'img-rmf',name:'Marsa Alam',code:'RMF',country:'Ägypten',price:'629',badge:'beliebt',ci:'ci5',q:'marsa alam egypt'},
-    {id:'img-alanya',name:'Alanya',code:'AYT',country:'Türkei',price:'429',badge:'angebot',ci:'ci7',q:'alanya turkey beach'},
-    {id:'img-marmaris',name:'Marmaris',code:'DLM',country:'Türkei',price:'499',badge:'neu',ci:'ci8',q:'marmaris turkey harbor'},
+  const DESTS=[
+    {id:'img-ayt',name:'Antalya',code:'AYT',rk:'turkey',price:'449',bk:'beliebt',ci:'ci1',q:'antalya turkey beach resort'},
+    {id:'img-bjv',name:'Bodrum',code:'BJV',rk:'turkey',price:'519',bk:'neu',ci:'ci2',q:'bodrum turkey bay harbor'},
+    {id:'img-adb',name:'İzmir',code:'ADB',rk:'turkey',price:'399',bk:'angebot',ci:'ci4',q:'izmir turkey coast aegean'},
+    {id:'img-hrg',name:'Hurghada',code:'HRG',rk:'egypt',price:'589',bk:'beliebt',ci:'ci6',q:'hurghada egypt red sea resort'},
+    {id:'img-dlm',name:'Dalaman',code:'DLM',rk:'turkey',price:'479',bk:'neu',ci:'ci3',q:'dalaman turkey fethiye'},
+    {id:'img-rmf',name:'Marsa Alam',code:'RMF',rk:'egypt',price:'629',bk:'beliebt',ci:'ci5',q:'marsa alam egypt diving'},
+    {id:'img-alanya',name:'Alanya',code:'AYT',rk:'turkey',price:'429',bk:'angebot',ci:'ci7',q:'alanya turkey castle beach'},
+    {id:'img-marmaris',name:'Marmaris',code:'DLM',rk:'turkey',price:'499',bk:'neu',ci:'ci8',q:'marmaris turkey marina'},
+  ];
+  const OFFERS=[
+    {id:'img-rixos',ci:'ci1',hotel:'Rixos Premium Belek',dest:'Belek, Antalya',rk:'turkey',stars:'★★★★★',score:'4.8',reviews:'2.841',price:'1.249',tags:['all-inclusive'],q:'rixos belek resort pool luxury'},
+    {id:'img-bodrum',ci:'ci2',hotel:'Bodrum Bay Resort',dest:'Turgutreis, Bodrum',rk:'turkey',stars:'★★★★',score:'4.2',reviews:'1.204',price:'879',tags:['halbpension'],q:'bodrum resort sea view turkey'},
+    {id:'img-aqua',ci:'ci3',hotel:'Steigenberger Aqua Magic',dest:'Hurghada',rk:'egypt',stars:'★★★★★',score:'4.6',reviews:'3.120',price:'749',tags:['all-inclusive'],q:'hurghada resort waterpark pool'},
   ];
 
-  const OFFERS = [
-    {id:'img-rixos',ci:'ci1',hotel:'Rixos Premium Belek',dest:'Belek, Antalya',stars:'★★★★★',score:'4.8',reviews:'2.841',price:'1.249',tags:['all-inclusive','direct'],q:'rixos belek resort pool'},
-    {id:'img-bodrum',ci:'ci2',hotel:'Bodrum Bay Resort',dest:'Turgutreis, Bodrum',stars:'★★★★',score:'4.2',reviews:'1.204',price:'879',tags:['halbpension','strand'],q:'bodrum resort sea turkey'},
-    {id:'img-aqua',ci:'ci3',hotel:'Steigenberger Aqua Magic',dest:'Hurghada, Ägypten',stars:'★★★★★',score:'4.6',reviews:'3.120',price:'749',tags:['all-inclusive','wasserpark'],q:'hurghada resort waterpark'},
-  ];
+  /* ── SLIDER ── */
+  let slideIdx=0, slideTimer;
+  const SLIDE_QUERIES=['antalya turkey resort summer beach','bodrum turkey sunset aegean','hurghada egypt red sea'];
 
-  function arrowSvg(){return`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`;}
-  function pinSvg(){return`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>`;}
+  function buildSlider(){
+    const slides=tArr('home','slides');
+    const dots=document.getElementById('slider-dots');
+    if(dots) dots.innerHTML=slides.map((_,i)=>`<button class="slider-dot ${i===0?'active':''}" onclick="goSlide(${i})"></button>`).join('');
+    showSlide(0);
+    slideTimer=setInterval(()=>goSlide((slideIdx+1)%slides.length),5000);
+  }
+  function goSlide(i){
+    clearInterval(slideTimer);
+    slideIdx=i;
+    showSlide(i);
+    slideTimer=setInterval(()=>goSlide((slideIdx+1)%tArr('home','slides').length),5000);
+  }
+  function slidePrev(){ const s=tArr('home','slides'); goSlide((slideIdx-1+s.length)%s.length); }
+  function slideNext(){ const s=tArr('home','slides'); goSlide((slideIdx+1)%s.length); }
 
-  document.addEventListener('DOMContentLoaded', () => {
-    const ho = tObj2('home');
-    const bd = tObj2('badges');
-    const su = tArr('usp');
-    const uspIcons = [
+  function showSlide(i){
+    const slides=tArr('home','slides');
+    const s=slides[i]; if(!s) return;
+    const badge=document.getElementById('hero-badge');
+    const title=document.getElementById('hero-title');
+    const sub=document.getElementById('hero-sub');
+    if(badge){ badge.textContent=s.badge; badge.style.background=s.color; }
+    if(title) title.innerHTML=s.title;
+    if(sub) sub.textContent=s.sub;
+    document.querySelectorAll('.slider-dot').forEach((d,j)=>d.classList.toggle('active',j===i));
+    fetchUnsplashImg(SLIDE_QUERIES[i]||SLIDE_QUERIES[0],'hero-bg');
+  }
+
+  function arrowSvg(){ return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`; }
+  function pinSvg(){ return `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>`; }
+
+  document.addEventListener('DOMContentLoaded',()=>{
+    const ho=tObj('home'); const bd=tObj('badges'); const su=tArr('usp');
+    const sp=tObj('sp');
+    const uspIcons=[
       `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
       `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 002 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>`,
       `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>`,
       `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.22 1.18 2 2 0 012.22 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.09a16 16 0 006 6l.56-.56a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/></svg>`,
       `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>`,
     ];
-
-    // Hero
-    document.getElementById('hero-badge').textContent = ho.heroBadge||'';
-    document.getElementById('hero-title').innerHTML = ho.heroTitle||'';
-    document.getElementById('hero-sub').textContent = ho.heroSub||'';
-    document.getElementById('fc-nights').textContent = t('search','nights');
-
-    // USP bar
-    document.getElementById('usp-bar').innerHTML = su.map((u,i)=>`<div class="usp-item">${uspIcons[i]||''}${u}</div>`).join('');
-
-    // Destinations
-    document.getElementById('dest-title').textContent = ho.destTitle||'';
-    document.getElementById('dest-sub').textContent = ho.destSub||'';
-    document.getElementById('dest-all-link').innerHTML = (ho.destAll||'') + ' ' + arrowSvg();
-    document.getElementById('dest-grid').innerHTML = DESTS.map(d => {
-      const bk = d.badge; const bLabel = bd[bk]||bk;
-      const bCls = bk==='beliebt'?'badge-orange':bk==='neu'?'badge-blue':'badge-yellow';
-      return `<a href="search.html" class="dest-card">
-        <div class="dest-img ${d.ci}" id="${d.id}">
-          <div class="dest-img-overlay"></div>
-          <div class="dest-img-content"><div class="dest-name">${d.name}</div><div class="dest-country">${d.code} · ${d.country}</div></div>
+    document.getElementById('fc-nights').textContent=t('search','nights');
+    document.getElementById('usp-bar').innerHTML=su.map((u,i)=>`<div class="usp-item">${uspIcons[i]||''}${u}</div>`).join('');
+    document.getElementById('dest-title').textContent=ho.destTitle||'';
+    document.getElementById('dest-sub').textContent=ho.destSub||'';
+    document.getElementById('dest-all-link').innerHTML=(ho.destAll||'')+' '+arrowSvg();
+    document.getElementById('dest-grid').innerHTML=DESTS.map(d=>{
+      const bLabel=bd[d.bk]||d.bk;
+      const bCls=d.bk==='beliebt'?'badge-orange':d.bk==='neu'?'badge-blue':'badge-yellow';
+      const reg=region(d.rk);
+      return `<a href="dest-detail.html?dest=${d.code.toLowerCase()}" class="dest-card">
+        <div class="dest-img ${d.ci}" id="${d.id}"><div class="dest-img-overlay"></div>
+          <div class="dest-img-content"><div class="dest-name">${d.name}</div><div class="dest-country">${d.code} · ${reg}</div></div>
         </div>
-        <div class="dest-footer">
-          <div><div class="dest-from">ab</div><div class="dest-price">€ ${d.price} <span>/ Person</span></div></div>
-          <span class="badge ${bCls}">${bLabel}</span>
-        </div>
+        <div class="dest-footer"><div><div style="font-size:11px;color:var(--grey-3)">ab</div><div class="dest-price">€ ${d.price} <span>/ Person</span></div></div><span class="badge ${bCls}">${bLabel}</span></div>
       </a>`;
     }).join('');
-
-    // Offers
-    document.getElementById('offers-title').textContent = ho.offersTitle||'';
-    document.getElementById('offers-sub').textContent = ho.offersSub||'';
-    document.getElementById('offers-all-link').innerHTML = (ho.offersAll||'') + ' ' + arrowSvg();
-    const vpLabels = tObj2('sp').vp || {};
-    document.getElementById('offers-grid').innerHTML = OFFERS.map(o => {
-      const tagH = o.tags.map(tg=>`<span class="tag">${vpLabels[tg]||tg}</span>`).join('');
-      return `<div class="offer-card">
-        <div class="offer-img ${o.ci}" id="${o.id}" style="position:relative">
-          <div class="offer-img-overlay"></div><div class="offer-img-name">${o.hotel}</div>
-        </div>
-        <div class="offer-body">
-          <div class="offer-hotel">${o.hotel}</div>
-          <div class="offer-dest">${pinSvg()}${o.dest}</div>
-          <div class="stars"><span style="color:var(--orange-light)">${o.stars}</span><span class="score">${o.score} (${o.reviews})</span></div>
-          <div class="offer-tags">${tagH}</div>
-        </div>
-        <div class="offer-footer">
-          <div><div class="offer-price-from">Ab</div><div class="offer-price-val">€ ${o.price}</div><div class="offer-price-pp">p.P., 7 ${t('search','nights')}</div></div>
-          <a href="hotel.html" class="btn btn-primary btn-sm">${(tObj2('sp').bookNow)||'Buchen'}</a>
-        </div>
-      </div>`;
-    }).join('');
-
-    // Promo
-    document.getElementById('promo-label').textContent = ho.promoLabel||'';
-    document.getElementById('promo-title').textContent = ho.promoTitle||'';
-    document.getElementById('promo-text').textContent = ho.promoText||'';
-    document.getElementById('promo-btn').innerHTML = (ho.promoBtn||'') + ' ' + arrowSvg();
-
-    // Why
-    document.getElementById('why-title').textContent = ho.whyTitle||'';
-    document.getElementById('why-sub').textContent  = ho.whySub||'';
-    const why=(ho.why||[]); const whyD=(ho.whyDesc||[]);
-    document.getElementById('why-grid').innerHTML = why.map((w,i)=>`
-      <div class="why-card"><div class="why-icon">${WHY_ICONS[i]||''}</div><h4>${w}</h4><p>${whyD[i]||''}</p></div>`).join('');
-
-    // Images
-    fetchUnsplashImg('antalya beach turkey resort','hero-bg');
+    document.getElementById('offers-title').textContent=ho.offersTitle||'';
+    document.getElementById('offers-sub').textContent=ho.offersSub||'';
+    document.getElementById('offers-all-link').innerHTML=(ho.offersAll||'')+' '+arrowSvg();
+    const vpL=sp.vp||{};
+    document.getElementById('offers-grid').innerHTML=OFFERS.map(o=>`<div class="offer-card">
+      <div class="offer-img ${o.ci}" id="${o.id}" style="position:relative"><div class="offer-img-overlay"></div><div class="offer-img-name">${o.hotel}</div></div>
+      <div class="offer-body">
+        <div class="offer-hotel">${o.hotel}</div>
+        <div class="offer-dest">${pinSvg()}${o.dest}</div>
+        <div class="stars"><span style="color:var(--orange-light)">${o.stars}</span><span class="score">${o.score} (${o.reviews})</span></div>
+        <div class="offer-tags">${o.tags.map(tg=>`<span class="tag">${vpL[tg]||tg}</span>`).join('')}</div>
+      </div>
+      <div class="offer-footer">
+        <div><div style="font-size:10px;color:var(--grey-3);text-transform:uppercase">Ab</div><div class="offer-price-val">€ ${o.price}</div><div class="offer-price-pp">p.P., 7 ${t('search','nights')}</div></div>
+        <a href="hotel.html" class="btn btn-primary btn-sm">${sp.bookNow||'Buchen'}</a>
+      </div>
+    </div>`).join('');
+    document.getElementById('promo-label').textContent=ho.promoLabel||'';
+    document.getElementById('promo-title').textContent=ho.promoTitle||'';
+    document.getElementById('promo-text').textContent=ho.promoText||'';
+    document.getElementById('promo-btn').innerHTML=(ho.promoBtn||'')+' '+arrowSvg();
+    document.getElementById('why-title').textContent=ho.whyTitle||'';
+    document.getElementById('why-sub').textContent=ho.whySub||'';
+    const why=ho.why||[]; const whyD=ho.whyDesc||[];
+    document.getElementById('why-grid').innerHTML=why.map((w,i)=>`<div class="why-card"><div class="why-icon">${WHY_ICONS[i]||''}</div><h4>${w}</h4><p>${whyD[i]||''}</p></div>`).join('');
+    buildSlider();
+    buildTeaserSlides();
     DESTS.forEach(d=>fetchUnsplashImg(d.q,d.id));
     OFFERS.forEach(o=>fetchUnsplashImg(o.q,o.id));
   });
