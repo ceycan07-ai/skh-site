@@ -159,17 +159,17 @@
   function toggleFilter(g,v){
     const s=fState[g]; s.has(v)?s.delete(v):s.add(v);
     document.querySelectorAll(`[data-f="${g}"][data-v="${v}"]`).forEach(el=>el.classList.toggle('checked',s.has(v)));
-    currentPage=1; applyFilters();
+    currentPage=1; applyFilters(false);
   }
   function togglePanel(h){h.classList.toggle('collapsed');h.nextElementSibling.classList.toggle('hidden');}
   function onPrice(v){
     fState.maxPrice=+v;
     const lbl=(sp('priceTo')||'bis € {{n}}').replace('{{n}}',Number(v).toLocaleString('de'));
     document.getElementById('price-lbl').textContent=lbl;
-    currentPage=1; applyFilters();
+    currentPage=1; applyFilters(false);
   }
 
-  function applyFilters(){
+  function applyFilters(doScroll=false){
     filteredHotels=HOTELS.filter(h=>{
       if(fState.verpflegung.size&&![...fState.verpflegung].some(v=>h.vp.includes(v))) return false;
       if(fState.ausstattung.size&&![...fState.ausstattung].every(v=>h.aus.includes(v))) return false;
@@ -178,13 +178,13 @@
       if(h.price>fState.maxPrice) return false;
       return true;
     });
-    renderPage(currentPage);
+    renderPage(currentPage, doScroll);
     renderChips();
     const any=[...Object.entries(fState)].some(([k,v])=>k==='maxPrice'?v<2500:v.size>0);
     document.getElementById('clear-btn').style.display=any?'inline':'none';
   }
 
-  function renderPage(page){
+  function renderPage(page, doScroll=true){
     currentPage=page;
     const el=document.getElementById('rlist');
     const noRes=document.getElementById('no-res');
@@ -237,7 +237,7 @@
     });
     // Pagination
     buildPagination(page,pages);
-    window.scrollTo({top:0,behavior:'smooth'});
+    if(doScroll) window.scrollTo({top:0,behavior:'smooth'});
   }
 
   function buildPagination(current,total){
@@ -267,7 +267,7 @@
     c.innerHTML=chips.map(ch=>`<span class="chip" onclick="${ch.g==='price'?'clearPrice()':'toggleFilter(\''+ch.g+'\',\''+ch.v+'\')'}">${ch.l} ×</span>`).join('');
   }
 
-  function clearPrice(){fState.maxPrice=2500;const r=document.getElementById('price-range');if(r)r.value=2500;const l=document.getElementById('price-lbl');if(l)l.textContent='bis € 2.500';currentPage=1;applyFilters();}
+  function clearPrice(){fState.maxPrice=2500;const r=document.getElementById('price-range');if(r)r.value=2500;const l=document.getElementById('price-lbl');if(l)l.textContent='bis € 2.500';currentPage=1;applyFilters(false);}
   function clearAll(){['verpflegung','ausstattung','sterne','ziel'].forEach(g=>{fState[g].clear();document.querySelectorAll(`[data-f="${g}"]`).forEach(e=>e.classList.remove('checked'));});clearPrice();}
 
   function sortResults(m){
