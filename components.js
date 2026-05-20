@@ -605,31 +605,62 @@ function chG(type,delta){
 }
 function setCA(i,v){searchState.childAges[i]=parseInt(v);}
 
-/* dropdown init — KEY FIX: each dropdown is INSIDE its .sf-rel parent so position:absolute is relative to it */
-function _initDropdowns(){
-  _bind('dest-trigger','dest-dd',()=>{renderDestList('');setTimeout(()=>document.getElementById('dest-q')?.focus(),40);});
-  _bind('airport-trigger','airport-dd',()=>{renderAirportList('');setTimeout(()=>document.getElementById('airport-q')?.focus(),40);});
-  _bind('dates-trigger','dates-dd',()=>{calS.phase='in';renderCal();});
-  _bind('guests-trigger','guests-dd',()=>{renderGuests();const c=document.getElementById('g-chev');if(c)c.style.transform='rotate(180deg)';},()=>{const c=document.getElementById('g-chev');if(c)c.style.transform='';});
-  document.addEventListener('click',e=>{
-    if(!e.target.closest('.sf-rel')&&!e.target.closest('.guests-dd')&&!e.target.closest('.search-dropdown')&&!e.target.closest('.search-mask')) closeAll();
-  },false);
-}
-function _bind(tid,did,onOpen,onClose){
-  const tr=document.getElementById(tid); const dd=document.getElementById(did); if(!tr||!dd) return;
-  // Stop click events inside the dropdown from bubbling up to document
-  dd.addEventListener('click',e=>e.stopPropagation());
-  tr.addEventListener('click',e=>{
-    e.stopPropagation();
-    const was=dd.classList.contains('open');
+/* ══ DROPDOWN SYSTEM — single global listener, no listener stacking ══
+   Click inside .search-mask-wrap → do nothing (triggers handle open/close).
+   Click outside .search-mask-wrap → closeAll().
+   Each trigger uses data-wired to prevent double-binding on re-render.
+*/
+let _docListenerAttached = false;
+
+function _ensureDocListener(){
+  if(_docListenerAttached) return;
+  _docListenerAttached = true;
+  document.addEventListener('click', function(e){
+    if(e.target.closest('.search-mask-wrap')) return;
     closeAll();
-    if(!was){dd.classList.add('open');if(onOpen)onOpen();}
-    else{if(onClose)onClose();}
+  }, false);
+}
+
+function _initDropdowns(){
+  _ensureDocListener();
+  _wireTrigger('dest-trigger',    'dest-dd',
+    function(){ renderDestList(''); setTimeout(function(){ var q=document.getElementById('dest-q'); if(q) q.focus(); }, 40); });
+  _wireTrigger('airport-trigger', 'airport-dd',
+    function(){ renderAirportList(''); setTimeout(function(){ var q=document.getElementById('airport-q'); if(q) q.focus(); }, 40); });
+  _wireTrigger('dates-trigger',   'dates-dd',
+    function(){ calS.phase='in'; renderCal(); });
+  _wireTrigger('guests-trigger',  'guests-dd',
+    function(){ renderGuests(); var c=document.getElementById('g-chev'); if(c) c.style.transform='rotate(180deg)'; },
+    function(){ var c=document.getElementById('g-chev'); if(c) c.style.transform=''; });
+}
+
+function _wireTrigger(tid, did, onOpen, onClose){
+  var tr = document.getElementById(tid);
+  if(!tr) return;
+  if(tr.dataset.wired) return;
+  tr.dataset.wired = '1';
+  tr.addEventListener('click', function(e){
+    e.stopPropagation();
+    _openDD(did, onOpen, onClose);
   });
 }
+
+function _openDD(did, onOpen, onClose){
+  var dd = document.getElementById(did);
+  if(!dd) return;
+  var wasOpen = dd.classList.contains('open');
+  closeAll();
+  if(!wasOpen){
+    dd.classList.add('open');
+    if(onOpen) onOpen();
+  } else {
+    if(onClose) onClose();
+  }
+}
+
 function closeAll(){
-  document.querySelectorAll('.search-dropdown,.guests-dd').forEach(d=>d.classList.remove('open'));
-  const c=document.getElementById('g-chev');if(c)c.style.transform='';
+  document.querySelectorAll('.search-dropdown,.guests-dd').forEach(function(d){ d.classList.remove('open'); });
+  var c=document.getElementById('g-chev'); if(c) c.style.transform='';
 }
 function doSearch(){window.location.href='search.html';}
 
