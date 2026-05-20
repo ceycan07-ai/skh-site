@@ -56,6 +56,7 @@ body { font-family: var(--font-primary); color: var(--color-text-dark); backgrou
 .hero-bg {
   position: absolute;
   inset: 0;
+  background: linear-gradient(135deg, #074588 0%, #1a7fc1 50%, #0e9f6e 100%);
   background-size: cover;
   background-position: center;
   transition: opacity .8s ease;
@@ -975,9 +976,9 @@ const SLIDE_QUERIES = [
   'hurghada egypt red sea',
 ];
 const SLIDE_IMGS = [
-  'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=1600&q=85',
-  'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1600&q=85',
-  'https://images.unsplash.com/photo-1548574505-5e239809ee19?w=1600&q=85',
+  'https://images.unsplash.com/photo-1523592121175-87252e70fbe2?w=1600&q=85', // Antalya beach resort
+  'https://images.unsplash.com/photo-1530841377377-3ff06c0ca713?w=1600&q=85', // Aegean coast Bodrum
+  'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1600&q=85', // Red Sea Hurghada
 ];
 
 function buildSlider() {
@@ -1008,7 +1009,34 @@ function showSlide(i) {
   if (subEl)   subEl.textContent = s.sub   || 'More comfort for less!';
   document.querySelectorAll('.slider-dot').forEach((d,j) => d.classList.toggle('active', j===i));
   const heroEl = document.getElementById('hero-bg');
-  if(heroEl){ const imgUrl = SLIDE_IMGS[i] || SLIDE_IMGS[0]; heroEl.style.backgroundImage=`url(${imgUrl})`; heroEl.style.backgroundSize='cover'; heroEl.style.backgroundPosition='center'; }
+  if (heroEl) {
+    const imgUrl = SLIDE_IMGS[i] || SLIDE_IMGS[0];
+    const img = new Image();
+    img.onload = () => {
+      heroEl.style.backgroundImage = `url(${imgUrl})`;
+      heroEl.style.backgroundSize = 'cover';
+      heroEl.style.backgroundPosition = 'center';
+      heroEl.style.background = '';
+    };
+    img.onerror = () => {
+      // Fallback gradient if image fails to load
+      const GRADIENTS = [
+        'linear-gradient(135deg, #074588 0%, #1a7fc1 50%, #0e9f6e 100%)',
+        'linear-gradient(135deg, #0e4d8a 0%, #1565c0 50%, #0288d1 100%)',
+        'linear-gradient(135deg, #006064 0%, #00838f 50%, #26c6da 100%)',
+      ];
+      heroEl.style.backgroundImage = 'none';
+      heroEl.style.background = GRADIENTS[i] || GRADIENTS[0];
+    };
+    // Show gradient immediately, replace with image when loaded
+    const GRADIENTS = [
+      'linear-gradient(135deg, #074588 0%, #1a7fc1 50%, #0e9f6e 100%)',
+      'linear-gradient(135deg, #0e4d8a 0%, #1565c0 50%, #0288d1 100%)',
+      'linear-gradient(135deg, #006064 0%, #00838f 50%, #26c6da 100%)',
+    ];
+    heroEl.style.background = GRADIENTS[i] || GRADIENTS[0];
+    img.src = imgUrl;
+  }
 }
 
 function arrowSvg() {

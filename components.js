@@ -612,11 +612,13 @@ function _initDropdowns(){
   _bind('dates-trigger','dates-dd',()=>{calS.phase='in';renderCal();});
   _bind('guests-trigger','guests-dd',()=>{renderGuests();const c=document.getElementById('g-chev');if(c)c.style.transform='rotate(180deg)';},()=>{const c=document.getElementById('g-chev');if(c)c.style.transform='';});
   document.addEventListener('click',e=>{
-    if(!e.target.closest('.search-field')&&!e.target.closest('.guests-dd')) closeAll();
-  },true);
+    if(!e.target.closest('.sf-rel')&&!e.target.closest('.guests-dd')&&!e.target.closest('.search-dropdown')&&!e.target.closest('.search-mask')) closeAll();
+  },false);
 }
 function _bind(tid,did,onOpen,onClose){
   const tr=document.getElementById(tid); const dd=document.getElementById(did); if(!tr||!dd) return;
+  // Stop click events inside the dropdown from bubbling up to document
+  dd.addEventListener('click',e=>e.stopPropagation());
   tr.addEventListener('click',e=>{
     e.stopPropagation();
     const was=dd.classList.contains('open');
