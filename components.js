@@ -548,7 +548,7 @@ function renderCal(){
     const isOut=searchState.checkOut&&dt.getTime()===searchState.checkOut.getTime();
     const inR=searchState.checkIn&&searchState.checkOut&&dt>searchState.checkIn&&dt<searchState.checkOut;
     let cls='cal-cell'+(past?' cal-past':'')+(isIn?' cal-in':'')+(isOut?' cal-out':'')+(inR?' cal-range':'');
-    cells+=`<div class="${cls}" ${past?'':'onclick="calPick('+year+','+month+','+d+')"'}>${d}</div>`;
+    cells+=`<div class="${cls}" ${past?'':'onclick="calPick('+year+','+month+','+d+',event)"'}>${d}</div>`;
   }
   const n=nightsCount();
   const inL=searchState.checkIn?fmtDate(searchState.checkIn):t('search','checkIn');
@@ -560,20 +560,22 @@ function renderCal(){
       <div class="cal-sel-item ${calS.phase==='out'||calS.phase==='done'?'active':''}"><div class="cal-sel-label">${t('search','checkOut')}</div><div class="cal-sel-date">${outL}</div></div>
       ${searchState.checkIn&&searchState.checkOut?`<div class="cal-nights-badge">${n} ${t('search','nights')}</div>`:''}
     </div>
-    <div class="cal-head"><button class="cal-nav" onclick="calMove(-1)">‹</button><span class="cal-month">${mn[month]} ${year}</span><button class="cal-nav" onclick="calMove(1)">›</button></div>
+    <div class="cal-head"><button class="cal-nav" onclick="calMove(-1,event)">‹</button><span class="cal-month">${mn[month]} ${year}</span><button class="cal-nav" onclick="calMove(1,event)">›</button></div>
     <div class="cal-days-hdr">${dn.map(d=>`<div>${d}</div>`).join('')}</div>
     <div class="cal-grid">${cells}</div>
-    ${searchState.checkIn&&searchState.checkOut?`<div class="cal-foot"><button class="btn btn-primary" style="width:100%" onclick="applyDates()">${t('search','apply')}</button></div>`:''}
+    ${searchState.checkIn&&searchState.checkOut?`<div class="cal-foot"><button class="btn btn-primary" style="width:100%" onclick="applyDates(event)">${t('search','apply')}</button></div>`:''}
   </div>`;
 }
-function calPick(y,m,d){
+function calPick(y,m,d,e){
+  if(e) e.stopPropagation();
   const dt=new Date(y,m,d);
   if(calS.phase==='in'||(searchState.checkIn&&dt<=searchState.checkIn)){searchState.checkIn=dt;searchState.checkOut=null;calS.phase='out';}
   else{searchState.checkOut=dt;calS.phase='done';}
   renderCal();
 }
-function calMove(dir){calS.month+=dir;if(calS.month>11){calS.month=0;calS.year++;}if(calS.month<0){calS.month=11;calS.year--;}renderCal();}
-function applyDates(){
+function calMove(dir,e){if(e){e.stopPropagation();}calS.month+=dir;if(calS.month>11){calS.month=0;calS.year++;}if(calS.month<0){calS.month=11;calS.year--;}renderCal();}
+function applyDates(e){
+  if(e) e.stopPropagation();
   const dv=document.getElementById('dates-val'); if(dv) dv.textContent=datesLabel();
   const ns=document.getElementById('nights-sub'); if(ns) ns.textContent=`${nightsCount()} ${t('search','nights')}`;
   closeAll();
@@ -591,13 +593,14 @@ function renderGuests(){
   }
   dd.innerHTML=`
     <div class="guests-row"><div><div class="guests-label">${t('search','adults')}</div><div class="guests-label-sub">${t('search','adultsAge')}</div></div>
-    <div class="guests-counter"><button class="g-btn" onclick="chG('adults',-1)" ${s.adults<=1?'disabled':''}>−</button><span class="g-count">${s.adults}</span><button class="g-btn" onclick="chG('adults',1)" ${s.adults>=9?'disabled':''}>+</button></div></div>
+    <div class="guests-counter"><button class="g-btn" onclick="chG('adults',-1,event)" ${s.adults<=1?'disabled':''}>−</button><span class="g-count">${s.adults}</span><button class="g-btn" onclick="chG('adults',1,event)" ${s.adults>=9?'disabled':''}>+</button></div></div>
     <div class="guests-row"><div><div class="guests-label">${t('search','children')}</div><div class="guests-label-sub">${t('search','childrenAge')}</div></div>
-    <div class="guests-counter"><button class="g-btn" onclick="chG('children',-1)" ${s.children<=0?'disabled':''}>−</button><span class="g-count">${s.children}</span><button class="g-btn" onclick="chG('children',1)" ${s.children>=6?'disabled':''}>+</button></div></div>
+    <div class="guests-counter"><button class="g-btn" onclick="chG('children',-1,event)" ${s.children<=0?'disabled':''}>−</button><span class="g-count">${s.children}</span><button class="g-btn" onclick="chG('children',1,event)" ${s.children>=6?'disabled':''}>+</button></div></div>
     ${ages}
     <button class="btn btn-primary guests-apply-btn" onclick="closeAll()">${t('search','apply')}</button>`;
 }
-function chG(type,delta){
+function chG(type,delta,e){
+  if(e) e.stopPropagation();
   if(type==='adults'){searchState.adults=Math.max(1,Math.min(9,searchState.adults+delta));}
   else{const p=searchState.children;searchState.children=Math.max(0,Math.min(6,searchState.children+delta));if(searchState.children>p)searchState.childAges.push(8);else searchState.childAges.pop();}
   renderGuests();
@@ -616,6 +619,9 @@ function _ensureDocListener(){
   if(_docListenerAttached) return;
   _docListenerAttached = true;
   document.addEventListener('click', function(e){
+    /* Element removed from DOM by re-render (renderCal/renderGuests rewrites innerHTML
+       while handling onclick) — document.contains returns false. Don't close. */
+    if(!document.contains(e.target)) return;
     if(e.target.closest('.search-mask-wrap')) return;
     closeAll();
   }, false);
