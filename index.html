@@ -951,20 +951,20 @@ const WHY_ICONS = [
 ];
 
 const DESTS = [
-  {id:'img-ayt', name:'Antalya',    code:'AYT', rk:'turkey', price:'449', bk:'beliebt', ci:'ci1', q:'antalya turkey beach resort'},
-  {id:'img-bjv', name:'Bodrum',     code:'BJV', rk:'turkey', price:'519', bk:'neu',     ci:'ci2', q:'bodrum turkey bay harbor'},
-  {id:'img-adb', name:'İzmir',      code:'ADB', rk:'turkey', price:'399', bk:'angebot', ci:'ci4', q:'izmir turkey coast aegean'},
-  {id:'img-hrg', name:'Hurghada',   code:'HRG', rk:'egypt',  price:'589', bk:'beliebt', ci:'ci6', q:'hurghada egypt red sea resort'},
-  {id:'img-dlm', name:'Dalaman',    code:'DLM', rk:'turkey', price:'479', bk:'neu',     ci:'ci3', q:'dalaman turkey fethiye'},
-  {id:'img-rmf', name:'Marsa Alam', code:'RMF', rk:'egypt',  price:'629', bk:'beliebt', ci:'ci5', q:'marsa alam egypt diving'},
-  {id:'img-alanya',   name:'Alanya',    code:'AYT', rk:'turkey', price:'429', bk:'angebot', ci:'ci7', q:'alanya turkey castle beach'},
-  {id:'img-marmaris', name:'Marmaris',  code:'DLM', rk:'turkey', price:'499', bk:'neu',     ci:'ci8', q:'marmaris turkey marina'},
+  {id:'img-ayt', name:'Antalya',    code:'AYT', rk:'turkey', price:'449', bk:'beliebt', ci:'ci1', img:'https://images.unsplash.com/photo-1590402902099-9d5d8cbfb0c1?w=800&q=80'},
+  {id:'img-bjv', name:'Bodrum',     code:'BJV', rk:'turkey', price:'519', bk:'neu',     ci:'ci2', img:'https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=800&q=80'},
+  {id:'img-adb', name:'İzmir',      code:'ADB', rk:'turkey', price:'399', bk:'angebot', ci:'ci4', img:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80'},
+  {id:'img-hrg', name:'Hurghada',   code:'HRG', rk:'egypt',  price:'589', bk:'beliebt', ci:'ci6', img:'https://images.unsplash.com/photo-1539650116574-75c0c6d73f6e?w=800&q=80'},
+  {id:'img-dlm', name:'Dalaman',    code:'DLM', rk:'turkey', price:'479', bk:'neu',     ci:'ci3', img:'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800&q=80'},
+  {id:'img-rmf', name:'Marsa Alam', code:'RMF', rk:'egypt',  price:'629', bk:'beliebt', ci:'ci5', img:'https://images.unsplash.com/photo-1580541832626-2a7131ee809f?w=800&q=80'},
+  {id:'img-alanya',   name:'Alanya',    code:'AYT', rk:'turkey', price:'429', bk:'angebot', ci:'ci7', img:'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80'},
+  {id:'img-marmaris', name:'Marmaris',  code:'DLM', rk:'turkey', price:'499', bk:'neu',     ci:'ci8', img:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80'},
 ];
 
 const OFFERS = [
-  {id:'img-rixos', ci:'ci1', hotel:'Rixos Premium Belek',       dest:'Belek, Antalya', rk:'turkey', stars:'★★★★★', score:'4.8', reviews:'2.841', price:'1.249', tags:['all-inclusive'], q:'rixos belek resort pool luxury'},
-  {id:'img-bodrum',ci:'ci2', hotel:'Bodrum Bay Resort',          dest:'Turgutreis, Bodrum', rk:'turkey', stars:'★★★★', score:'4.2', reviews:'1.204', price:'879',   tags:['halbpension'],  q:'bodrum resort sea view turkey'},
-  {id:'img-aqua',  ci:'ci3', hotel:'Steigenberger Aqua Magic',   dest:'Hurghada',       rk:'egypt',  stars:'★★★★★', score:'4.6', reviews:'3.120', price:'749',   tags:['all-inclusive'], q:'hurghada resort waterpark pool'},
+  {id:'img-rixos', ci:'ci1', hotel:'Rixos Premium Belek',       dest:'Belek, Antalya', rk:'turkey', stars:'★★★★★', score:'4.8', reviews:'2.841', price:'1.249', tags:['all-inclusive'], img:'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80'},
+  {id:'img-bodrum',ci:'ci2', hotel:'Bodrum Bay Resort',          dest:'Turgutreis, Bodrum', rk:'turkey', stars:'★★★★', score:'4.2', reviews:'1.204', price:'879',   tags:['halbpension'],  img:'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&q=80'},
+  {id:'img-aqua',  ci:'ci3', hotel:'Steigenberger Aqua Magic',   dest:'Hurghada',       rk:'egypt',  stars:'★★★★★', score:'4.6', reviews:'3.120', price:'749',   tags:['all-inclusive'], img:'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80'},
 ];
 
 /* ══ HERO SLIDER ══ */
@@ -973,6 +973,11 @@ const SLIDE_QUERIES = [
   'antalya turkey resort summer beach',
   'bodrum turkey sunset aegean',
   'hurghada egypt red sea',
+];
+const SLIDE_IMGS = [
+  'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=1600&q=85',
+  'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1600&q=85',
+  'https://images.unsplash.com/photo-1548574505-5e239809ee19?w=1600&q=85',
 ];
 
 function buildSlider() {
@@ -1002,7 +1007,8 @@ function showSlide(i) {
   if (titleEl) titleEl.innerHTML = s.title || 'Relaxed into your holidays';
   if (subEl)   subEl.textContent = s.sub   || 'More comfort for less!';
   document.querySelectorAll('.slider-dot').forEach((d,j) => d.classList.toggle('active', j===i));
-  fetchUnsplashImg(SLIDE_QUERIES[i] || SLIDE_QUERIES[0], 'hero-bg');
+  const heroEl = document.getElementById('hero-bg');
+  if(heroEl){ const imgUrl = SLIDE_IMGS[i] || SLIDE_IMGS[0]; heroEl.style.backgroundImage=`url(${imgUrl})`; heroEl.style.backgroundSize='cover'; heroEl.style.backgroundPosition='center'; }
 }
 
 function arrowSvg() {
@@ -1110,9 +1116,15 @@ document.addEventListener('DOMContentLoaded', () => {
   buildSlider();
   buildTeaserSlides();
 
-  /* Lazy images */
-  DESTS.forEach(d  => fetchUnsplashImg(d.q, d.id));
-  OFFERS.forEach(o => fetchUnsplashImg(o.q, o.id));
+  /* Static images — no API needed */
+  DESTS.forEach(d => {
+    const el = document.getElementById(d.id);
+    if(el && d.img){ el.style.backgroundImage=`url(${d.img})`; el.style.backgroundSize='cover'; el.style.backgroundPosition='center'; }
+  });
+  OFFERS.forEach(o => {
+    const el = document.getElementById(o.id);
+    if(el && o.img){ el.style.backgroundImage=`url(${o.img})`; el.style.backgroundSize='cover'; el.style.backgroundPosition='center'; }
+  });
 });
 </script>
 </body>
